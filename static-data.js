@@ -203,6 +203,76 @@ window.STATIC_OUTPATIENT_DATA = [
         status: "Accepting Assessments",
         lastUpdated: "2025-01-25",
         coordinates: { lat: 40.8089, lng: -96.6917 }
+    },
+    {
+        id: 17,
+        name: "Grand Island Outpatient Clinic",
+        type: "Outpatient",
+        address: "2116 W Capital Ave, Grand Island, NE 68803",
+        phone: "(308) 555-0606",
+        website: "https://www.gioutpatient.org",
+        ageGroup: "Both",
+        genderServed: "Co-ed",
+        treatmentType: "Both",
+        status: "Openings Available",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 40.9264, lng: -98.3420 }
+    },
+    {
+        id: 18,
+        name: "Norfolk Community Mental Health",
+        type: "Outpatient",
+        address: "1223 Koenigstein Ave, Norfolk, NE 68701",
+        phone: "(402) 555-0707",
+        website: "https://www.norfolkmentalhealth.org",
+        ageGroup: "Adult",
+        genderServed: "Co-ed",
+        treatmentType: "Mental Health",
+        status: "Waitlist",
+        lastUpdated: "2025-01-26",
+        coordinates: { lat: 42.0281, lng: -97.4170 }
+    },
+    {
+        id: 19,
+        name: "Columbus Behavioral Services",
+        type: "Outpatient",
+        address: "4600 38th St, Columbus, NE 68601",
+        phone: "(402) 555-0808",
+        website: "https://www.columbusbehavioral.org",
+        ageGroup: "Both",
+        genderServed: "Co-ed",
+        treatmentType: "Both",
+        status: "Openings Available",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 41.4302, lng: -97.3670 }
+    },
+    {
+        id: 20,
+        name: "Kearney Outpatient Treatment Center",
+        type: "Outpatient",
+        address: "5102 2nd Ave, Kearney, NE 68847",
+        phone: "(308) 555-0909",
+        website: "https://www.kearneyoutpatient.org",
+        ageGroup: "Adult",
+        genderServed: "Co-ed",
+        treatmentType: "Substance Abuse",
+        status: "Accepting Assessments",
+        lastUpdated: "2025-01-25",
+        coordinates: { lat: 40.6994, lng: -99.0816 }
+    },
+    {
+        id: 21,
+        name: "Fremont Mental Health Services",
+        type: "Outpatient",
+        address: "1941 N Clarkson St, Fremont, NE 68025",
+        phone: "(402) 555-1010",
+        website: "https://www.fremontmentalhealth.org",
+        ageGroup: "Both",
+        genderServed: "Co-ed",
+        treatmentType: "Mental Health",
+        status: "Openings Available",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 41.4333, lng: -96.4981 }
     }
 ];
 

@@ -6,24 +6,25 @@ const successMessage = document.getElementById('success-message');
 // Initialize the page
 async function init() {
     try {
-        // Initialize Firebase
-        await window.firebaseAuth.init();
-        
         // Set up event listeners
         signinForm.addEventListener('submit', handleSignin);
         
         // Setup forgot password link
-        document.querySelector('.forgot-password a').addEventListener('click', handleForgotPassword);
+        const forgotLink = document.querySelector('.forgot-password a');
+        if (forgotLink) {
+            forgotLink.addEventListener('click', handleForgotPassword);
+        }
         
         // Check if user is already logged in
-        if (window.firebaseAuth.isAuthenticated()) {
+        const currentProvider = localStorage.getItem('currentProvider');
+        if (currentProvider) {
             // Auto-redirect to dashboard if already logged in
             window.location.href = 'provider-dashboard.html';
             return;
         }
         
-        // For development: Initialize mock data and offer migration
-        await initializeMockDataAndMigration();
+        // Initialize mock data for development
+        initializeMockData();
         
     } catch (error) {
         console.error('Initialization error:', error);
@@ -31,8 +32,8 @@ async function init() {
     }
 }
 
-// Initialize mock data and offer migration to Firebase
-async function initializeMockDataAndMigration() {
+// Initialize mock data for development
+function initializeMockData() {
     // Check if mock providers exist
     const mockProviders = JSON.parse(localStorage.getItem('mockProviders')) || [];
     
@@ -44,78 +45,66 @@ async function initializeMockDataAndMigration() {
                 id: 1,
                 firstName: 'John',
                 lastName: 'Doe',
-                email: 'john@example.com',
-                password: 'Password123',
+                email: 'admin@test.com',
+                password: 'password123',
                 agencyName: 'Example Treatment Center',
                 jobTitle: 'Director',
                 workPhone: '(402) 555-1234',
                 isVerifiedByAdmin: true,
                 emailVerifiedAt: new Date().toISOString(),
                 createdAt: new Date().toISOString(),
-                facilities: [35, 36] // IDs of managed facilities
+                facilities: [1, 2] // IDs of managed facilities
             },
             {
                 id: 2,
                 firstName: 'Jane',
                 lastName: 'Smith',
-                email: 'jane@example.com',
-                password: 'Password123',
+                email: 'provider@test.com',
+                password: 'password123',
                 agencyName: 'Community Health Services',
                 jobTitle: 'Administrator',
                 workPhone: '(402) 555-5678',
                 isVerifiedByAdmin: true,
                 emailVerifiedAt: new Date().toISOString(),
                 createdAt: new Date().toISOString(),
-                facilities: [18, 19] // IDs of managed facilities
+                facilities: [3, 4] // IDs of managed facilities
             }
         ];
         
         // Save to localStorage
         localStorage.setItem('mockProviders', JSON.stringify(sampleProviders));
         
-        // Show migration option
-        showMigrationOption();
-    } else if (mockProviders.length > 0) {
-        // Show migration option for existing users
-        showMigrationOption();
+        // Show test credentials
+        showTestCredentials();
     }
 }
 
-// Show migration option to users
-function showMigrationOption() {
-    const migrationBanner = document.createElement('div');
-    migrationBanner.style.cssText = `
-        background-color: #e3f2fd;
-        border: 1px solid #2196f3;
+// Show test credentials to users
+function showTestCredentials() {
+    const credentialsBanner = document.createElement('div');
+    credentialsBanner.style.cssText = `
+        background-color: #e8f5e8;
+        border: 1px solid #4caf50;
         border-radius: 4px;
         padding: 15px;
         margin: 20px 0;
         text-align: center;
     `;
-    migrationBanner.innerHTML = `
-        <p><strong>Development Mode:</strong> Migrate existing test accounts to Firebase?</p>
-        <button onclick="migrateUsers()" style="background: #2196f3; color: white; border: none; padding: 8px 16px; border-radius: 4px; margin-right: 10px; cursor: pointer;">Migrate Users</button>
-        <button onclick="this.parentElement.remove()" style="background: #666; color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer;">Skip</button>
+    credentialsBanner.innerHTML = `
+        <p><strong>Test Credentials:</strong></p>
+        <p>Email: <code>admin@test.com</code> | Password: <code>password123</code></p>
+        <p>Email: <code>provider@test.com</code> | Password: <code>password123</code></p>
+        <button onclick="this.parentElement.remove()" style="background: #666; color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer; margin-top: 10px;">Hide</button>
     `;
     
-    document.querySelector('.signin-container').insertBefore(migrationBanner, document.querySelector('.signin-form'));
-}
-
-// Migrate users to Firebase
-async function migrateUsers() {
-    try {
-        showSuccess('Migrating users to Firebase...');
-        await window.firebaseAuth.migrateLocalStorageUsers();
-        showSuccess('Migration completed! You can now use Firebase authentication.');
-        
-        // Remove migration banner
-        const banner = document.querySelector('.signin-container > div');
-        if (banner) banner.remove();
-    } catch (error) {
-        console.error('Migration error:', error);
-        showError('Migration failed. Please try again or contact support.');
+    const container = document.querySelector('.signin-container');
+    const form = document.querySelector('.signin-form');
+    if (container && form) {
+        container.insertBefore(credentialsBanner, form);
     }
 }
+
+
 
 // Handle form submission
 async function handleSignin(e) {
@@ -127,7 +116,6 @@ async function handleSignin(e) {
     // Get form data
     const email = document.getElementById('email').value.toLowerCase().trim();
     const password = document.getElementById('password').value;
-    const rememberMe = document.getElementById('remember-me').checked;
     
     // Validate required fields
     if (!email || !password) {
@@ -142,28 +130,16 @@ async function handleSignin(e) {
     submitButton.textContent = 'Signing in...';
     
     try {
-        // Try Firebase authentication first
-        const result = await window.firebaseAuth.signIn(email, password);
+        // Use localStorage authentication
+        const result = await tryLocalStorageAuth(email, password);
         
         if (result.success) {
             showSuccess(result.message);
-            
-            // Redirect to dashboard
             setTimeout(() => {
                 window.location.href = 'provider-dashboard.html';
             }, 1000);
         } else {
-            // If Firebase fails, try fallback to localStorage (for development)
-            const fallbackResult = await tryLocalStorageFallback(email, password);
-            
-            if (fallbackResult.success) {
-                showSuccess(fallbackResult.message);
-                setTimeout(() => {
-                    window.location.href = 'provider-dashboard.html';
-                }, 1000);
-            } else {
-                showError(result.error || fallbackResult.error);
-            }
+            showError(result.error);
         }
     } catch (error) {
         console.error('Sign-in error:', error);
@@ -175,8 +151,8 @@ async function handleSignin(e) {
     }
 }
 
-// Fallback to localStorage authentication (for development)
-async function tryLocalStorageFallback(email, password) {
+// localStorage authentication
+async function tryLocalStorageAuth(email, password) {
     try {
         // Get providers from local storage
         const mockProviders = JSON.parse(localStorage.getItem('mockProviders')) || [];
@@ -234,7 +210,7 @@ async function tryLocalStorageFallback(email, password) {
 async function handleForgotPassword(e) {
     e.preventDefault();
     
-    const email = prompt('Please enter your email address to reset your password:');
+    const email = prompt('Please enter your email address:');
     
     if (!email) {
         return; // User cancelled
@@ -247,18 +223,11 @@ async function handleForgotPassword(e) {
         return;
     }
     
-    try {
-        // Use Firebase password reset
-        const result = await window.firebaseAuth.resetPassword(email);
-        
-        if (result.success) {
-            showSuccess(result.message);
-        } else {
-            showError(result.error);
-        }
-    } catch (error) {
-        console.error('Password reset error:', error);
-        showError('Failed to send password reset email. Please try again.');
+    // For demo purposes, show test credentials
+    if (email === 'admin@test.com' || email === 'provider@test.com') {
+        showSuccess('Password reset: Your password is "password123"');
+    } else {
+        showError('Email not found. Use admin@test.com or provider@test.com for testing.');
     }
 }
 

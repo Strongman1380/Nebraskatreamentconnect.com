@@ -11,7 +11,11 @@ let userLocation = null;
 // Initialize the application
 document.addEventListener('DOMContentLoaded', function() {
     // Load static data
-    allFacilities = window.ALL_FACILITIES_DATA || [];
+    allFacilities = window.STATIC_FACILITIES_DATA || [];
+    
+    // Filter facilities based on current page
+    const pageType = getCurrentPageType();
+    allFacilities = filterFacilitiesByPageType(allFacilities, pageType);
     filteredFacilities = [...allFacilities];
     
     // Initialize UI
@@ -19,20 +23,42 @@ document.addEventListener('DOMContentLoaded', function() {
     displayFacilities(filteredFacilities);
     updateResultsCount();
     
-    // Show demo notice if configured
-    if (window.APP_CONFIG && window.APP_CONFIG.SHOW_DEMO_MESSAGE) {
-        showDemoNotice();
-    }
-    
-    console.log('Static version loaded with', allFacilities.length, 'facilities');
+    console.log('Loaded', allFacilities.length, 'facilities for page type:', pageType);
 });
 
-function showDemoNotice() {
-    const notice = document.getElementById('demo-notice');
-    if (notice) {
-        notice.style.display = 'block';
+// Determine what type of facilities to show based on current page
+function getCurrentPageType() {
+    const path = window.location.pathname;
+    const filename = path.split('/').pop() || 'index.html';
+    
+    if (filename.includes('halfway-houses')) {
+        return 'halfway-houses';
+    } else if (filename.includes('outpatient')) {
+        return 'outpatient';
+    } else if (filename.includes('detox')) {
+        return 'detox-info'; // This page is informational only
+    } else {
+        return 'residential-detox'; // Home page shows residential and detox centers
     }
 }
+
+// Filter facilities based on page type
+function filterFacilitiesByPageType(facilities, pageType) {
+    switch (pageType) {
+        case 'residential-detox':
+            return facilities.filter(f => f.type === 'Treatment Center' || f.type === 'Detox Center');
+        case 'halfway-houses':
+            return facilities.filter(f => f.type === 'Halfway House');
+        case 'outpatient':
+            return facilities.filter(f => f.type === 'Outpatient');
+        case 'detox-info':
+            return []; // No facilities shown on info page
+        default:
+            return facilities;
+    }
+}
+
+
 
 function initializeEventListeners() {
     // Search functionality
