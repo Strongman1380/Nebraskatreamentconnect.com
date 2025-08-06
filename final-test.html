@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Final Test - Geneva 68361 Search</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        .test-banner { 
+            background: #28a745; 
+            color: white; 
+            padding: 15px; 
+            text-align: center; 
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        .auto-search { 
+            background: #ffc107; 
+            padding: 10px; 
+            margin: 10px 0; 
+            border-radius: 5px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-banner">
+        🧪 TESTING: Geneva 68361 Search with Hardcoded ZIP Coordinates
+    </div>
+    
+    <header>
+        <div class="container">
+            <div class="logo">
+                <h1><a href="index.html">Nebraska Treatment Connect</a></h1>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section id="search-section" class="container">
+            <div class="auto-search">
+                ⏱️ Auto-search will trigger in 3 seconds...
+            </div>
+            
+            <h2>Find Residential Treatment, Halfway Houses, and Outpatient Services in Nebraska</h2>
+            <div class="search-container">
+                <input type="text" id="search-input" placeholder="Search by name, city, or ZIP code..." value="68361">
+                <button id="search-btn"><i class="fas fa-search"></i></button>
+                <button id="use-location-btn" title="Use my current location"><i class="fas fa-crosshairs"></i></button>
+            </div>
+            <p style="text-align: center; color: #666; font-size: 0.9rem; margin-top: 10px;">
+                <i class="fas fa-map-marker-alt"></i> Search for your city or <i class="fas fa-crosshairs"></i> use your current location
+            </p>
+            <div class="filters-container">
+                <div class="filter-group">
+                    <label for="search-radius">Search Radius</label>
+                    <select id="search-radius">
+                        <option value="25">25 miles</option>
+                        <option value="50">50 miles</option>
+                        <option value="75" selected>75 miles</option>
+                        <option value="100">100 miles</option>
+                        <option value="150">150 miles</option>
+                        <option value="999">All distances</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="age-group">Age Group</label>
+                    <select id="age-group">
+                        <option value="">All</option>
+                        <option value="Adult">Adult</option>
+                        <option value="Youth">Youth</option>
+                        <option value="Both">Both</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="gender-served">Gender Served</label>
+                    <select id="gender-served">
+                        <option value="">All</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                        <option value="Co-ed">Co-ed</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="treatment-type">Treatment Type</label>
+                    <select id="treatment-type">
+                        <option value="">All</option>
+                        <option value="Substance Abuse">Substance Abuse</option>
+                        <option value="Mental Health">Mental Health</option>
+                        <option value="Both">Both</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="facility-type">Facility Type</label>
+                    <select id="facility-type">
+                        <option value="">All</option>
+                        <option value="Residential">Residential</option>
+                        <option value="Halfway House">Halfway House</option>
+                        <option value="Outpatient">Outpatient</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="view-toggle">
+                <button id="list-view-btn" class="view-btn active">
+                    <i class="fas fa-list"></i> List View
+                </button>
+                <button id="map-view-btn" class="view-btn">
+                    <i class="fas fa-map"></i> Map View
+                </button>
+            </div>
+
+            <div class="results-header">
+                <div class="results-count">
+                    <span id="total-results">Loading...</span> facilities found
+                </div>
+            </div>
+
+            <div id="facilities-list" class="facilities-grid">
+                <p class="no-results">Loading facilities...</p>
+            </div>
+
+            <div id="map-container" style="display: none;">
+                <div id="map" style="height: 600px; width: 100%;"></div>
+            </div>
+        </section>
+    </main>
+
+    <script src="scripts.js"></script>
+    <script>
+        // Automatically trigger search after page loads
+        window.addEventListener('load', function() {
+            console.log('Page loaded, triggering search in 3 seconds...');
+            
+            setTimeout(function() {
+                console.log('Triggering search for 68361...');
+                document.querySelector('.auto-search').innerHTML = '🔍 Searching for facilities within 75 miles of Geneva, NE (68361)...';
+                
+                // Trigger the search
+                const searchBtn = document.getElementById('search-btn');
+                if (searchBtn) {
+                    searchBtn.click();
+                    console.log('Search button clicked');
+                    
+                    // Check results after a delay
+                    setTimeout(function() {
+                        const totalResults = document.getElementById('total-results').textContent;
+                        console.log('Search completed. Results:', totalResults);
+                        
+                        if (totalResults !== 'Loading...' && totalResults !== '0') {
+                            document.querySelector('.auto-search').innerHTML = '✅ SUCCESS: Found ' + totalResults + ' facilities within 75 miles!';
+                            document.querySelector('.auto-search').style.background = '#d4edda';
+                            document.querySelector('.auto-search').style.color = '#155724';
+                        } else {
+                            document.querySelector('.auto-search').innerHTML = '❌ No facilities found - search may have failed';
+                            document.querySelector('.auto-search').style.background = '#f8d7da';
+                            document.querySelector('.auto-search').style.color = '#721c24';
+                        }
+                    }, 2000);
+                }
+            }, 3000);
+        });
+    </script>
+</body>
+</html>

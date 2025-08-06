@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nebraska Treatment Connect</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">
+                <h1><a href="index-static.html">Nebraska Treatment Connect</a></h1>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="index-static.html" class="active">Find Treatment</a></li>
+                    <li><a href="halfway-houses-static.html">Halfway Houses</a></li>
+                    <li><a href="outpatient-static.html">Outpatient Services</a></li>
+                    <li><a href="detox-static.html">Detox Services</a></li>
+                    <li><a href="#" onclick="showProviderMessage()" id="provider-portal-btn">Provider Portal</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <!-- Demo Notice -->
+        <div id="demo-notice" class="demo-notice">
+            <div class="container">
+                <p><i class="fas fa-info-circle"></i> <strong>Demo Version:</strong> This is a static demonstration of the Nebraska Treatment Connect platform. Provider portal and real-time updates are disabled in this version.</p>
+            </div>
+        </div>
+
+        <section id="search-section" class="container">
+            <h2>Find Residential Treatment, Halfway Houses, and Outpatient Services in Nebraska</h2>
+            <div class="search-container">
+                <input type="text" id="search-input" placeholder="Search by name, city, or ZIP code..." aria-label="Search for treatment facilities">
+                <button id="search-btn" aria-label="Search for facilities"><i class="fas fa-search" aria-hidden="true"></i></button>
+                <button id="use-location-btn" title="Use my current location" aria-label="Use my current location"><i class="fas fa-crosshairs" aria-hidden="true"></i></button>
+            </div>
+            <p style="text-align: center; color: #666; font-size: 0.9rem; margin-top: 10px;">
+                <i class="fas fa-map-marker-alt"></i> Search for your city or <i class="fas fa-crosshairs"></i> use your current location
+            </p>
+            <div class="filters-container">
+                <div class="filter-group">
+                    <label for="search-radius">Search Radius</label>
+                    <select id="search-radius">
+                        <option value="25">25 miles</option>
+                        <option value="50">50 miles</option>
+                        <option value="75">75 miles</option>
+                        <option value="100">100 miles</option>
+                        <option value="150">150 miles</option>
+                        <option value="999" selected>All distances</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="age-group">Age Group</label>
+                    <select id="age-group">
+                        <option value="">All</option>
+                        <option value="Adult">Adult</option>
+                        <option value="Juvenile">Juvenile</option>
+                        <option value="Both">Both</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="gender-served">Gender Served</label>
+                    <select id="gender-served">
+                        <option value="">All</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                        <option value="Co-ed">Co-ed</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="treatment-type">Treatment Type</label>
+                    <select id="treatment-type">
+                        <option value="">All</option>
+                        <option value="Substance Abuse">Substance Abuse</option>
+                        <option value="Mental Health">Mental Health</option>
+                        <option value="Both">Both</option>
+                        <option value="Halfway House">Halfway House</option>
+                        <option value="Outpatient">Outpatient</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="facility-type">Facility Type</label>
+                    <select id="facility-type">
+                        <option value="">All</option>
+                        <option value="Treatment Center">Treatment Center</option>
+                        <option value="Halfway House">Halfway House</option>
+                        <option value="Outpatient">Outpatient</option>
+                        <option value="Detox Center">Detox Centers</option>
+                    </select>
+                </div>
+            </div>
+        </section>
+
+        <section id="results-section" class="container">
+            <div class="results-header">
+                <div class="results-count">
+                    <span id="total-results">0</span> facilities found
+                </div>
+                <div class="view-toggle">
+                    <button id="list-view-btn" class="view-btn active">
+                        <i class="fas fa-list"></i> List View
+                    </button>
+                    <button id="map-view-btn" class="view-btn">
+                        <i class="fas fa-map"></i> Map View
+                    </button>
+                </div>
+            </div>
+            <div id="facilities-list">
+                <!-- Facility cards will be dynamically inserted here -->
+            </div>
+            <div id="map-container" style="display: none;">
+                <div id="google-map"></div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Nebraska Treatment Connect. All rights reserved. | <a href="terms.html">Terms of Service</a> | <a href="privacy.html">Privacy Policy</a> | <a href="footer-links.html">Resources</a></p>
+        </div>
+    </footer>
+
+    <!-- Static Configuration -->
+    <script src="config-static.js"></script>
+    
+    <!-- Static Data -->
+    <script src="static-data.js"></script>
+    
+    <!-- Google Maps API -->
+    <script>(g=>{var h,a,k,p="The Google Maps JavaScript API",c="google",l="importLibrary",q="__ib__",m=document,b=window;b=b[c]||(b[c]={});var d=b.maps||(b.maps={}),r=new Set,e=new URLSearchParams,u=()=>h||(h=new Promise(async(f,n)=>{await (a=m.createElement("script"));e.set("libraries",[...r]+"");for(k in g)e.set(k.replace(/[A-Z]/g,t=>"_"+t[0].toLowerCase()),g[k]);e.set("callback",c+".maps."+q);a.src=`https://maps.${c}apis.com/maps/api/js?`+e;d[q]=f;a.onerror=()=>h=n(Error(p+" could not load."));a.nonce=m.querySelector("script[nonce]")?.nonce||"";m.head.append(a)}));d[l]?console.warn(p+" only loads once. Ignoring:",g):d[l]=(f,...n)=>r.add(f)&&u().then(()=>d[l](f,...n))})
+        ({key: window.GOOGLE_MAPS_API_KEY || "YOUR_API_KEY_HERE", v: "weekly"});</script>
+    
+    <script src="scripts-static.js"></script>
+
+    <script>
+        function showProviderMessage() {
+            alert('Provider Portal is disabled in this static demo version. In the full version, providers can log in to update facility availability status.');
+        }
+    </script>
+</body>
+</html>

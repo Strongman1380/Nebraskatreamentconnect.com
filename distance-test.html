@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Distance Calculation Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .test-result {
+            background: #f5f5f5;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        .accurate { background: #d4edda; }
+        .inaccurate { background: #f8d7da; }
+    </style>
+</head>
+<body>
+    <h1>Distance Calculation Accuracy Test</h1>
+    <p>Testing distance calculations from York, NE (68467) to various locations.</p>
+    
+    <div id="test-results"></div>
+    
+    <script>
+        // Haversine formula for calculating distance
+        function calculateDistance(lat1, lon1, lat2, lon2) {
+            const R = 3959; // Earth's radius in miles
+            const dLat = (lat2 - lat1) * Math.PI / 180;
+            const dLon = (lon2 - lon1) * Math.PI / 180;
+            const a = 
+                Math.sin(dLat/2) * Math.sin(dLat/2) +
+                Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * 
+                Math.sin(dLon/2) * Math.sin(dLon/2);
+            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+            return R * c; // Distance in miles
+        }
+        
+        // York, NE coordinates (corrected)
+        const yorkNE = { lat: 40.87, lng: -97.59 };
+        
+        // Test locations with known approximate distances
+        const testLocations = [
+            { name: "Lincoln, NE", lat: 40.8069, lng: -96.6817, expectedDistance: 50 },
+            { name: "Omaha, NE", lat: 41.2563, lng: -95.9404, expectedDistance: 85 },
+            { name: "Grand Island, NE", lat: 40.9291, lng: -98.3681, expectedDistance: 45 },
+            { name: "Hastings, NE", lat: 40.5863, lng: -98.3899, expectedDistance: 45 },
+            { name: "Council Bluffs, IA", lat: 41.2619, lng: -95.9378, expectedDistance: 85 },
+            { name: "Des Moines, IA", lat: 41.5868, lng: -93.6250, expectedDistance: 140 },
+            { name: "Sioux City, IA", lat: 42.4999, lng: -96.4003, expectedDistance: 120 }
+        ];
+        
+        const resultsDiv = document.getElementById('test-results');
+        
+        testLocations.forEach(location => {
+            const calculatedDistance = calculateDistance(
+                yorkNE.lat, yorkNE.lng, 
+                location.lat, location.lng
+            );
+            
+            const difference = Math.abs(calculatedDistance - location.expectedDistance);
+            const isAccurate = difference <= 5; // Within 5 miles is considered accurate
+            
+            const resultDiv = document.createElement('div');
+            resultDiv.className = `test-result ${isAccurate ? 'accurate' : 'inaccurate'}`;
+            resultDiv.innerHTML = `
+                <h3>${location.name}</h3>
+                <p><strong>Expected Distance:</strong> ~${location.expectedDistance} miles</p>
+                <p><strong>Calculated Distance:</strong> ${calculatedDistance.toFixed(1)} miles</p>
+                <p><strong>Difference:</strong> ${difference.toFixed(1)} miles</p>
+                <p><strong>Status:</strong> ${isAccurate ? '✅ Accurate' : '❌ Needs Review'}</p>
+            `;
+            resultsDiv.appendChild(resultDiv);
+        });
+        
+        // Test if Council Bluffs, IA would show up in a 50-mile search from York, NE
+        const councilBluffsDistance = calculateDistance(
+            yorkNE.lat, yorkNE.lng, 
+            41.2619, -95.9378
+        );
+        
+        const summaryDiv = document.createElement('div');
+        summaryDiv.className = 'test-result';
+        summaryDiv.innerHTML = `
+            <h3>50-Mile Radius Test from York, NE</h3>
+            <p><strong>Distance to Council Bluffs, IA:</strong> ${councilBluffsDistance.toFixed(1)} miles</p>
+            <p><strong>Would appear in 50-mile search:</strong> ${councilBluffsDistance <= 50 ? '❌ YES (This might be the issue!)' : '✅ NO'}</p>
+            <p><strong>Would appear in 75-mile search:</strong> ${councilBluffsDistance <= 75 ? '✅ YES' : '✅ NO'}</p>
+        `;
+        resultsDiv.appendChild(summaryDiv);
+    </script>
+</body>
+</html>

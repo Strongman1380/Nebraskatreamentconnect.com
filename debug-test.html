@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug Test - Nebraska Treatment Connect</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .test-container { max-width: 800px; margin: 0 auto; }
+        .debug-log { background: #f5f5f5; padding: 15px; margin: 10px 0; border-radius: 5px; max-height: 400px; overflow-y: auto; }
+        button { padding: 10px 20px; margin: 10px 0; background: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; }
+        input { padding: 8px; margin: 10px 0; width: 200px; }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>Debug Test for Geneva 68361 Search</h1>
+        
+        <div>
+            <label>Test ZIP code search:</label><br>
+            <input type="text" id="test-search" value="68361" placeholder="Enter ZIP code">
+            <select id="test-radius">
+                <option value="75">75 miles</option>
+            </select>
+            <button onclick="testSearch()">Test Search</button>
+            <button onclick="clearLog()">Clear Log</button>
+        </div>
+        
+        <div id="debug-output" class="debug-log">
+            <h3>Debug Output:</h3>
+            <div id="log-content">Ready to test. Click "Test Search" to begin...</div>
+        </div>
+        
+        <div id="results">
+            <h3>Results:</h3>
+            <div id="results-content">No results yet...</div>
+        </div>
+    </div>
+
+    <script>
+        // Load all facilities from the main script to test with real data
+        // But let's first test with simpler data
+        const testFacilities = [
+            {
+                id: 1,
+                name: "Omaha Facility",
+                address: "2900 Blondo Street, Omaha, NE 68111",
+                latitude: "41.3033",
+                longitude: "-95.9922"
+            },
+            {
+                id: 2,
+                name: "Lincoln Facility", 
+                address: "2200 South 10th Street, Lincoln, NE 68502",
+                latitude: "40.7914",
+                longitude: "-96.6665"
+            },
+            {
+                id: 3,
+                name: "Grand Island Facility",
+                address: "914 Baumann Avenue, Grand Island, NE 68803",
+                latitude: "40.9249",
+                longitude: "-98.3420"
+            }
+        ];
+
+        function clearLog() {
+            document.getElementById('log-content').innerHTML = 'Log cleared. Ready for new test...';
+        }
+
+        function log(message) {
+            const logContent = document.getElementById('log-content');
+            logContent.innerHTML += '<div>' + new Date().toLocaleTimeString() + ': ' + message + '</div>';
+            console.log(message);
+            // Auto scroll to bottom
+            logContent.scrollTop = logContent.scrollHeight;
+        }
+
+        function calculateDistance(lat1, lon1, lat2, lon2) {
+            const R = 3959; // Earth's radius in miles
+            const dLat = (lat2 - lat1) * Math.PI / 180;
+            const dLon = (lon2 - lon1) * Math.PI / 180;
+            const a = 
+                Math.sin(dLat/2) * Math.sin(dLat/2) +
+                Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * 
+                Math.sin(dLon/2) * Math.sin(dLon/2);
+            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+            return R * c; // Distance in miles
+        }
+
+        async function testSearch() {
+            clearLog();
+            
+            const searchTerm = document.getElementById('test-search').value;
+            const radius = parseInt(document.getElementById('test-radius').value);
+            
+            log('🔍 Starting test search for: "' + searchTerm + '"');
+            log('📏 Selected radius: ' + radius + ' miles');
+            
+            // Check if it's a location search
+            const isLocationSearch = /\b\d{5}\b/.test(searchTerm);
+            log('📍 Is location search (ZIP code detected): ' + isLocationSearch);
+            
+            if (!isLocationSearch) {
+                log('❌ ERROR: Search term not detected as location');
+                return;
+            }
+            
+            try {
+                // Test geocoding
+                const geocodeUrl = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(searchTerm + ', Nebraska')}&key=AIzaSyDUDTg2qpuIh3Yf0b80T0aViBmP2Dv1x7s`;
+                log('🌐 Making geocoding request...');
+                log('🔗 URL: ' + geocodeUrl);
+                
+                const response = await fetch(geocodeUrl);
+                const data = await response.json();
+                
+                log('📡 Geocoding API response status: ' + data.status);
+                log('📊 Number of results: ' + (data.results ? data.results.length : 0));
+                
+                if (data.status !== 'OK') {
+                    log('❌ Geocoding failed with status: ' + data.status);
+                    if (data.error_message) {
+                        log('❌ Error message: ' + data.error_message);
+                    }
+                    return;
+                }
+                
+                if (data.results && data.results.length > 0) {
+                    const searchLocation = data.results[0].geometry.location;
+                    log('✅ Search location coordinates: ' + searchLocation.lat + ', ' + searchLocation.lng);
+                    log('🏠 Formatted address: ' + data.results[0].formatted_address);
+                    
+                    // Calculate distances to test facilities
+                    log('📐 Calculating distances to facilities...');
+                    const facilitiesWithDistance = testFacilities.map(facility => {
+                        const distance = calculateDistance(
+                            searchLocation.lat, 
+                            searchLocation.lng, 
+                            parseFloat(facility.latitude), 
+                            parseFloat(facility.longitude)
+                        );
+                        log(`   - ${facility.name}: ${distance.toFixed(1)} miles`);
+                        return { ...facility, distance };
+                    });
+                    
+                    // Filter by radius
+                    const facilitiesWithinRadius = facilitiesWithDistance.filter(facility => facility.distance <= radius);
+                    log('✅ Facilities within ' + radius + ' miles: ' + facilitiesWithinRadius.length);
+                    
+                    // Show results
+                    const resultsContent = document.getElementById('results-content');
+                    if (facilitiesWithinRadius.length > 0) {
+                        resultsContent.innerHTML = '<div style="color: green; font-weight: bold;">Found ' + facilitiesWithinRadius.length + ' facilities within ' + radius + ' miles:</div><br>' + 
+                            facilitiesWithinRadius.map(f => 
+                                `<div style="border: 1px solid #ddd; padding: 10px; margin: 5px 0;"><strong>${f.name}</strong><br>Distance: ${f.distance.toFixed(1)} miles<br>Address: ${f.address}</div>`
+                            ).join('');
+                        log('✅ Results displayed successfully');
+                    } else {
+                        resultsContent.innerHTML = '<div style="color: red;">No facilities found within ' + radius + ' miles of ' + data.results[0].formatted_address + '</div>';
+                        log('⚠️ No facilities within radius');
+                    }
+                } else {
+                    log('❌ ERROR: No geocoding results found');
+                    document.getElementById('results-content').innerHTML = '<div style="color: red;">Error: Could not find location for ' + searchTerm + '</div>';
+                }
+                
+            } catch (error) {
+                log('❌ ERROR: ' + error.message);
+                document.getElementById('results-content').innerHTML = '<div style="color: red;">Error: ' + error.message + '</div>';
+            }
+        }
+
+        // Auto-run the test on page load
+        window.onload = function() {
+            log('🚀 Page loaded. Ready to test.');
+            // Automatically run the test
+            setTimeout(testSearch, 1000);
+        };
+    </script>
+</body>
+</html>

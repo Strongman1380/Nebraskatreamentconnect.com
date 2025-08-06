@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Facility Status Management | Nebraska Treatment Connect</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+            --admin-primary-color: #2c3e50;
+            --admin-secondary-color: #3498db;
+            --admin-accent-color: #2ecc71;
+            --admin-light-color: #ecf0f1;
+            --admin-dark-text: #34495e;
+            --admin-light-text: #ffffff;
+            --admin-danger-color: #e74c3c;
+            --admin-warning-color: #f39c12;
+            --admin-border-color: #bdc3c7;
+        }
+
+        body.admin-page {
+            font-family: 'Arial', sans-serif;
+            background-color: var(--admin-light-color);
+            color: var(--admin-dark-text);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .admin-header {
+            background-color: var(--admin-primary-color);
+            color: var(--admin-light-text);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .admin-header h1 {
+            margin: 0;
+            font-size: 1.8rem;
+        }
+
+        .admin-nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+        }
+
+        .admin-nav li a {
+            color: var(--admin-light-text);
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            transition: background-color 0.3s ease;
+        }
+
+        .admin-nav li a:hover, .admin-nav li a.active {
+            background-color: var(--admin-secondary-color);
+            border-radius: 4px;
+        }
+
+        .admin-main {
+            flex-grow: 1;
+            padding: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .admin-section {
+            background-color: var(--admin-light-text);
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .admin-section h2 {
+            color: var(--admin-primary-color);
+            margin-top: 0;
+            border-bottom: 2px solid var(--admin-secondary-color);
+            padding-bottom: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .search-container {
+            margin-bottom: 1.5rem;
+        }
+
+        .search-container input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--admin-border-color);
+            border-radius: 4px;
+            font-size: 1rem;
+            box-sizing: border-box;
+        }
+
+        .facility-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .facility-card {
+            border: 1px solid var(--admin-border-color);
+            border-radius: 8px;
+            padding: 1.5rem;
+            background-color: white;
+            transition: box-shadow 0.3s;
+        }
+
+        .facility-card:hover {
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .facility-name {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--admin-primary-color);
+        }
+
+        .facility-address {
+            color: #666;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+        }
+
+        .status-section {
+            margin-bottom: 1rem;
+        }
+
+        .current-status {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin-bottom: 1rem;
+        }
+
+        .status-available {
+            background-color: #e6f4ea;
+            color: #137333;
+        }
+
+        .status-no-openings {
+            background-color: #fce8e6;
+            color: #c5221f;
+        }
+
+        .status-waitlist {
+            background-color: #fef7e0;
+            color: #e37400;
+        }
+
+        .status-not-updated {
+            background-color: #f1f3f4;
+            color: #5f6368;
+        }
+
+        .status-controls {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .status-controls label {
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+
+        .status-controls select {
+            padding: 0.75rem;
+            border: 1px solid var(--admin-border-color);
+            border-radius: 4px;
+            font-size: 0.9rem;
+        }
+
+        .update-btn {
+            background-color: var(--admin-secondary-color);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+            margin-top: 1rem;
+            transition: background-color 0.3s;
+        }
+
+        .update-btn:hover {
+            background-color: #2980b9;
+        }
+
+        .last-updated {
+            font-size: 0.8rem;
+            color: #666;
+            margin-top: 0.5rem;
+        }
+
+        .admin-footer {
+            background-color: var(--admin-primary-color);
+            color: var(--admin-light-text);
+            text-align: center;
+            padding: 1rem;
+            margin-top: auto;
+        }
+
+        .admin-footer p {
+            margin: 0;
+        }
+
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background-color: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--admin-secondary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .no-facilities {
+            text-align: center;
+            padding: 3rem;
+            color: #666;
+        }
+
+        .filters-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .filter-item {
+            flex: 1;
+            min-width: 200px;
+        }
+        
+        .filter-item select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--admin-border-color);
+            border-radius: 4px;
+        }
+
+        .notes-field {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--admin-border-color);
+            border-radius: 4px;
+            resize: vertical;
+            min-height: 80px;
+        }
+        
+        .success-message,
+        .error-message {
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-radius: 4px;
+            font-weight: 500;
+            display: none;
+        }
+        
+        .success-message {
+            background-color: #e6f4ea;
+            color: #137333;
+        }
+        
+        .error-message {
+            background-color: #fce8e6;
+            color: #c5221f;
+        }
+
+        @media (max-width: 768px) {
+            .admin-header {
+                flex-direction: column;
+                padding: 1rem;
+            }
+
+            .admin-header h1 {
+                margin-bottom: 0.5rem;
+                font-size: 1.5rem;
+            }
+
+            .admin-nav ul {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .facility-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .stats-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body class="admin-page">
+    <header class="admin-header">
+        <h1>Nebraska Treatment Connect - Status Management</h1>
+        <nav class="admin-nav">
+            <ul>
+                <li><a href="index.html"><i class="fas fa-home"></i> Main Site</a></li>
+                <li><a href="admin-import.html"><i class="fas fa-upload"></i> Import Data</a></li>
+                <li><a href="admin-status.html" class="active"><i class="fas fa-list-check"></i> Status Management</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="admin-main">
+        <!-- Statistics Overview -->
+        <section class="admin-section">
+            <h2><i class="fas fa-chart-bar"></i> Status Overview</h2>
+            <div class="stats-container">
+                <div class="stat-card">
+                    <div class="stat-value" id="total-facilities">0</div>
+                    <div class="stat-label">Total Facilities</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="available-count">0</div>
+                    <div class="stat-label">Openings Available</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="no-openings-count">0</div>
+                    <div class="stat-label">No Openings</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="waitlist-count">0</div>
+                    <div class="stat-label">Waitlist</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="not-updated-count">0</div>
+                    <div class="stat-label">Status Not Updated</div>
+                </div>
+            </div>
+        </section>
+                
+        <!-- Facility Search and Filter -->
+        <section class="admin-section">
+            <h2><i class="fas fa-search"></i> Filter Facilities</h2>
+            
+            <div class="success-message" id="success-message">Status updated successfully!</div>
+            <div class="error-message" id="error-message">Failed to update status. Please try again.</div>
+            
+            <div class="search-container">
+                <input type="text" id="facility-search" placeholder="Search by facility name, address, phone number...">
+            </div>
+            
+            <div class="filters-row">
+                <div class="filter-item">
+                    <select id="status-filter">
+                        <option value="">All Status Types</option>
+                        <option value="Openings Available">Openings Available</option>
+                        <option value="No Openings">No Openings</option>
+                        <option value="Waitlist">Waitlist</option>
+                        <option value="Status Not Updated">Status Not Updated</option>
+                        <option value="Accepting Assessments">Accepting Assessments</option>
+                        <option value="Emergency/Crisis Only">Emergency/Crisis Only</option>
+                    </select>
+                </div>
+                <div class="filter-item">
+                    <select id="facility-type-filter">
+                        <option value="">All Facility Types</option>
+                        <option value="Treatment Center">Treatment Center</option>
+                        <option value="Halfway House">Halfway House</option>
+                        <option value="Outpatient">Outpatient</option>
+                    </select>
+                </div>
+            </div>
+        </section>
+
+        <!-- Facility Status Cards -->
+        <section class="admin-section">
+            <h2><i class="fas fa-building"></i> Facility Status Management</h2>
+            <div id="facility-grid" class="facility-grid">
+                <!-- Facility cards will be dynamically inserted here -->
+            </div>
+            <div id="no-facilities" class="no-facilities" style="display:none;">
+                <p>No facilities found matching your search criteria.</p>
+            </div>
+        </section>
+    </main>
+
+    <footer class="admin-footer">
+        <p>&copy; <span id="current-year"></span> Nebraska Treatment Connect. Admin Panel. All rights reserved. | <a href="terms.html">Terms of Service</a> | <a href="privacy.html">Privacy Policy</a> | <a href="footer-links.html">Resources</a></p>
+    </footer>
+
+    <script>
+        // Global variables
+        let allFacilities = [];
+        
+        // Initialize the app
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('current-year').textContent = new Date().getFullYear();
+            loadFacilitiesData();
+            setupEventListeners();
+        });
+        
+        // Load facilities data from localStorage or scripts.js
+        function loadFacilitiesData() {
+            // Try to load from localStorage first
+            const localData = localStorage.getItem('treatmentCenterDatabase');
+            
+            if (localData) {
+                allFacilities = JSON.parse(localData);
+                renderFacilities(allFacilities);
+                updateStatistics(allFacilities);
+            } else {
+                // If no data in localStorage, try loading from scripts.js
+                const script = document.createElement('script');
+                script.src = 'scripts.js';
+                script.onload = function() {
+                    if (typeof mockFacilities !== 'undefined' && typeof mockFacilitiesPart2 !== 'undefined') {
+                        allFacilities = [...mockFacilities, ...mockFacilitiesPart2];
+                        
+                        // Add halfway houses if available
+                        if (typeof halfwayHouses !== 'undefined') {
+                            allFacilities = [...allFacilities, ...halfwayHouses];
+                        }
+                        
+                        // Add outpatient services if available
+                        if (typeof outpatientServices !== 'undefined') {
+                            allFacilities = [...allFacilities, ...outpatientServices];
+                        }
+                        
+                        renderFacilities(allFacilities);
+                        updateStatistics(allFacilities);
+                        
+                        // Save to localStorage for future use
+                        localStorage.setItem('treatmentCenterDatabase', JSON.stringify(allFacilities));
+                    } else {
+                        showError("Failed to load facility data.");
+                    }
+                };
+                
+                script.onerror = function() {
+                    showError("Failed to load scripts.js file.");
+                };
+                
+                document.head.appendChild(script);
+            }
+        }
+        
+        // Set up event listeners
+        function setupEventListeners() {
+            // Search input listener
+            document.getElementById('facility-search').addEventListener('input', filterFacilities);
+            
+            // Status filter listener
+            document.getElementById('status-filter').addEventListener('change', filterFacilities);
+            
+            // Facility type filter listener
+            document.getElementById('facility-type-filter').addEventListener('change', filterFacilities);
+        }
+        

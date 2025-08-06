@@ -1,0 +1,1401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Import Treatment Centers | Nebraska Treatment Connect</title>
+    <link rel="stylesheet" href="styles.css"> <!-- Link to existing stylesheet -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+            --admin-primary-color: #2c3e50; /* Dark Blue */
+            --admin-secondary-color: #3498db; /* Bright Blue */
+            --admin-accent-color: #2ecc71; /* Green */
+            --admin-light-color: #ecf0f1; /* Light Grey */
+            --admin-dark-text: #34495e; /* Dark Grey Text */
+            --admin-light-text: #ffffff;
+            --admin-danger-color: #e74c3c; /* Red */
+            --admin-warning-color: #f39c12; /* Orange */
+            --admin-border-color: #bdc3c7;
+        }
+
+        body.admin-page {
+            font-family: 'Arial', sans-serif;
+            background-color: var(--admin-light-color);
+            color: var(--admin-dark-text);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .admin-header {
+            background-color: var(--admin-primary-color);
+            color: var(--admin-light-text);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .admin-header h1 {
+            margin: 0;
+            font-size: 1.8rem;
+        }
+
+        .admin-nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+        }
+
+        .admin-nav li a {
+            color: var(--admin-light-text);
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            transition: background-color 0.3s ease;
+        }
+
+        .admin-nav li a:hover, .admin-nav li a.active {
+            background-color: var(--admin-secondary-color);
+            border-radius: 4px;
+        }
+
+        .admin-main {
+            flex-grow: 1;
+            padding: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .admin-section {
+            background-color: var(--admin-light-text);
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .admin-section h2 {
+            color: var(--admin-primary-color);
+            margin-top: 0;
+            border-bottom: 2px solid var(--admin-secondary-color);
+            padding-bottom: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+        }
+
+        .form-group input[type="file"],
+        .form-group input[type="text"],
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--admin-border-color);
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        
+        .form-group textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            margin-right: 0.5rem;
+        }
+
+        .btn-primary {
+            background-color: var(--admin-secondary-color);
+            color: var(--admin-light-text);
+        }
+
+        .btn-primary:hover {
+            background-color: #2980b9; /* Darker blue */
+        }
+        
+        .btn-success {
+            background-color: var(--admin-accent-color);
+            color: var(--admin-light-text);
+        }
+        .btn-success:hover {
+            background-color: #27ae60; /* Darker green */
+        }
+
+        .btn-danger {
+            background-color: var(--admin-danger-color);
+            color: var(--admin-light-text);
+        }
+        .btn-danger:hover {
+            background-color: #c0392b; /* Darker red */
+        }
+        
+        .btn-warning {
+            background-color: var(--admin-warning-color);
+            color: var(--admin-light-text);
+        }
+        .btn-warning:hover {
+            background-color: #d35400; /* Darker orange */
+        }
+
+
+        .data-table-container {
+            overflow-x: auto;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        .data-table th, .data-table td {
+            border: 1px solid var(--admin-border-color);
+            padding: 0.75rem;
+            text-align: left;
+            font-size: 0.9rem;
+        }
+
+        .data-table th {
+            background-color: var(--admin-primary-color);
+            color: var(--admin-light-text);
+            cursor: pointer;
+        }
+        .data-table th .sort-icon {
+            margin-left: 5px;
+            opacity: 0.7;
+        }
+
+        .data-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        .data-table tr:hover {
+            background-color: #e0e0e0;
+        }
+        .data-table td.actions {
+            white-space: nowrap;
+        }
+        .data-table td.actions .btn {
+            padding: 0.3rem 0.6rem;
+            font-size: 0.8rem;
+            margin-right: 0.3rem;
+        }
+
+
+        .status-duplicate {
+            background-color: #ffebee !important; /* Light red */
+            color: var(--admin-danger-color);
+        }
+        .status-duplicate td::before {
+            content: "DUPLICATE ";
+            font-weight: bold;
+            color: var(--admin-danger-color);
+        }
+
+        .status-consolidate {
+            background-color: #fff9c4 !important; /* Light yellow */
+            color: #f57f17;
+        }
+        .status-consolidate td::before {
+            content: "CONSOLIDATE ";
+            font-weight: bold;
+            color: #f57f17;
+        }
+        
+        .status-new {
+             /* No special styling, or a subtle green if preferred */
+        }
+
+
+        .import-summary ul {
+            list-style: none;
+            padding: 0;
+        }
+        .import-summary li {
+            padding: 0.5rem 0;
+            border-bottom: 1px dashed var(--admin-border-color);
+        }
+        .import-summary li:last-child {
+            border-bottom: none;
+        }
+
+        .progress-bar-container {
+            width: 100%;
+            background-color: #e0e0e0;
+            border-radius: 4px;
+            margin: 1rem 0;
+        }
+        .progress-bar {
+            width: 0%;
+            height: 20px;
+            background-color: var(--admin-accent-color);
+            border-radius: 4px;
+            text-align: center;
+            line-height: 20px;
+            color: white;
+            transition: width 0.5s ease;
+        }
+
+        .tooltip {
+            position: relative;
+            display: inline-block;
+        }
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 200px;
+            background-color: var(--admin-dark-text);
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px 0;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -100px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .tooltip .tooltiptext::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: var(--admin-dark-text) transparent transparent transparent;
+        }
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.5);
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 10% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 600px;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        .modal-header {
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .modal-header h3 {
+            margin: 0;
+            color: var(--admin-primary-color);
+        }
+        .close-button {
+            color: #aaa;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .close-button:hover,
+        .close-button:focus {
+            color: black;
+            text-decoration: none;
+        }
+        .modal-body {
+            padding: 15px 0;
+        }
+        .modal-footer {
+            padding: 10px 0;
+            border-top: 1px solid #eee;
+            text-align: right;
+        }
+
+        .admin-footer {
+            background-color: var(--admin-primary-color);
+            color: var(--admin-light-text);
+            text-align: center;
+            padding: 1rem;
+            margin-top: auto; /* Pushes footer to bottom */
+        }
+        .admin-footer p {
+            margin: 0;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .admin-header {
+                flex-direction: column;
+                padding: 1rem;
+            }
+            .admin-header h1 {
+                margin-bottom: 0.5rem;
+                font-size: 1.5rem;
+            }
+            .admin-nav ul {
+                flex-direction: column;
+                width: 100%;
+            }
+            .admin-nav li a {
+                display: block;
+                text-align: center;
+                padding: 0.8rem;
+            }
+            .admin-main {
+                padding: 1rem;
+            }
+            .admin-section {
+                padding: 1rem;
+            }
+            .btn {
+                width: 100%;
+                margin-bottom: 0.5rem;
+            }
+            .btn:last-child {
+                margin-bottom: 0;
+            }
+            .data-table td.actions .btn {
+                 width: auto; /* Keep action buttons smaller */
+                 margin-bottom: 0.3rem;
+            }
+        }
+
+    </style>
+</head>
+<body class="admin-page">
+
+    <header class="admin-header">
+        <h1>Nebraska Treatment Connect - Admin Panel</h1>
+        <nav class="admin-nav">
+            <ul>
+                <li><a href="index.html"><i class="fas fa-home"></i> Main Site</a></li>
+                <li><a href="admin-import.html" class="active"><i class="fas fa-upload"></i> Import Data</a></li>
+                <li><a href="#admin-dashboard-section" id="viewDashboardLink"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                <!-- Add other admin links here if needed -->
+            </ul>
+        </nav>
+    </header>
+
+    <main class="admin-main">
+        <!-- Section 1: File Upload -->
+        <section class="admin-section" id="upload-section">
+            <h2><i class="fas fa-file-csv"></i> Import Treatment Center Data</h2>
+            <div class="form-group">
+                <label for="csvFile">Upload CSV/Spreadsheet File:</label>
+                <input type="file" id="csvFile" accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel">
+                <small>Accepted formats: .csv, .xlsx, .xls. Ensure columns are: name, address, phone, website, treatment_type (comma-separated for multiple), age_group, gender_served, description, availability_status, status_last_updated, facility_type.</small>
+            </div>
+            <button id="uploadPreviewBtn" class="btn btn-primary"><i class="fas fa-eye"></i> Upload & Preview Data</button>
+            <div class="progress-bar-container" id="uploadProgressBarContainer" style="display:none;">
+                <div class="progress-bar" id="uploadProgressBar">0%</div>
+            </div>
+        </section>
+
+        <!-- Section 2: Data Preview and Actions -->
+        <section class="admin-section" id="preview-section" style="display:none;">
+            <h2><i class="fas fa-table"></i> Data Preview & Actions</h2>
+            <p>Review the data below. Duplicates or potential consolidations are highlighted. Select rows to import.</p>
+            <div class="form-group">
+                <input type="text" id="previewSearch" placeholder="Search preview data...">
+            </div>
+            <div class="data-table-container">
+                <table class="data-table" id="previewTable">
+                    <thead>
+                        <tr>
+                            <th><input type="checkbox" id="selectAllPreview"></th>
+                            <th data-sort="name">Name <i class="fas fa-sort sort-icon"></i></th>
+                            <th data-sort="address">Address <i class="fas fa-sort sort-icon"></i></th>
+                            <th data-sort="phone">Phone <i class="fas fa-sort sort-icon"></i></th>
+                            <th data-sort="treatment_type">Treatments <i class="fas fa-sort sort-icon"></i></th>
+                            <th data-sort="facility_type">Facility Type <i class="fas fa-sort sort-icon"></i></th>
+                            <th data-sort="status">Status <i class="fas fa-sort sort-icon"></i></th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="previewTableBody">
+                        <!-- Rows will be populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+            <button id="importSelectedBtn" class="btn btn-success" style="margin-top: 1rem;"><i class="fas fa-check-circle"></i> Import Selected (<span id="selectedCount">0</span>)</button>
+            <div class="progress-bar-container" id="importProgressBarContainer" style="display:none;">
+                <div class="progress-bar" id="importProgressBar">0%</div>
+            </div>
+        </section>
+
+        <!-- Section 3: Import Summary -->
+        <section class="admin-section" id="summary-section" style="display:none;">
+            <h2><i class="fas fa-clipboard-list"></i> Import Summary</h2>
+            <div class="import-summary" id="importSummaryContent">
+                <!-- Summary will be populated by JavaScript -->
+            </div>
+        </section>
+
+        <!-- Section 4: Admin Dashboard - View All Treatment Centers -->
+        <section class="admin-section" id="admin-dashboard-section">
+            <h2><i class="fas fa-database"></i> Treatment Center Database</h2>
+            <div class="form-group">
+                <input type="text" id="dashboardSearch" placeholder="Search database (e.g., name, city, treatment type)...">
+            </div>
+            <button id="exportDataBtn" class="btn btn-primary"><i class="fas fa-file-export"></i> Export All Data (CSV)</button>
+            <button id="clearDatabaseBtn" class="btn btn-danger"><i class="fas fa-trash-alt"></i> Clear Entire Database</button>
+            <div class="data-table-container">
+                <table class="data-table" id="dashboardTable">
+                    <thead>
+                        <tr>
+                            <th data-sort-db="name">Name <i class="fas fa-sort sort-icon"></i></th>
+                            <th data-sort-db="address">Address <i class="fas fa-sort sort-icon"></i></th>
+                            <th data-sort-db="phone">Phone <i class="fas fa-sort sort-icon"></i></th>
+                            <th data-sort-db="website">Website <i class="fas fa-sort sort-icon"></i></th>
+                            <th data-sort-db="treatment_type">Treatments <i class="fas fa-sort sort-icon"></i></th>
+                            <th data-sort-db="facility_type">Facility Type <i class="fas fa-sort sort-icon"></i></th>
+                            <th data-sort-db="availability_status">Availability <i class="fas fa-sort sort-icon"></i></th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="dashboardTableBody">
+                        <!-- Rows will be populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+            <p id="dashboardNoData" style="text-align:center; padding:1rem; display:none;">No treatment centers in the database yet.</p>
+        </section>
+    </main>
+
+    <!-- Modal for Editing/Viewing Details -->
+    <div id="detailsModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">Treatment Center Details</h3>
+                <span class="close-button" id="modalCloseBtn">&times;</span>
+            </div>
+            <div class="modal-body" id="modalBodyContent">
+                <!-- Content will be populated by JavaScript -->
+                <form id="editCenterForm">
+                    <input type="hidden" id="editCenterId">
+                    <div class="form-group">
+                        <label for="editName">Name:</label>
+                        <input type="text" id="editName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editAddress">Address:</label>
+                        <input type="text" id="editAddress" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editPhone">Phone:</label>
+                        <input type="tel" id="editPhone" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editWebsite">Website:</label>
+                        <input type="url" id="editWebsite">
+                    </div>
+                    <div class="form-group">
+                        <label for="editTreatmentType">Treatment Types (comma-separated):</label>
+                        <input type="text" id="editTreatmentType" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editAgeGroup">Age Group:</label>
+                        <input type="text" id="editAgeGroup">
+                    </div>
+                    <div class="form-group">
+                        <label for="editGenderServed">Gender Served:</label>
+                        <input type="text" id="editGenderServed">
+                    </div>
+                    <div class="form-group">
+                        <label for="editDescription">Description:</label>
+                        <textarea id="editDescription"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="editAvailabilityStatus">Availability Status:</label>
+                        <select id="editAvailabilityStatus">
+                            <option value="Accepting Patients">Accepting Patients</option>
+                            <option value="Waitlist">Waitlist</option>
+                            <option value="Full">Full</option>
+                            <option value="Not Specified">Not Specified</option>
+                        </select>
+                    </div>
+                     <div class="form-group">
+                        <label for="editFacilityType">Facility Type:</label>
+                        <select id="editFacilityType" required>
+                            <option value="Treatment Center">Treatment Center</option>
+                            <option value="Halfway House">Halfway House</option>
+                            <option value="Outpatient">Outpatient</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button id="saveChangesBtn" class="btn btn-success"><i class="fas fa-save"></i> Save Changes</button>
+                <button id="cancelEditBtn" class="btn btn-danger">Cancel</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Confirmation Modal -->
+    <div id="confirmModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="confirmModalTitle">Confirm Action</h3>
+                <span class="close-button" id="confirmModalCloseBtn">&times;</span>
+            </div>
+            <div class="modal-body">
+                <p id="confirmModalMessage">Are you sure you want to proceed?</p>
+            </div>
+            <div class="modal-footer">
+                <button id="confirmModalYesBtn" class="btn btn-danger">Yes</button>
+                <button id="confirmModalNoBtn" class="btn btn-primary">No</button>
+            </div>
+        </div>
+    </div>
+
+
+    <footer class="admin-footer">
+        <p>&copy; <span id="currentYear"></span> Nebraska Treatment Connect. Admin Panel. All rights reserved. | <a href="terms.html">Terms of Service</a> | <a href="privacy.html">Privacy Policy</a> | <a href="footer-links.html">Resources</a></p>
+    </footer>
+
+    <script>
+    // JavaScript for Admin Tool Functionality
+    document.addEventListener('DOMContentLoaded', () => {
+        const DB_KEY = 'treatmentCenterDatabase';
+        let treatmentCentersDB = JSON.parse(localStorage.getItem(DB_KEY)) || [];
+        let uploadedData = [];
+        let previewSortColumn = null;
+        let previewSortDirection = 'asc';
+        let dbSortColumn = null;
+        let dbSortDirection = 'asc';
+        
+        // Helper function for string normalization (used in various places)
+        function normalizeStr(str) {
+            return str ? str.toLowerCase().replace(/\s+/g, '') : '';
+        }
+        
+        // Initialize database - load from scripts.js if available
+        function initializeDB() {
+            if (treatmentCentersDB.length === 0) {
+                // Check if scripts.js is loaded or try to load it
+                if (typeof mockFacilities === 'undefined' || typeof mockFacilitiesPart2 === 'undefined') {
+                    // Load scripts.js dynamically
+                    const script = document.createElement('script');
+                    script.src = 'scripts.js';
+                    script.onload = () => {
+                        loadFacilitiesFromScripts();
+                    };
+                    script.onerror = () => {
+                        console.log('Could not load scripts.js, starting with empty database');
+                    };
+                    document.head.appendChild(script);
+                } else {
+                    loadFacilitiesFromScripts();
+                }
+            }
+        }
+        
+        function loadFacilitiesFromScripts() {
+            if (typeof mockFacilities !== 'undefined' && typeof mockFacilitiesPart2 !== 'undefined') {
+                const allMockFacilities = [...mockFacilities, ...mockFacilitiesPart2];
+                if (typeof halfwayHouses !== 'undefined') {
+                    allMockFacilities.push(...halfwayHouses);
+                }
+                if (typeof outpatientServices !== 'undefined') {
+                    allMockFacilities.push(...outpatientServices);
+                }
+                
+                // Convert to admin format with treatment_type as array
+                const convertedFacilities = allMockFacilities.map(facility => ({
+                    id: facility.id,
+                    name: facility.name,
+                    address: facility.address,
+                    phone: facility.phone,
+                    website: facility.website || '',
+                    treatment_type: Array.isArray(facility.treatment_type) ? 
+                                   facility.treatment_type : 
+                                   [facility.treatment_type],
+                    age_group: facility.age_group || '',
+                    gender_served: facility.gender_served || '',
+                    description: facility.description || '',
+                    availability_status: facility.availability_status || 'Status Not Updated',
+                    status_last_updated: facility.status_last_updated || new Date().toISOString(),
+                    facility_type: facility.facility_type || 'Treatment Center'
+                }));
+                
+                treatmentCentersDB = convertedFacilities;
+                localStorage.setItem(DB_KEY, JSON.stringify(treatmentCentersDB));
+                console.log(`Loaded ${convertedFacilities.length} existing facilities into database`);
+                renderDashboardTable();
+            }
+        }
+        
+        // Initialize database on page load
+        initializeDB();
+
+        // DOM Elements
+        const csvFileInput = document.getElementById('csvFile');
+        const uploadPreviewBtn = document.getElementById('uploadPreviewBtn');
+        const previewSection = document.getElementById('preview-section');
+        const previewTableBody = document.getElementById('previewTableBody');
+        const selectAllPreviewCheckbox = document.getElementById('selectAllPreview');
+        const importSelectedBtn = document.getElementById('importSelectedBtn');
+        const selectedCountSpan = document.getElementById('selectedCount');
+        
+        const summarySection = document.getElementById('summary-section');
+        const importSummaryContent = document.getElementById('importSummaryContent');
+        
+        const dashboardTableBody = document.getElementById('dashboardTableBody');
+        const dashboardSearchInput = document.getElementById('dashboardSearch');
+        const previewSearchInput = document.getElementById('previewSearch');
+        const exportDataBtn = document.getElementById('exportDataBtn');
+        const clearDatabaseBtn = document.getElementById('clearDatabaseBtn');
+        const dashboardNoData = document.getElementById('dashboardNoData');
+        
+        const uploadProgressBar = document.getElementById('uploadProgressBar');
+        const uploadProgressBarContainer = document.getElementById('uploadProgressBarContainer');
+        const importProgressBar = document.getElementById('importProgressBar');
+        const importProgressBarContainer = document.getElementById('importProgressBarContainer');
+
+        const detailsModal = document.getElementById('detailsModal');
+        const modalCloseBtn = document.getElementById('modalCloseBtn');
+        const modalTitle = document.getElementById('modalTitle');
+        const editCenterForm = document.getElementById('editCenterForm');
+        const saveChangesBtn = document.getElementById('saveChangesBtn');
+        const cancelEditBtn = document.getElementById('cancelEditBtn');
+        
+        const confirmModal = document.getElementById('confirmModal');
+        const confirmModalCloseBtn = document.getElementById('confirmModalCloseBtn');
+        const confirmModalTitle = document.getElementById('confirmModalTitle');
+        const confirmModalMessage = document.getElementById('confirmModalMessage');
+        const confirmModalYesBtn = document.getElementById('confirmModalYesBtn');
+        const confirmModalNoBtn = document.getElementById('confirmModalNoBtn');
+        let confirmActionCallback = null;
+
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+        document.getElementById('viewDashboardLink').addEventListener('click', (e) => {
+            e.preventDefault();
+            document.getElementById('admin-dashboard-section').scrollIntoView({ behavior: 'smooth' });
+        });
+
+
+        // --- Utility Functions ---
+        function generateId() {
+            return '_' + Math.random().toString(36).substr(2, 9);
+        }
+
+        function saveDB() {
+            localStorage.setItem(DB_KEY, JSON.stringify(treatmentCentersDB));
+        }
+        
+        function showModal(modalElement) {
+            modalElement.style.display = 'block';
+        }
+
+        function closeModal(modalElement) {
+            modalElement.style.display = 'none';
+        }
+        
+        function showConfirmModal(title, message, callback) {
+            confirmModalTitle.textContent = title;
+            confirmModalMessage.textContent = message;
+            confirmActionCallback = callback;
+            showModal(confirmModal);
+        }
+
+        confirmModalCloseBtn.onclick = () => closeModal(confirmModal);
+        confirmModalNoBtn.onclick = () => closeModal(confirmModal);
+        confirmModalYesBtn.onclick = () => {
+            if (confirmActionCallback) confirmActionCallback();
+            closeModal(confirmModal);
+        };
+        
+        modalCloseBtn.onclick = () => closeModal(detailsModal);
+        cancelEditBtn.onclick = (e) => {
+            e.preventDefault();
+            closeModal(detailsModal);
+        };
+        window.onclick = (event) => {
+            if (event.target == detailsModal) closeModal(detailsModal);
+            if (event.target == confirmModal) closeModal(confirmModal);
+        };
+
+
+        // --- CSV Parsing (Simplified) ---
+        // For robust XLSX/XLS, a library like SheetJS (xlsx) would be needed.
+        // This example focuses on CSV.
+        function parseCSV(csvText) {
+            const lines = csvText.split('\n').filter(line => line.trim() !== '');
+            if (lines.length < 2) return []; // Need header and at least one data row
+            
+            const header = lines[0].split(',').map(h => h.trim().toLowerCase().replace(/\s+/g, '_'));
+            const expectedHeaders = ['name', 'address', 'phone', 'website', 'treatment_type', 'age_group', 'gender_served', 'description', 'availability_status', 'status_last_updated', 'facility_type'];
+            // Basic header validation
+            if (!expectedHeaders.every(eh => header.includes(eh))) {
+                alert(`CSV header mismatch. Expected columns: ${expectedHeaders.join(', ')}. Found: ${header.join(', ')}`);
+                return [];
+            }
+
+            return lines.slice(1).map(line => {
+                const values = line.split(','); // Simple split, doesn't handle commas in fields
+                const entry = {};
+                header.forEach((col, index) => {
+                    let value = values[index] ? values[index].trim() : '';
+                    if (col === 'treatment_type') {
+                        entry[col] = value.split(';').map(t => t.trim()).filter(t => t); // Assuming treatments separated by semicolon
+                    } else {
+                        entry[col] = value;
+                    }
+                });
+                entry.id = generateId(); // Assign a temporary ID for preview
+                entry.validation_errors = []; // For field validation
+                return entry;
+            });
+        }
+        
+        // --- Data Validation ---
+        function validateEntry(entry) {
+            entry.validation_errors = [];
+            if (!entry.name || entry.name.trim() === '') entry.validation_errors.push("Name is required.");
+            if (!entry.address || entry.address.trim() === '') entry.validation_errors.push("Address is required.");
+            if (!entry.phone || entry.phone.trim() === '') entry.validation_errors.push("Phone is required.");
+            // Basic phone format check (example)
+            else if (!/^\+?([0-9]{1,3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/.test(entry.phone) && !/^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/.test(entry.phone)) {
+                 // entry.validation_errors.push("Phone format seems incorrect."); // This regex is too strict for general use
+            }
+            if (!entry.treatment_type || entry.treatment_type.length === 0) entry.validation_errors.push("At least one Treatment Type is required.");
+            if (!entry.facility_type || entry.facility_type.trim() === '') entry.validation_errors.push("Facility Type is required.");
+            
+            // Website validation (optional, allow empty)
+            if (entry.website && entry.website.trim() !== '') {
+                try {
+                    new URL(entry.website);
+                } catch (_) {
+                    entry.validation_errors.push("Website URL is invalid.");
+                }
+            }
+            return entry.validation_errors.length === 0;
+        }
+
+
+        // --- Duplicate & Consolidation Check ---
+        function checkStatus(entry) {
+            // Normalize for comparison
+            const normalizeStr = (str) => str ? str.toLowerCase().replace(/\s+/g, '') : '';
+            const entryNameNorm = normalizeStr(entry.name);
+            const entryAddrNorm = normalizeStr(entry.address);
+
+            for (const dbEntry of treatmentCentersDB) {
+                const dbNameNorm = normalizeStr(dbEntry.name);
+                const dbAddrNorm = normalizeStr(dbEntry.address);
+
+                if (dbNameNorm === entryNameNorm && dbAddrNorm === entryAddrNorm) {
+                    return 'duplicate'; // Exact match on name and address
+                }
+                if (dbNameNorm === entryNameNorm && dbAddrNorm !== entryAddrNorm) {
+                     // Potential consolidation if name matches but address differs slightly or services differ
+                     // For this version, we'll mark as 'consolidate' if name matches but address is different.
+                     // A more sophisticated check would compare addresses more closely.
+                    return 'consolidate';
+                }
+            }
+            return 'new';
+        }
+
+        // --- Rendering Functions ---
+        function renderPreviewTable(dataToRender = uploadedData) {
+            previewTableBody.innerHTML = '';
+            if (dataToRender.length === 0) {
+                previewTableBody.innerHTML = '<tr><td colspan="8" style="text-align:center;">No data to preview. Upload a file or adjust search.</td></tr>';
+                return;
+            }
+            
+            dataToRender.forEach((entry, index) => {
+                const tr = document.createElement('tr');
+                tr.dataset.id = entry.id;
+                validateEntry(entry); // Validate before rendering status
+                const status = entry.validation_errors.length > 0 ? 'error' : checkStatus(entry);
+                tr.classList.add(`status-${status}`);
+                if (entry.validation_errors.length > 0) {
+                    tr.title = `Validation Errors: ${entry.validation_errors.join('; ')}`;
+                }
+
+
+                let statusText = status.charAt(0).toUpperCase() + status.slice(1);
+                if (status === 'error') statusText = `Error (${entry.validation_errors.length})`;
+
+                tr.innerHTML = `
+                    <td><input type="checkbox" class="preview-select" data-id="${entry.id}" ${status === 'duplicate' || status === 'error' ? 'disabled' : 'checked'}></td>
+                    <td>${entry.name || 'N/A'}</td>
+                    <td>${entry.address || 'N/A'}</td>
+                    <td>${entry.phone || 'N/A'}</td>
+                    <td>${(entry.treatment_type || []).join(', ') || 'N/A'}</td>
+                    <td>${entry.facility_type || 'N/A'}</td>
+                    <td>${statusText}</td>
+                    <td class="actions">
+                        <button class="btn btn-primary btn-sm view-details-preview" data-id="${entry.id}"><i class="fas fa-eye"></i> View</button>
+                        ${status === 'duplicate' ? '<button class="btn btn-warning btn-sm force-add-preview" data-id="'+entry.id+'" title="Add anyway, creates new ID"><i class="fas fa-plus-circle"></i> Force Add</button>' : ''}
+                        ${status === 'consolidate' ? '<button class="btn btn-info btn-sm merge-preview" data-id="'+entry.id+'" title="Merge with existing (not fully implemented)"><i class="fas fa-code-merge"></i> Merge</button>' : ''}
+                    </td>
+                `;
+                previewTableBody.appendChild(tr);
+            });
+            updateSelectedCount();
+            addPreviewTableEventListeners();
+        }
+        
+        function addPreviewTableEventListeners() {
+            document.querySelectorAll('.view-details-preview').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const id = e.currentTarget.dataset.id;
+                    const entry = uploadedData.find(item => item.id === id);
+                    if (entry) openDetailsModal(entry, true); // true for read-only from preview
+                });
+            });
+            document.querySelectorAll('.force-add-preview').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                     const id = e.currentTarget.dataset.id;
+                     const checkbox = previewTableBody.querySelector(`input.preview-select[data-id="${id}"]`);
+                     if(checkbox) {
+                        checkbox.checked = true;
+                        checkbox.disabled = false; // Allow selection
+                        const row = checkbox.closest('tr');
+                        row.classList.remove('status-duplicate');
+                        row.classList.add('status-new'); // Visually mark as to be added
+                        row.querySelector('td:nth-child(7)').textContent = 'New (Forced)';
+                        updateSelectedCount();
+                        alert('Marked for forced addition. This will create a new entry.');
+                     }
+                });
+            });
+             document.querySelectorAll('.merge-preview').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    // Basic merge: find existing, add new treatments. More complex merging needs UI.
+                    const id = e.currentTarget.dataset.id;
+                    const entryToMerge = uploadedData.find(item => item.id === id);
+                    const existing = treatmentCentersDB.find(db => db.name.toLowerCase() === entryToMerge.name.toLowerCase());
+                    if (existing && entryToMerge) {
+                        showConfirmModal('Confirm Merge', `Merge services from "${entryToMerge.name}" (new) into existing "${existing.name}"? New services: ${entryToMerge.treatment_type.join(', ')}. Existing services: ${existing.treatment_type.join(', ')}. This will update the existing entry.`, () => {
+                            const newTreatments = entryToMerge.treatment_type.filter(t => !existing.treatment_type.includes(t));
+                            existing.treatment_type.push(...newTreatments);
+                            existing.status_last_updated = new Date().toISOString().split('T')[0];
+                            // Potentially update other fields if desired
+                            saveDB();
+                            renderDashboardTable();
+                            // Mark as processed in preview
+                            const checkbox = previewTableBody.querySelector(`input.preview-select[data-id="${id}"]`);
+                            if(checkbox) checkbox.checked = false; checkbox.disabled = true;
+                            const row = checkbox.closest('tr');
+                            row.classList.remove('status-consolidate');
+                            row.classList.add('status-merged'); // Custom class
+                            row.querySelector('td:nth-child(7)').textContent = 'Merged';
+                            updateSelectedCount();
+                            alert(`"${entryToMerge.name}" services merged with existing entry.`);
+                        });
+                    } else {
+                        alert("Could not find matching entry in database to merge.");
+                    }
+                });
+            });
+        }
+
+
+        function renderDashboardTable(dataToRender = treatmentCentersDB) {
+            dashboardTableBody.innerHTML = '';
+            if (dataToRender.length === 0) {
+                dashboardNoData.style.display = 'block';
+                dashboardTableBody.innerHTML = '<tr><td colspan="8" style="text-align:center;">No treatment centers in the database.</td></tr>';
+                return;
+            }
+            dashboardNoData.style.display = 'none';
+
+            dataToRender.forEach(center => {
+                const tr = document.createElement('tr');
+                tr.dataset.id = center.id;
+                tr.innerHTML = `
+                    <td>${center.name}</td>
+                    <td>${center.address}</td>
+                    <td>${center.phone}</td>
+                    <td><a href="${center.website}" target="_blank">${center.website ? center.website.length > 30 ? center.website.substring(0,27)+'...' : center.website : 'N/A'}</a></td>
+                    <td>${(center.treatment_type || []).join(', ')}</td>
+                    <td>${center.facility_type || 'N/A'}</td>
+                    <td>${center.availability_status || 'N/A'} <small>(${(center.status_last_updated || 'never')})</small></td>
+                    <td class="actions">
+                        <button class="btn btn-primary btn-sm view-details-db" data-id="${center.id}"><i class="fas fa-eye"></i> View</button>
+                        <button class="btn btn-warning btn-sm edit-center-db" data-id="${center.id}"><i class="fas fa-edit"></i> Edit</button>
+                        <button class="btn btn-danger btn-sm delete-center-db" data-id="${center.id}"><i class="fas fa-trash"></i> Delete</button>
+                    </td>
+                `;
+                dashboardTableBody.appendChild(tr);
+            });
+            addDashboardTableEventListeners();
+        }
+        
+        function addDashboardTableEventListeners() {
+            document.querySelectorAll('.view-details-db, .edit-center-db').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const id = e.currentTarget.dataset.id;
+                    const entry = treatmentCentersDB.find(item => item.id === id);
+                    if (entry) {
+                        const isEditMode = e.currentTarget.classList.contains('edit-center-db');
+                        openDetailsModal(entry, !isEditMode); // readOnly if not edit mode
+                    }
+                });
+            });
+            document.querySelectorAll('.delete-center-db').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const id = e.currentTarget.dataset.id;
+                    const entry = treatmentCentersDB.find(item => item.id === id);
+                    if (entry) {
+                        showConfirmModal('Confirm Delete', `Are you sure you want to delete "${entry.name}"? This action cannot be undone.`, () => {
+                            treatmentCentersDB = treatmentCentersDB.filter(item => item.id !== id);
+                            saveDB();
+                            renderDashboardTable();
+                            // If this item was also in preview (e.g. after force add then delete), update preview
+                            const previewRow = previewTableBody.querySelector(`tr[data-id="${id}"]`);
+                            if (previewRow) {
+                                const status = checkStatus(uploadedData.find(ud => ud.id === id)); // Re-check status
+                                previewRow.className = `status-${status}`;
+                                previewRow.querySelector('td:nth-child(7)').textContent = status.charAt(0).toUpperCase() + status.slice(1);
+                                const checkbox = previewRow.querySelector('input.preview-select');
+                                if(checkbox) {
+                                    checkbox.disabled = (status === 'duplicate');
+                                    checkbox.checked = !(status === 'duplicate');
+                                }
+                            }
+                        });
+                    }
+                });
+            });
+        }
+
+        function openDetailsModal(entry, readOnly = false) {
+            modalTitle.textContent = readOnly ? `View Details: ${entry.name}` : `Edit Details: ${entry.name}`;
+            document.getElementById('editCenterId').value = entry.id;
+            document.getElementById('editName').value = entry.name || '';
+            document.getElementById('editAddress').value = entry.address || '';
+            document.getElementById('editPhone').value = entry.phone || '';
+            document.getElementById('editWebsite').value = entry.website || '';
+            document.getElementById('editTreatmentType').value = (entry.treatment_type || []).join(', ');
+            document.getElementById('editAgeGroup').value = entry.age_group || '';
+            document.getElementById('editGenderServed').value = entry.gender_served || '';
+            document.getElementById('editDescription').value = entry.description || '';
+            document.getElementById('editAvailabilityStatus').value = entry.availability_status || 'Not Specified';
+            document.getElementById('editFacilityType').value = entry.facility_type || 'Treatment Center';
+
+            const formElements = editCenterForm.elements;
+            for (let i = 0; i < formElements.length; i++) {
+                formElements[i].readOnly = readOnly;
+                if (formElements[i].tagName === 'SELECT') formElements[i].disabled = readOnly;
+            }
+            saveChangesBtn.style.display = readOnly ? 'none' : 'inline-block';
+            cancelEditBtn.textContent = readOnly ? 'Close' : 'Cancel';
+            showModal(detailsModal);
+        }
+        
+        saveChangesBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            const id = document.getElementById('editCenterId').value;
+            const index = treatmentCentersDB.findIndex(item => item.id === id);
+            const previewIndex = uploadedData.findIndex(item => item.id === id); // If editing a preview item directly
+
+            if (index === -1 && previewIndex === -1) {
+                alert("Error: Item not found.");
+                closeModal(detailsModal);
+                return;
+            }
+            
+            const updatedEntry = {
+                id: id,
+                name: document.getElementById('editName').value.trim(),
+                address: document.getElementById('editAddress').value.trim(),
+                phone: document.getElementById('editPhone').value.trim(),
+                website: document.getElementById('editWebsite').value.trim(),
+                treatment_type: document.getElementById('editTreatmentType').value.split(',').map(t => t.trim()).filter(t => t),
+                age_group: document.getElementById('editAgeGroup').value.trim(),
+                gender_served: document.getElementById('editGenderServed').value.trim(),
+                description: document.getElementById('editDescription').value.trim(),
+                availability_status: document.getElementById('editAvailabilityStatus').value,
+                facility_type: document.getElementById('editFacilityType').value,
+                status_last_updated: new Date().toISOString().split('T')[0] // Update timestamp
+            };
+
+            if (!validateEntry(updatedEntry)) { // Use the same validation
+                alert(`Validation Errors: ${updatedEntry.validation_errors.join('; ')}`);
+                return;
+            }
+
+            if (index !== -1) { // Editing an existing DB entry
+                treatmentCentersDB[index] = { ...treatmentCentersDB[index], ...updatedEntry };
+                saveDB();
+                renderDashboardTable();
+            }
+            if (previewIndex !== -1) { // Editing a preview entry (e.g. after "View" from preview)
+                 // This scenario is less common as preview items are usually not directly editable in this flow
+                 // but if it were, update uploadedData and re-render preview
+                uploadedData[previewIndex] = { ...uploadedData[previewIndex], ...updatedEntry };
+                renderPreviewTable();
+            }
+            
+            closeModal(detailsModal);
+            alert('Changes saved successfully.');
+        });
+
+
+        // --- Event Handlers ---
+        uploadPreviewBtn.addEventListener('click', () => {
+            if (!csvFileInput.files || csvFileInput.files.length === 0) {
+                alert('Please select a file to upload.');
+                return;
+            }
+            const file = csvFileInput.files[0];
+            const reader = new FileReader();
+
+            uploadProgressBarContainer.style.display = 'block';
+            uploadProgressBar.style.width = '0%';
+            uploadProgressBar.textContent = '0%';
+
+            reader.onprogress = (event) => {
+                if (event.lengthComputable) {
+                    const percentLoaded = Math.round((event.loaded / event.total) * 100);
+                    uploadProgressBar.style.width = percentLoaded + '%';
+                    uploadProgressBar.textContent = percentLoaded + '%';
+                }
+            };
+            
+            reader.onload = (e) => {
+                try {
+                    // Rudimentary check for XLSX/XLS, ideally use a library like SheetJS here
+                    if (file.name.endsWith('.xlsx') || file.name.endsWith('.xls')) {
+                         alert('XLSX/XLS parsing is not fully supported in this demo. Please use CSV or ensure simple XLSX structure. For full support, integrate a library like SheetJS.');
+                         // As a fallback, try to treat as CSV if structure is very simple, or just show error.
+                         // For now, we'll just proceed assuming it might be CSV-like content for demo.
+                    }
+                    uploadedData = parseCSV(e.target.result);
+                    if (uploadedData.length > 0) {
+                        previewSection.style.display = 'block';
+                        summarySection.style.display = 'none'; // Hide previous summary
+                        importSummaryContent.innerHTML = '';
+                        renderPreviewTable();
+                        selectAllPreviewCheckbox.checked = true; // Default to all selected (except duplicates/errors)
+                        document.querySelectorAll('.preview-select:not(:disabled)').forEach(cb => cb.checked = true);
+                        updateSelectedCount();
+                    } else if (uploadedData.length === 0 && !(file.name.endsWith('.xlsx') || file.name.endsWith('.xls'))) { // only show if not xlsx error
+                        alert('No data parsed from CSV. Check file format and content.');
+                    }
+                } catch (error) {
+                    alert('Error parsing file: ' + error.message);
+                    console.error("Parsing error:", error);
+                } finally {
+                    uploadProgressBar.style.width = '100%';
+                    uploadProgressBar.textContent = 'Loaded';
+                    setTimeout(() => { uploadProgressBarContainer.style.display = 'none'; }, 1000);
+                }
+            };
+            reader.onerror = () => {
+                alert('Error reading file.');
+                uploadProgressBarContainer.style.display = 'none';
+            };
+            reader.readAsText(file);
+        });
+
+        selectAllPreviewCheckbox.addEventListener('change', (e) => {
+            document.querySelectorAll('.preview-select:not(:disabled)').forEach(checkbox => {
+                checkbox.checked = e.target.checked;
+            });
+            updateSelectedCount();
+        });
+
+        previewTableBody.addEventListener('change', (e) => {
+            if (e.target.classList.contains('preview-select')) {
+                updateSelectedCount();
+            }
+        });
+
+        function updateSelectedCount() {
+            const count = document.querySelectorAll('.preview-select:checked').length;
+            selectedCountSpan.textContent = count;
+        }
+
+        importSelectedBtn.addEventListener('click', () => {
+            const selectedIds = Array.from(document.querySelectorAll('.preview-select:checked')).map(cb => cb.dataset.id);
+            if (selectedIds.length === 0) {
+                alert('No items selected for import.');
+                return;
+            }
+
+            let addedCount = 0;
+            let skippedCount = 0;
+            let consolidatedCount = 0; // Placeholder for future more complex consolidation
+            let errorCount = 0;
+
+            importProgressBarContainer.style.display = 'block';
+            importProgressBar.style.width = '0%';
+            importProgressBar.textContent = '0%';
+            let processedCount = 0;
+
+            selectedIds.forEach((id, index) => {
+                const entry = uploadedData.find(item => item.id === id);
+                if (!entry) return;
+
+                // Re-validate before import, in case something changed or was forced
+                if (!validateEntry(entry)) {
+                    errorCount++;
+                    // Mark as error in preview if not already
+                    const row = previewTableBody.querySelector(`tr[data-id="${id}"]`);
+                    if (row) {
+                        row.className = 'status-error';
+                        row.querySelector('td:nth-child(7)').textContent = `Error (${entry.validation_errors.length})`;
+                        row.title = `Validation Errors: ${entry.validation_errors.join('; ')}`;
+                        const checkbox = row.querySelector('input.preview-select');
+                        if(checkbox) checkbox.disabled = true; checkbox.checked = false;
+                    }
+                    return; // Skip import for this entry
+                }
+
+                const status = checkStatus(entry); // Re-check status against current DB
+
+                if (status === 'new' || previewTableBody.querySelector(`tr[data-id="${id}"] td:nth-child(7)`).textContent === 'New (Forced)') {
+                    const newEntry = { ...entry };
+                    delete newEntry.validation_errors; // Clean up temp field
+                    newEntry.id = generateId(); // Generate a new permanent ID for DB
+                    newEntry.status_last_updated = new Date().toISOString().split('T')[0];
+                    treatmentCentersDB.push(newEntry);
+                    addedCount++;
+                } else if (status === 'consolidate') {
+                    // Basic consolidation: if name matches, update existing entry's treatment_type array
+                    // This is a simplified version. A real one might involve more complex merging logic.
+                    const existingEntry = treatmentCentersDB.find(dbEntry => normalizeStr(dbEntry.name) === normalizeStr(entry.name));
+                    if (existingEntry) {
+                        const newTreatments = entry.treatment_type.filter(t => !existingEntry.treatment_type.includes(t));
+                        if (newTreatments.length > 0) {
+                            existingEntry.treatment_type.push(...newTreatments);
+                            existingEntry.status_last_updated = new Date().toISOString().split('T')[0];
+                            // Potentially update other fields if desired
+                        }
+                        // Update other fields if they are newer or more complete in the uploaded entry
+                        // For simplicity, we're just merging treatments here.
+                        consolidatedCount++;
+                    } else { // Should not happen if status is 'consolidate' based on current logic, but as a fallback treat as new
+                        const newEntry = { ...entry };
+                        delete newEntry.validation_errors;
+                        newEntry.id = generateId();
+                        newEntry.status_last_updated = new Date().toISOString().split('T')[0];
+                        treatmentCentersDB.push(newEntry);
+                        addedCount++;
+                    }
+                } else if (status === 'duplicate') {
+                    skippedCount++;
+                }
+                
+                processedCount++;
+                const percentComplete = Math.round((processedCount / selectedIds.length) * 100);
+                importProgressBar.style.width = percentComplete + '%';
+                importProgressBar.textContent = percentComplete + '%';
+            });
+
+            saveDB();
+            renderDashboardTable();
+            
+            // Update summary section
+            summarySection.style.display = 'block';
+            importSummaryContent.innerHTML = `
+                <ul>
+                    <li><strong>Total Selected for Import:</strong> ${selectedIds.length}</li>
+                    <li><strong>New Centers Added:</strong> ${addedCount}</li>
+                    <li><strong>Providers Consolidated/Updated:</strong> ${consolidatedCount}</li>
+                    <li><strong>Duplicates Skipped:</strong> ${skippedCount}</li>
+                    <li><strong>Entries with Validation Errors (Skipped):</strong> ${errorCount}</li>
+                </ul>
+            `;
+            // Optionally, clear preview or update its statuses
+            renderPreviewTable(); // Re-render to reflect changes (e.g. newly added items are now duplicates)
+            updateSelectedCount(); // Reset selected count
+
+            setTimeout(() => { importProgressBarContainer.style.display = 'none'; }, 1000);
+            alert('Import process complete. Check summary and dashboard.');
+        });
+
+        // --- Sorting ---
+        function sortData(data, column, direction, isDbTable = false) {
+            const dataType = (val) => {
+                if (Array.isArray(val)) return val.join(', ').toLowerCase(); // for treatment_type
+                return String(val).toLowerCase(); // Convert to string for consistent comparison
+            };
+
+            data.sort((a, b) => {
+                const valA = dataType(a[column]);
+                const valB = dataType(b[column]);
+                
+                let comparison = 0;
+                if (valA > valB) comparison = 1;
+                else if (valA < valB) comparison = -1;
+                
+                return direction === 'asc' ? comparison : comparison * -1;
+            });
+
+            if (isDbTable) {
+                dbSortColumn = column;
+                dbSortDirection = direction;
+                renderDashboardTable(data);
+            } else {
+                previewSortColumn = column;
+                previewSortDirection = direction;
+                renderPreviewTable(data);
+            }
+            updateSortIcons(isDbTable ? document.getElementById('dashboardTable').querySelector('thead') : document.getElementById('previewTable').querySelector('thead'), column, direction);
+        }
+        
+        function updateSortIcons(tableHead, activeColumn, direction) {
+            tableHead.querySelectorAll('th[data-sort], th[data-sort-db]').forEach(th => {
+                const icon = th.querySelector('.sort-icon');
+                if (th.dataset.sort === activeColumn || th.dataset.sortDb === activeColumn) {
+                    icon.className = `fas sort-icon ${direction === 'asc' ? 'fa-sort-up' : 'fa-sort-down'}`;
+                } else {
+                    icon.className = 'fas fa-sort sort-icon';
+                }
+            });
+        }
+
+
+        document.getElementById('previewTable').querySelector('thead').addEventListener('click', (e) => {
+            const headerCell = e.target.closest('th[data-sort]');
+            if (headerCell) {
+                const column = headerCell.dataset.sort;
+                const direction = (column === previewSortColumn && previewSortDirection === 'asc') ? 'desc' : 'asc';
+                const currentPreviewData = getFilteredPreviewData();
+                sortData(currentPreviewData, column, direction, false);
+            }
+        });
+
+        document.getElementById('dashboardTable').querySelector('thead').addEventListener('click', (e) => {
+            const headerCell = e.target.closest('th[data-sort-db]');
+            if (headerCell) {
+                const column = headerCell.dataset.sortDb;
+                const direction = (column === dbSortColumn && dbSortDirection === 'asc') ? 'desc' : 'asc';
+                const currentDashboardData = getFilteredDashboardData();
+                sortData(currentDashboardData, column, direction, true);
+            }
+        });
+        
+        // --- Filtering/Searching ---
+        function getFilteredPreviewData() {
+            const searchTerm = previewSearchInput.value.toLowerCase();
+            if (!searchTerm) return [...uploadedData]; // Return a copy
+            return uploadedData.filter(entry => 
+                Object.values(entry).some(val => 
+                    String(val).toLowerCase().includes(searchTerm)
+                )
+            );
+        }
+        previewSearchInput.addEventListener('input', () => {
+            renderPreviewTable(getFilteredPreviewData());
+        });
+
+        function getFilteredDashboardData() {
+            const searchTerm = dashboardSearchInput.value.toLowerCase();
+            if (!searchTerm) return [...treatmentCentersDB]; // Return a copy
+            return treatmentCentersDB.filter(center => 
+                Object.values(center).some(val => {
+                    if (Array.isArray(val)) return val.join(', ').toLowerCase().includes(searchTerm);
+                    return String(val).toLowerCase().includes(searchTerm);
+                })
+            );
+        }
+        dashboardSearchInput.addEventListener('input', () => {
+            renderDashboardTable(getFilteredDashboardData());
+        });
+
+
+        // --- Export Data ---
+        exportDataBtn.addEventListener('click', () => {
+            if (treatmentCentersDB.length === 0) {
+                alert('No data to export.');
+                return;
+            }
+            // Define headers based on the full data structure
+            const headers = ["id", "name", "address", "phone", "website", "treatment_type", "age_group", "gender_served", "description", "availability_status", "status_last_updated", "facility_type"];
+            let csvContent = headers.join(',') + '\n';
+
+            treatmentCentersDB.forEach(center => {
+                const row = headers.map(header => {
+                    let value = center[header];
+                    if (Array.isArray(value)) {
+                        value = value.join(';'); // Use semicolon for multi-value fields like treatment_type
+                    }
+                    // Escape commas and quotes in values
+                    if (typeof value === 'string') {
+                        value = value.replace(/"/g, '""'); // Escape double quotes
+                        if (value.includes(',')) {
+                            value = `"${value}"`; // Enclose in double quotes if it contains a comma
+                        }
+                    }
+                    return value === undefined || value === null ? '' : value;
+                });
+                csvContent += row.join(',') + '\n';
+            });
+
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            if (link.download !== undefined) {
+                const url = URL.createObjectURL(blob);
+                link.setAttribute('href', url);
+                link.setAttribute('download', 'nebraska_treatment_centers_export.csv');
+                link.style.visibility = 'hidden';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            } else {
+                alert('CSV export not supported by your browser.');
+            }
+        });
+        
+        // --- Clear Database ---
+        clearDatabaseBtn.addEventListener('click', () => {
+            showConfirmModal('Confirm Clear Database', 'Are you sure you want to delete ALL treatment centers from the database? This action cannot be undone.', () => {
+                treatmentCentersDB = [];
+                saveDB();
+                renderDashboardTable();
+                renderPreviewTable(); // Re-render preview as all items are now 'new'
+                alert('Database cleared.');
+            });
+        });
+
+
+        // Initial Load
+        renderDashboardTable();
+        updateSortIcons(document.getElementById('dashboardTable').querySelector('thead'), null, 'asc');
+        updateSortIcons(document.getElementById('previewTable').querySelector('thead'), null, 'asc');
+
+    });
+    </script>
+</body>
+</html>

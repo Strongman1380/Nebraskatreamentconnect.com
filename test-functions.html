@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Function Test - Nebraska Treatment Connect</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; max-width: 800px; margin: 0 auto; }
+        .test-section { margin: 20px 0; padding: 15px; border: 1px solid #ddd; border-radius: 5px; }
+        .test-button { margin: 10px; padding: 10px 15px; background: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; }
+        .test-button:hover { background: #0056b3; }
+        .result { margin: 10px 0; padding: 10px; background: #f8f9fa; border-radius: 4px; }
+    </style>
+</head>
+<body>
+    <h1>Function Testing for Nebraska Treatment Connect</h1>
+    
+    <div class="test-section">
+        <h2>Direction Functions Test</h2>
+        <button class="test-button" onclick="testDirections()">Test Directions (Sample Address)</button>
+        <div id="directions-result" class="result"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>Call Functions Test</h2>
+        <button class="test-button" onclick="testCall()">Test Call (Sample Phone)</button>
+        <div id="call-result" class="result"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>Website Functions Test</h2>
+        <button class="test-button" onclick="testWebsite()">Test Website (Sample URL)</button>
+        <div id="website-result" class="result"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>Sample Facility Data Test</h2>
+        <div id="sample-facility"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>All Facility Types Test</h2>
+        <div id="all-facility-types"></div>
+    </div>
+
+    <!-- Include the main configuration and scripts -->
+    <script src="config.js"></script>
+    
+    <!-- Mock some required elements and functions for testing -->
+    <script>
+        // Mock notification function for testing
+        function showNotification(message, type) {
+            console.log(`${type.toUpperCase()}: ${message}`);
+            alert(`${type.toUpperCase()}: ${message}`);
+        }
+        
+        // Mock user location for testing
+        let userLocation = { lat: 41.2619, lng: -95.9378 }; // Omaha coordinates
+        
+        // Test functions
+        function testDirections() {
+            const testAddress = "2900 Blondo Street, Omaha, NE 68111";
+            document.getElementById('directions-result').innerHTML = `Testing directions to: ${testAddress}`;
+            getDirections(testAddress);
+        }
+        
+        function testCall() {
+            const testPhone = "(402) 665-0035";
+            document.getElementById('call-result').innerHTML = `Testing call to: ${testPhone}`;
+            callFacility(testPhone);
+        }
+        
+        function testWebsite() {
+            const testUrl = "https://www.horizons.com";
+            document.getElementById('website-result').innerHTML = `Testing website: ${testUrl}`;
+            visitWebsite(testUrl);
+        }
+        
+        // Create a sample facility card for testing
+        function createSampleFacility() {
+            const sampleFacility = {
+                id: 1,
+                name: "Test Treatment Center",
+                address: "2900 Blondo Street, Omaha, NE 68111",
+                phone: "(402) 665-0035",
+                website: "https://www.horizons.com",
+                treatment_type: "Both",
+                age_group: "Adult",
+                gender_served: "Co-ed",
+                description: "Sample facility for testing purposes.",
+                availability_status: "Openings Available",
+                status_last_updated: "2025-01-20T10:00:00",
+                facility_type: "Treatment Center"
+            };
+            
+            // Mock the createFacilityCard function elements
+            const facilityHtml = `
+                <div style="border: 1px solid #ddd; padding: 15px; margin: 10px 0; border-radius: 8px;">
+                    <h3>${sampleFacility.name}</h3>
+                    <p><strong>Address:</strong> ${sampleFacility.address}</p>
+                    <p><strong>Phone:</strong> <a href="javascript:void(0)" onclick="callFacility('${sampleFacility.phone}')" style="color: inherit; cursor: pointer; text-decoration: underline;">${sampleFacility.phone}</a></p>
+                    <p><strong>Description:</strong> ${sampleFacility.description}</p>
+                    <div style="display: flex; gap: 10px; margin-top: 10px;">
+                        <button onclick="getDirections('${sampleFacility.address}')" style="padding: 8px 12px; background: #e8f0fe; color: #1a73e8; border: none; border-radius: 4px; cursor: pointer;">
+                            🧭 Directions
+                        </button>
+                        <button onclick="callFacility('${sampleFacility.phone}')" style="padding: 8px 12px; background: #e6f4ea; color: #137333; border: none; border-radius: 4px; cursor: pointer;">
+                            📞 Call
+                        </button>
+                        <button onclick="visitWebsite('${sampleFacility.website}')" style="padding: 8px 12px; background: #f1f3f4; color: #5f6368; border: none; border-radius: 4px; cursor: pointer;">
+                            🌐 Website
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('sample-facility').innerHTML = facilityHtml;
+        }
+        
+        // Create sample facilities from each type
+        function createAllFacilityTypes() {
+            const sampleFacilities = [
+                {
+                    id: 1,
+                    name: "Treatment Center Example",
+                    address: "2900 Blondo Street, Omaha, NE 68111",
+                    phone: "(402) 665-0035",
+                    website: "https://www.horizons.com",
+                    facility_type: "Treatment Center"
+                },
+                {
+                    id: 2,
+                    name: "Halfway House Example",
+                    address: "1234 Main Street, Lincoln, NE 68508",
+                    phone: "(402) 555-0123",
+                    website: "https://www.example-halfway.org",
+                    facility_type: "Halfway House"
+                },
+                {
+                    id: 3,
+                    name: "Outpatient Services Example",
+                    address: "5678 Oak Avenue, Grand Island, NE 68803",
+                    phone: "(308) 555-0456",
+                    website: "",
+                    facility_type: "Outpatient"
+                },
+                {
+                    id: 4,
+                    name: "Detox Center Example",
+                    address: "9012 Pine Street, Kearney, NE 68847",
+                    phone: "(308) 555-0789",
+                    website: "https://www.detox-example.com",
+                    facility_type: "Detox Center"
+                }
+            ];
+            
+            let html = '';
+            sampleFacilities.forEach(facility => {
+                html += `
+                    <div style="border: 1px solid #ddd; padding: 15px; margin: 10px 0; border-radius: 8px;">
+                        <h4>${facility.name} (${facility.facility_type})</h4>
+                        <p><strong>Address:</strong> ${facility.address}</p>
+                        <p><strong>Phone:</strong> <a href="javascript:void(0)" onclick="callFacility('${facility.phone}')" style="color: inherit; cursor: pointer; text-decoration: underline;">${facility.phone}</a></p>
+                        ${facility.website ? `<p><strong>Website:</strong> <a href="javascript:void(0)" onclick="visitWebsite('${facility.website}')" style="color: inherit; cursor: pointer; text-decoration: underline;">${facility.website}</a></p>` : '<p><strong>Website:</strong> No website available</p>'}
+                        <div style="display: flex; gap: 10px; margin-top: 10px;">
+                            <button onclick="getDirections('${facility.address}')" style="padding: 8px 12px; background: #e8f0fe; color: #1a73e8; border: none; border-radius: 4px; cursor: pointer;">
+                                🧭 Directions
+                            </button>
+                            <button onclick="callFacility('${facility.phone}')" style="padding: 8px 12px; background: #e6f4ea; color: #137333; border: none; border-radius: 4px; cursor: pointer;">
+                                📞 Call
+                            </button>
+                            ${facility.website ? `
+                                <button onclick="visitWebsite('${facility.website}')" style="padding: 8px 12px; background: #f1f3f4; color: #5f6368; border: none; border-radius: 4px; cursor: pointer;">
+                                    🌐 Website
+                                </button>
+                            ` : `
+                                <button style="padding: 8px 12px; background: #f8f9fa; color: #aaa; border: none; border-radius: 4px; cursor: not-allowed;" disabled>
+                                    🌐 No Website
+                                </button>
+                            `}
+                        </div>
+                    </div>
+                `;
+            });
+            
+            document.getElementById('all-facility-types').innerHTML = html;
+        }
+
+        // Initialize test page
+        window.onload = function() {
+            createSampleFacility();
+            createAllFacilityTypes();
+        };
+    </script>
+    
+    <!-- Include the main scripts (only the functions we need) -->
+    <script>
+        // Escape HTML to prevent XSS
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // Direction function
+        function getDirections(address) {
+            // Validate address
+            if (!address || typeof address !== 'string') {
+                showNotification('Invalid address for directions', 'error');
+                return;
+            }
+            
+            const encodedAddress = encodeURIComponent(address.trim());
+            
+            // Detect if user is on mobile device
+            const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+            
+            try {
+                if (userLocation && userLocation.lat && userLocation.lng) {
+                    // If we have user location, provide turn-by-turn directions
+                    const origin = encodeURIComponent(`${userLocation.lat},${userLocation.lng}`);
+                    
+                    if (isMobile) {
+                        // On mobile, try to open native maps app first
+                        if (navigator.userAgent.match(/iPhone|iPad|iPod/i)) {
+                            // iOS - try Apple Maps first, fallback to Google Maps
+                            const appleUrl = `maps://maps.apple.com/?daddr=${encodedAddress}&saddr=${origin}`;
+                            const googleUrl = `https://maps.google.com/dir/${origin}/${encodedAddress}`;
+                            
+                            // Try Apple Maps first
+                            window.location.href = appleUrl;
+                            
+                            // Fallback to Google Maps after a short delay
+                            setTimeout(() => {
+                                window.open(googleUrl, '_blank');
+                            }, 1000);
+                        } else if (navigator.userAgent.match(/Android/i)) {
+                            // Android - try Google Maps app first
+                            const androidUrl = `google.navigation:q=${encodedAddress}`;
+                            const webUrl = `https://maps.google.com/dir/${origin}/${encodedAddress}`;
+                            
+                            try {
+                                window.location.href = androidUrl;
+                            } catch (e) {
+                                window.open(webUrl, '_blank');
+                            }
+                        } else {
+                            // Other mobile devices - use web version
+                            window.open(`https://maps.google.com/dir/${origin}/${encodedAddress}`, '_blank');
+                        }
+                    } else {
+                        // Desktop - open Google Maps in new tab
+                        window.open(`https://maps.google.com/dir/${origin}/${encodedAddress}`, '_blank');
+                    }
+                } else {
+                    // No user location - just show the destination
+                    if (isMobile) {
+                        if (navigator.userAgent.match(/iPhone|iPad|iPod/i)) {
+                            // iOS - try Apple Maps first
+                            const appleUrl = `maps://maps.apple.com/?q=${encodedAddress}`;
+                            const googleUrl = `https://maps.google.com/?q=${encodedAddress}`;
+                            
+                            window.location.href = appleUrl;
+                            setTimeout(() => {
+                                window.open(googleUrl, '_blank');
+                            }, 1000);
+                        } else if (navigator.userAgent.match(/Android/i)) {
+                            // Android - try Google Maps app
+                            const androidUrl = `geo:0,0?q=${encodedAddress}`;
+                            const webUrl = `https://maps.google.com/?q=${encodedAddress}`;
+                            
+                            try {
+                                window.location.href = androidUrl;
+                            } catch (e) {
+                                window.open(webUrl, '_blank');
+                            }
+                        } else {
+                            window.open(`https://maps.google.com/?q=${encodedAddress}`, '_blank');
+                        }
+                    } else {
+                        // Desktop
+                        window.open(`https://maps.google.com/?q=${encodedAddress}`, '_blank');
+                    }
+                }
+                
+                showNotification('Opening directions...', 'success');
+            } catch (error) {
+                console.error('Error opening directions:', error);
+                showNotification('Error opening directions. Please try again.', 'error');
+            }
+        }
+
+        // Call function
+        function callFacility(phone) {
+            // Validate phone number
+            if (!phone || typeof phone !== 'string') {
+                showNotification('Invalid phone number', 'error');
+                return;
+            }
+            
+            const trimmedPhone = phone.trim();
+            if (!trimmedPhone) {
+                showNotification('Phone number is empty', 'error');
+                return;
+            }
+            
+            // Remove non-numeric characters for the tel: URI
+            const cleanPhone = trimmedPhone.replace(/\D/g, '');
+            
+            // Check if we have a valid phone number (at least 10 digits for US numbers)
+            if (cleanPhone.length < 10) {
+                showNotification('Invalid phone number format. Please check the number.', 'error');
+                return;
+            }
+            
+            // Format phone number for display (US format)
+            let displayPhone = trimmedPhone;
+            if (cleanPhone.length === 10) {
+                displayPhone = `(${cleanPhone.slice(0,3)}) ${cleanPhone.slice(3,6)}-${cleanPhone.slice(6)}`;
+            } else if (cleanPhone.length === 11 && cleanPhone.startsWith('1')) {
+                displayPhone = `+1 (${cleanPhone.slice(1,4)}) ${cleanPhone.slice(4,7)}-${cleanPhone.slice(7)}`;
+            }
+            
+            // Check if device likely supports calling
+            const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+            
+            try {
+                if (isMobile) {
+                    // Use tel: protocol for mobile devices
+                    window.location.href = `tel:+1${cleanPhone.length === 10 ? cleanPhone : cleanPhone.slice(1)}`;
+                    showNotification(`Calling ${displayPhone}...`, 'success');
+                } else {
+                    // For desktop, show a more user-friendly dialog
+                    const userChoice = confirm(
+                        `📞 Call ${displayPhone}\n\n` +
+                        `Click OK to attempt calling (if your device supports it),\n` +
+                        `or Cancel to copy the number to your clipboard.`
+                    );
+                    
+                    if (userChoice) {
+                        // Try to initiate call
+                        window.location.href = `tel:+1${cleanPhone.length === 10 ? cleanPhone : cleanPhone.slice(1)}`;
+                        showNotification(`Attempting to call ${displayPhone}...`, 'success');
+                    } else {
+                        // Copy to clipboard as fallback
+                        if (navigator.clipboard && navigator.clipboard.writeText) {
+                            navigator.clipboard.writeText(displayPhone).then(() => {
+                                showNotification(`Phone number ${displayPhone} copied to clipboard!`, 'success');
+                            }).catch(() => {
+                                // Fallback: show the number in an alert
+                                alert(`Phone number: ${displayPhone}\n\nThe number has been displayed for you to dial manually.`);
+                            });
+                        } else {
+                            // Fallback for older browsers
+                            alert(`Phone number: ${displayPhone}\n\nPlease dial this number manually.`);
+                        }
+                    }
+                }
+            } catch (error) {
+                console.error('Error initiating call:', error);
+                showNotification(`Error calling ${displayPhone}. Please dial manually.`, 'error');
+            }
+        }
+
+        // Website function
+        function visitWebsite(url) {
+            // Validate URL
+            if (!url || typeof url !== 'string') {
+                showNotification('No website URL provided', 'error');
+                return;
+            }
+            
+            const trimmedUrl = url.trim();
+            if (!trimmedUrl) {
+                showNotification('Website URL is empty', 'error');
+                return;
+            }
+            
+            // Handle common URL formats
+            let validUrl = trimmedUrl;
+            
+            // Add protocol if missing
+            if (!trimmedUrl.startsWith('http://') && !trimmedUrl.startsWith('https://')) {
+                validUrl = 'https://' + trimmedUrl;
+            }
+            
+            // Clean up common URL issues
+            validUrl = validUrl.replace(/\s+/g, ''); // Remove any spaces
+            
+            // Basic URL validation
+            try {
+                const urlObj = new URL(validUrl);
+                
+                // Additional validation for common issues
+                if (!urlObj.hostname || urlObj.hostname.length < 3) {
+                    throw new Error('Invalid hostname');
+                }
+                
+                // Check for suspicious or invalid domains
+                if (urlObj.hostname === 'localhost' || urlObj.hostname.startsWith('127.')) {
+                    showNotification('Cannot open local URLs for security reasons', 'error');
+                    return;
+                }
+                
+                // Open the website
+                const newWindow = window.open(validUrl, '_blank', 'noopener,noreferrer');
+                
+                // Check if popup was blocked
+                if (!newWindow || newWindow.closed || typeof newWindow.closed === 'undefined') {
+                    showNotification('Popup blocked. Please allow popups for this site or copy the URL: ' + validUrl, 'error');
+                } else {
+                    showNotification('Opening website...', 'success');
+                }
+                
+            } catch (error) {
+                console.error('Invalid URL:', error);
+                
+                // Provide helpful error message
+                if (trimmedUrl.includes(' ')) {
+                    showNotification('Website URL contains spaces. Please check the URL format.', 'error');
+                } else if (!trimmedUrl.includes('.')) {
+                    showNotification('Website URL appears to be missing a domain extension (.com, .org, etc.)', 'error');
+                } else {
+                    showNotification(`Invalid website URL format: ${trimmedUrl}`, 'error');
+                }
+            }
+        }
+    </script>
+</body>
+</html>

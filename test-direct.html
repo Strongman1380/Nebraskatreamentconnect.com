@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Direct Search Test</title>
+</head>
+<body>
+    <script>
+        // Test the location detection logic directly
+        function testLocationDetection() {
+            const searchTerm = "68361";
+            console.log('Testing search term:', searchTerm);
+            
+            const locationKeywords = ['city', 'county', 'ne', 'nebraska', 'near', 'close', 'around'];
+            const isLocationSearch = locationKeywords.some(keyword => 
+                searchTerm.includes(keyword) || 
+                searchTerm.length <= 3 || // Short terms often city codes
+                /\b\d{5}\b/.test(searchTerm) // ZIP codes
+            );
+            
+            console.log('Location keywords match:', locationKeywords.some(keyword => searchTerm.includes(keyword)));
+            console.log('Short term (<= 3 chars):', searchTerm.length <= 3);
+            console.log('ZIP code regex match:', /\b\d{5}\b/.test(searchTerm));
+            console.log('Final result - Is location search:', isLocationSearch);
+            
+            return isLocationSearch;
+        }
+
+        // Test the geocoding URL
+        function testGeocodingURL() {
+            const searchTerm = "68361";
+            const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(searchTerm + ', Nebraska')}&key=AIzaSyDUDTg2qpuIh3Yf0b80T0aViBmP2Dv1x7s`;
+            console.log('Geocoding URL:', url);
+            
+            // Test the fetch
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Geocoding response:', data);
+                    if (data.results && data.results.length > 0) {
+                        const location = data.results[0].geometry.location;
+                        console.log('Geneva coordinates:', location.lat, location.lng);
+                        console.log('Formatted address:', data.results[0].formatted_address);
+                    } else {
+                        console.log('No geocoding results found');
+                    }
+                })
+                .catch(error => {
+                    console.error('Geocoding error:', error);
+                });
+        }
+
+        // Run tests
+        console.log('=== Starting Direct Tests ===');
+        const isLocation = testLocationDetection();
+        
+        if (isLocation) {
+            console.log('✅ Location detection working correctly');
+            console.log('Testing geocoding...');
+            testGeocodingURL();
+        } else {
+            console.log('❌ Location detection failed');
+        }
+    </script>
+</body>
+</html>

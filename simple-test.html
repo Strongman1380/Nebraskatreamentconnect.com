@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Search Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .test { background: #f0f0f0; padding: 15px; margin: 10px 0; border-radius: 5px; }
+        button { padding: 10px 20px; margin: 5px; }
+        input { padding: 8px; width: 200px; }
+        #console-output { background: #000; color: #0f0; padding: 10px; font-family: monospace; height: 300px; overflow-y: auto; }
+    </style>
+</head>
+<body>
+    <h1>Simple ZIP Code Search Test</h1>
+    
+    <div class="test">
+        <h3>Test Location Detection</h3>
+        <input type="text" id="test-input" value="68361" placeholder="Enter search term">
+        <button onclick="testLocationDetection()">Test Detection</button>
+        <div id="detection-result"></div>
+    </div>
+    
+    <div class="test">
+        <h3>Console Output</h3>
+        <div id="console-output">Console messages will appear here...</div>
+    </div>
+
+    <script>
+        // Capture console.log output
+        const consoleOutput = document.getElementById('console-output');
+        const originalLog = console.log;
+        console.log = function(...args) {
+            originalLog.apply(console, args);
+            consoleOutput.innerHTML += '<div>' + args.join(' ') + '</div>';
+            consoleOutput.scrollTop = consoleOutput.scrollHeight;
+        };
+
+        function testLocationDetection() {
+            const searchTerm = document.getElementById('test-input').value.toLowerCase();
+            console.log('Testing search term:', searchTerm);
+            
+            const locationKeywords = ['city', 'county', 'ne', 'nebraska', 'near', 'close', 'around'];
+            const keywordMatch = locationKeywords.some(keyword => searchTerm.includes(keyword));
+            const shortTerm = searchTerm.length <= 3;
+            const zipCode = /\b\d{5}\b/.test(searchTerm);
+            
+            console.log('Keyword match:', keywordMatch);
+            console.log('Short term (<=3 chars):', shortTerm);
+            console.log('ZIP code pattern match:', zipCode);
+            
+            const isLocationSearch = keywordMatch || shortTerm || zipCode;
+            console.log('Final result - Is location search:', isLocationSearch);
+            
+            document.getElementById('detection-result').innerHTML = 
+                `<strong>Result:</strong> ${isLocationSearch ? 'LOCATION SEARCH' : 'TEXT SEARCH'}`;
+        }
+
+        // Test immediately
+        setTimeout(testLocationDetection, 500);
+    </script>
+</body>
+</html>
