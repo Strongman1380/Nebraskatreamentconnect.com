@@ -10,18 +10,28 @@ let userLocation = null;
 
 // Initialize the application
 document.addEventListener('DOMContentLoaded', function() {
-    // Load static data
-    allFacilities = window.STATIC_FACILITIES_DATA || [];
+    // Load all static data
+    const allStaticFacilities = [
+        ...(window.STATIC_FACILITIES_DATA || []),
+        ...(window.STATIC_HALFWAY_HOUSES_DATA || []),
+        ...(window.STATIC_OUTPATIENT_DATA || []),
+        ...(window.STATIC_DETOX_DATA || [])
+    ];
     
     // Filter facilities based on current page
     const pageType = getCurrentPageType();
-    allFacilities = filterFacilitiesByPageType(allFacilities, pageType);
+    allFacilities = filterFacilitiesByPageType(allStaticFacilities, pageType);
     filteredFacilities = [...allFacilities];
     
     // Initialize UI
     initializeEventListeners();
     displayFacilities(filteredFacilities);
     updateResultsCount();
+    
+    // Ensure list view is active by default
+    setTimeout(() => {
+        switchView('list');
+    }, 100);
     
     console.log('Loaded', allFacilities.length, 'facilities for page type:', pageType);
 });
@@ -46,13 +56,13 @@ function getCurrentPageType() {
 function filterFacilitiesByPageType(facilities, pageType) {
     switch (pageType) {
         case 'residential-detox':
-            return facilities.filter(f => f.type === 'Treatment Center' || f.type === 'Detox Center');
+            return facilities.filter(f => f.type === 'Treatment Center' || f.type === 'Detox');
         case 'halfway-houses':
             return facilities.filter(f => f.type === 'Halfway House');
         case 'outpatient':
             return facilities.filter(f => f.type === 'Outpatient');
         case 'detox-info':
-            return []; // No facilities shown on info page
+            return facilities.filter(f => f.type === 'Detox'); // Show detox facilities on detox info page
         default:
             return facilities;
     }
@@ -92,11 +102,17 @@ function initializeEventListeners() {
     const mapViewBtn = document.getElementById('map-view-btn');
     
     if (listViewBtn) {
-        listViewBtn.addEventListener('click', () => switchView('list'));
+        listViewBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            switchView('list');
+        });
     }
     
     if (mapViewBtn) {
-        mapViewBtn.addEventListener('click', () => switchView('map'));
+        mapViewBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            switchView('map');
+        });
     }
 }
 
@@ -184,39 +200,48 @@ function displayFacilities(facilities) {
         return;
     }
     
-    facilitiesList.innerHTML = facilities.map(facility => createFacilityCard(facility)).join('');
+    facilitiesList.innerHTML = facilities.map((facility, index) => createFacilityCard(facility, index)).join('');
+    
+    // Add staggered animation delays
+    setTimeout(() => {
+        const cards = facilitiesList.querySelectorAll('.facility-card');
+        cards.forEach((card, index) => {
+            card.style.animationDelay = `${index * 0.1}s`;
+        });
+    }, 10);
 }
 
-function createFacilityCard(facility) {
+function createFacilityCard(facility, index = 0) {
     const statusClass = getStatusClass(facility.status);
-    const statusIcon = getStatusIcon(facility.status);
     
     return `
         <div class="facility-card">
-            <div class="facility-header">
-                <h3>${facility.name}</h3>
-                <div class="status-indicator ${statusClass}">
-                    <i class="${statusIcon}"></i>
-                    <span>${facility.status}</span>
-                </div>
+            <div class="facility-name">
+                ${facility.name}
+                <span class="facility-type-badge">${facility.type}</span>
             </div>
-            <div class="facility-details">
-                <p><strong>Type:</strong> ${facility.type}</p>
-                <p><strong>Address:</strong> ${facility.address}</p>
-                <p><strong>Phone:</strong> ${facility.phone}</p>
-                <p><strong>Age Group:</strong> ${facility.ageGroup}</p>
-                <p><strong>Gender Served:</strong> ${facility.genderServed}</p>
-                <p><strong>Treatment Type:</strong> ${facility.treatmentType}</p>
-                ${facility.lastUpdated ? `<p class="last-updated">Status updated: ${formatDate(facility.lastUpdated)}</p>` : ''}
+            
+            <div class="facility-category">${facility.treatmentType}</div>
+            
+            <div class="facility-status ${statusClass}">
+                ${facility.status}
             </div>
+            
+            <div class="facility-info">
+                <p><i class="fas fa-map-marker-alt"></i> ${facility.address}</p>
+                <p><i class="fas fa-phone"></i> ${facility.phone}</p>
+                <p><i class="fas fa-users"></i> ${facility.genderServed} • ${facility.ageGroup}</p>
+                ${facility.lastUpdated ? `<p><i class="fas fa-clock"></i> Updated: ${formatDate(facility.lastUpdated)}</p>` : ''}
+            </div>
+            
             <div class="facility-actions">
-                <button onclick="getDirections('${facility.address}')" class="action-btn directions-btn">
+                <button onclick="getDirections('${facility.address.replace(/'/g, "\\\'")}')" class="action-btn btn-directions">
                     <i class="fas fa-directions"></i> Directions
                 </button>
-                <button onclick="callFacility('${facility.phone}')" class="action-btn call-btn">
+                <button onclick="callFacility('${facility.phone}')" class="action-btn btn-call">
                     <i class="fas fa-phone"></i> Call
                 </button>
-                ${facility.website ? `<button onclick="visitWebsite('${facility.website}')" class="action-btn website-btn">
+                ${facility.website && facility.website !== 'http://' ? `<button onclick="visitWebsite('${facility.website}')" class="action-btn btn-website">
                     <i class="fas fa-globe"></i> Website
                 </button>` : ''}
             </div>
@@ -227,11 +252,12 @@ function createFacilityCard(facility) {
 function getStatusClass(status) {
     switch (status) {
         case 'Openings Available': return 'status-available';
-        case 'No Openings': return 'status-full';
+        case 'No Openings': return 'status-unavailable';
         case 'Waitlist': return 'status-waitlist';
-        case 'Accepting Assessments': return 'status-assessment';
-        case 'Emergency/Crisis Only': return 'status-emergency';
-        default: return 'status-unknown';
+        case 'Accepting Assessments': return 'status-available';
+        case 'Emergency/Crisis Only': return 'status-available';
+        case 'Contact for Availability': return 'status-not-updated';
+        default: return 'status-not-updated';
     }
 }
 
@@ -360,15 +386,23 @@ function switchView(view) {
     const listBtn = document.getElementById('list-view-btn');
     const mapBtn = document.getElementById('map-view-btn');
     
+    if (!listView || !mapContainer || !listBtn || !mapBtn) {
+        return;
+    }
+    
+    // Remove active class from both buttons first
+    listBtn.classList.remove('active');
+    mapBtn.classList.remove('active');
+    
     if (view === 'list') {
-        listView.style.display = 'block';
+        // Show list view, hide map
+        listView.style.display = 'grid';
         mapContainer.style.display = 'none';
         listBtn.classList.add('active');
-        mapBtn.classList.remove('active');
-    } else {
+    } else if (view === 'map') {
+        // Show map view, hide list
         listView.style.display = 'none';
         mapContainer.style.display = 'block';
-        listBtn.classList.remove('active');
         mapBtn.classList.add('active');
         
         // Initialize map if not already done
