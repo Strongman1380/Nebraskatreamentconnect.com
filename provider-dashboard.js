@@ -32,6 +32,7 @@ const searchResults = document.getElementById('search-results');
 const searchType = document.getElementById('search-type');
 const locationFilter = document.getElementById('location-filter');
 const treatmentFilter = document.getElementById('treatment-filter');
+const facilityTypeFilter = document.getElementById('facility-type-filter');
 const searchInfo = document.getElementById('search-info');
 
 // DOM elements - Profile
@@ -72,53 +73,33 @@ const submitAssociationBtn = document.getElementById('submit-association-btn');
 // Initialize the dashboard
 async function init() {
     try {
-        // Initialize Firebase
-        await window.firebaseAuth.init();
-        
-        // Check if user is logged in
+        // DEMO: Skip Firebase initialization
         currentProvider = JSON.parse(localStorage.getItem('currentProvider'));
-        
-        // If no localStorage session, check Firebase auth
-        if (!currentProvider && !window.firebaseAuth.isAuthenticated()) {
-            // Redirect to login page if not logged in
-            window.location.href = 'provider-signin.html';
-            return;
-        }
-        
-        // If Firebase user exists but no localStorage session, load from Firebase
-        if (!currentProvider && window.firebaseAuth.isAuthenticated()) {
-            const firebaseUser = window.firebaseAuth.getCurrentUser();
-            if (firebaseUser) {
-                await window.firebaseAuth.loadUserProfile(firebaseUser.uid);
-                currentProvider = JSON.parse(localStorage.getItem('currentProvider'));
-            }
-        }
-        
-        // Final check - if still no provider data, redirect to sign-in
         if (!currentProvider) {
-            window.location.href = 'provider-signin.html';
-            return;
+            // Create a default demo provider if none exists
+            currentProvider = {
+                id: 0,
+                firstName: 'Demo',
+                lastName: 'Provider',
+                email: 'demo@demo.com',
+                facilities: [],
+            };
+            localStorage.setItem('currentProvider', JSON.stringify(currentProvider));
         }
-        
+        // Ensure facilities array exists
+        if (!Array.isArray(currentProvider.facilities)) {
+            currentProvider.facilities = [];
+            localStorage.setItem('currentProvider', JSON.stringify(currentProvider));
+        }
         // Load facilities data
         loadFacilitiesData();
-        
         // Set up event listeners
         setupEventListeners();
-        
         // Update UI with provider information
         updateProviderInfo();
-        
     } catch (error) {
         console.error('Dashboard initialization error:', error);
-        // Fallback to localStorage-only mode
-        currentProvider = JSON.parse(localStorage.getItem('currentProvider'));
-        if (!currentProvider) {
-            window.location.href = 'provider-signin.html';
-            return;
-        }
-        
-        // Continue with initialization
+        // DEMO: Continue with dashboard access even if no provider
         loadFacilitiesData();
         setupEventListeners();
         updateProviderInfo();
@@ -129,27 +110,68 @@ async function init() {
 function loadFacilitiesData() {
     // In a real app, this would be an API call
     // For our prototype, load from localStorage or use mock data
-    allFacilities = JSON.parse(localStorage.getItem('allFacilities')) || [];
-    
-    // If no facilities in localStorage, use the ones from scripts.js
-    if (allFacilities.length === 0) {
-        const scriptTag = document.createElement('script');
-        scriptTag.src = 'scripts.js';
-        scriptTag.onload = function() {
-            // Once scripts.js is loaded, the mockFacilities and mockFacilitiesPart2 variables should be available
-            if (typeof mockFacilities !== 'undefined' && typeof mockFacilitiesPart2 !== 'undefined') {
-                allFacilities = [...mockFacilities, ...mockFacilitiesPart2];
-                localStorage.setItem('allFacilities', JSON.stringify(allFacilities));
-                
-                // Now load provider's associated facilities
-                loadProviderFacilities();
-            }
-        };
-        document.head.appendChild(scriptTag);
+    // DEMO: Ensure some facilities exist for search
+    let demoFacilities = [
+        {
+            id: 101,
+            name: 'Nebraska Recovery Center',
+            type: 'Residential',
+            address: '123 Main St, Lincoln, NE',
+            phone: '402-555-1234',
+            description: 'A leading residential treatment center.'
+        },
+        {
+            id: 102,
+            name: 'Omaha Outpatient Clinic',
+            type: 'Outpatient',
+            address: '456 Elm St, Omaha, NE',
+            phone: '402-555-5678',
+            description: 'Outpatient services for substance use.'
+        },
+        {
+            id: 103,
+            name: 'Halfway House North',
+            type: 'Halfway House',
+            address: '789 Oak St, Grand Island, NE',
+            phone: '308-555-9012',
+            description: 'Supportive halfway house for recovery.'
+        }
+    ];
+    let storedFacilities = JSON.parse(localStorage.getItem('allFacilities')) || [];
+
+    if (storedFacilities.length > 0) {
+        allFacilities = window.FacilityUtils
+            ? window.FacilityUtils.normalizeFacilityDataset(storedFacilities)
+            : storedFacilities;
+    } else if (typeof window !== 'undefined' && (
+        Array.isArray(window.STATIC_FACILITIES_DATA) ||
+        Array.isArray(window.STATIC_HALFWAY_HOUSES_DATA) ||
+        Array.isArray(window.STATIC_OUTPATIENT_DATA) ||
+        Array.isArray(window.STATIC_DETOX_DATA)
+    )) {
+        const combined = [
+            ...(window.STATIC_FACILITIES_DATA || []),
+            ...(window.STATIC_HALFWAY_HOUSES_DATA || []),
+            ...(window.STATIC_OUTPATIENT_DATA || []),
+            ...(window.STATIC_DETOX_DATA || []),
+        ];
+        allFacilities = window.FacilityUtils
+            ? window.FacilityUtils.normalizeFacilityDataset(combined)
+            : combined;
+        localStorage.setItem('allFacilities', JSON.stringify(allFacilities));
     } else {
-        // Load provider's associated facilities
-        loadProviderFacilities();
+        allFacilities = window.FacilityUtils
+            ? window.FacilityUtils.normalizeFacilityDataset(demoFacilities)
+            : demoFacilities;
+        localStorage.setItem('allFacilities', JSON.stringify(allFacilities));
     }
+
+    if (window.FacilityUtils) {
+        localStorage.setItem('allFacilities', JSON.stringify(allFacilities));
+    }
+
+    // Load provider's associated facilities
+    loadProviderFacilities();
 }
 
 // Load provider's associated facilities
@@ -208,6 +230,9 @@ function setupEventListeners() {
     searchType.addEventListener('change', handleFacilitySearch);
     locationFilter.addEventListener('change', handleFacilitySearch);
     treatmentFilter.addEventListener('change', handleFacilitySearch);
+    if (facilityTypeFilter) {
+        facilityTypeFilter.addEventListener('change', handleFacilitySearch);
+    }
     
     // Modal close buttons
     document.querySelectorAll('.close, .close-modal').forEach(button => {
@@ -284,9 +309,14 @@ function renderDashboardFacilities() {
                 <div class="empty-state-icon"><i class="fas fa-building"></i></div>
                 <div class="empty-state-title">No Facilities Found</div>
                 <div class="empty-state-message">You haven't been associated with any facilities yet.</div>
-                <button class="btn-action btn-primary" onclick="showSection('association-section')">Associate with a Facility</button>
+                <button class="btn-action btn-primary associate-facility-btn">Associate with a Facility</button>
             </div>
         `;
+        // Add event listener for the button
+        const associateBtn = dashboardFacilities.querySelector('.associate-facility-btn');
+        if (associateBtn) {
+            associateBtn.addEventListener('click', () => showSection('association-section'));
+        }
         return;
     }
     
@@ -314,9 +344,14 @@ function renderFacilitiesList() {
                 <div class="empty-state-icon"><i class="fas fa-building"></i></div>
                 <div class="empty-state-title">No Facilities Found</div>
                 <div class="empty-state-message">You haven't been associated with any facilities yet.</div>
-                <button class="btn-action btn-primary" onclick="showSection('association-section')">Associate with a Facility</button>
+                <button class="btn-action btn-primary associate-facility-btn">Associate with a Facility</button>
             </div>
         `;
+        // Add event listener for the button
+        const associateBtn = facilitiesList.querySelector('.associate-facility-btn');
+        if (associateBtn) {
+            associateBtn.addEventListener('click', () => showSection('association-section'));
+        }
         return;
     }
     
@@ -329,33 +364,43 @@ function renderFacilitiesList() {
 
 // Create a facility card
 function createFacilityCard(facility, isCompact) {
+    const safeFacility = window.FacilityUtils
+        ? window.FacilityUtils.sanitizeFacilityForRender(facility)
+        : null;
+    if (!safeFacility) {
+        return document.createElement('div');
+    }
+
     const card = document.createElement('div');
     card.className = 'facility-card';
     card.dataset.id = facility.id;
-    
-    // Determine status class
+
+    // Determine effective status and class
+    const effectiveStatus = facility.availability_status || facility.status || 'Status Not Updated';
     let statusClass = 'status-not-updated';
-    if (facility.availability_status === 'Openings Available') {
+    if (effectiveStatus === 'Openings Available') {
         statusClass = 'status-available';
-    } else if (facility.availability_status === 'No Openings') {
+    } else if (effectiveStatus === 'No Openings') {
         statusClass = 'status-unavailable';
-    } else if (facility.availability_status === 'Waitlist' || facility.availability_status === 'Accepting Assessments') {
+    } else if (effectiveStatus === 'Waitlist' || effectiveStatus === 'Accepting Assessments' || effectiveStatus === 'Contact for Availability') {
         statusClass = 'status-waitlist';
     }
     
     // Format last updated date
-    const lastUpdated = new Date(facility.status_last_updated);
-    const formattedDate = lastUpdated.toLocaleDateString();
-    
+    const lastUpdatedRaw = facility.status_last_updated || facility.lastUpdated || null;
+    const formattedDate = lastUpdatedRaw ? new Date(lastUpdatedRaw).toLocaleDateString() : 'N/A';
+
+    const phoneDigits = (safeFacility.phone || '').replace(/\D/g, '');
+
     // Create card content
     card.innerHTML = `
         <div class="facility-header">
-            <h3 class="facility-name">${facility.name}</h3>
-            <span class="facility-status ${statusClass}">${facility.availability_status}</span>
+            <h3 class="facility-name">${safeFacility.name}</h3>
+            <span class="facility-status ${statusClass}">${effectiveStatus}</span>
         </div>
         <div class="facility-info">
-            <p><strong>Address:</strong> ${facility.address}</p>
-            <p><strong>Phone:</strong> <a href="tel:${facility.phone.replace(/\D/g, '')}" style="color: inherit;">${facility.phone}</a></p>
+            <p><strong>Address:</strong> ${safeFacility.address}</p>
+            <p><strong>Phone:</strong> ${safeFacility.phone ? `<a href="tel:${phoneDigits}" style="color: inherit;">${safeFacility.phone}</a>` : 'N/A'}</p>
             <p><strong>Last Updated:</strong> ${formattedDate}</p>
         </div>
         <div class="facility-actions">
@@ -399,11 +444,15 @@ function populateLocationFilter() {
     
     // Extract city from each facility address
     allFacilities.forEach(facility => {
-        const addressParts = facility.address.split(',');
-        if (addressParts.length > 1) {
-            const city = addressParts[1].trim();
-            cities.add(city);
+        const address = facility.address || '';
+        const parts = address.split(',');
+        let city = '';
+        if (parts.length >= 3) {
+            city = parts[1].trim();
+        } else if (parts.length === 2) {
+            city = parts[0].trim();
         }
+        if (city) cities.add(city);
     });
     
     // Sort cities alphabetically
@@ -509,11 +558,14 @@ async function updateProfileFallback(updates) {
     updateProviderInfo();
     
     // Update provider in the providers list
-    const mockProviders = JSON.parse(localStorage.getItem('mockProviders')) || [];
-    const providerIndex = mockProviders.findIndex(p => p.id === currentProvider.id);
+    const providers = JSON.parse(localStorage.getItem('mockProviders')) || [];
+    const providerIndex = providers.findIndex(p => p.id === currentProvider.id);
     if (providerIndex !== -1) {
-        Object.assign(mockProviders[providerIndex], updates);
-        localStorage.setItem('mockProviders', JSON.stringify(mockProviders));
+        providers[providerIndex] = {
+            ...providers[providerIndex],
+            ...updates
+        };
+        localStorage.setItem('mockProviders', JSON.stringify(providers));
     }
     
     alert('Profile updated successfully! (Using fallback storage)');
@@ -521,115 +573,138 @@ async function updateProfileFallback(updates) {
 
 // Handle facility search
 function handleFacilitySearch() {
-    const searchTerm = facilitySearchInput.value.toLowerCase();
+    const searchTerm = (facilitySearchInput.value || '').toLowerCase();
     const selectedSearchType = searchType.value;
-    const selectedLocation = locationFilter.value.toLowerCase();
+    const selectedLocation = (locationFilter.value || '').toLowerCase();
     const selectedTreatment = treatmentFilter.value;
-    
+    const selectedFacilityTypeRaw = facilityTypeFilter ? facilityTypeFilter.value : '';
+
+    // Map UI label to data (Detox Center -> Detox)
+    const selectedFacilityType = selectedFacilityTypeRaw === 'Detox Center' ? 'Detox' : selectedFacilityTypeRaw;
+
     let filteredFacilities = [...allFacilities];
-    
-    // Apply treatment type filter if selected
-    if (selectedTreatment) {
-        filteredFacilities = filteredFacilities.filter(facility => {
-            if (selectedTreatment === 'Both') {
-                return facility.treatment_type === 'Both';
-            } else {
-                return facility.treatment_type === selectedTreatment || facility.treatment_type === 'Both';
-            }
+
+    // Apply facility type filter if selected
+    if (selectedFacilityType) {
+        const desiredType = selectedFacilityType.toLowerCase();
+        filteredFacilities = filteredFacilities.filter(f => {
+            const types = Array.isArray(f.facilityTypes) ? f.facilityTypes : [f.type];
+            return types.some(type => (type || '').toLowerCase() === desiredType);
         });
     }
-    
+
+    // Apply treatment type filter if selected
+    if (selectedTreatment) {
+        const desiredTreatment = selectedTreatment.toLowerCase();
+        filteredFacilities = filteredFacilities.filter(f => {
+            const treatments = Array.isArray(f.treatmentTypes) && f.treatmentTypes.length > 0
+                ? f.treatmentTypes
+                : [f.treatmentType || f.treatment_type || ''];
+            return treatments.some(t => {
+                const normalized = (t || '').toLowerCase();
+                if (desiredTreatment === 'both') {
+                    return normalized === 'both';
+                }
+                return normalized === desiredTreatment || normalized === 'both';
+            });
+        });
+    }
+
     // Apply location filter if selected
     if (selectedLocation) {
-        filteredFacilities = filteredFacilities.filter(facility => 
-            facility.address.toLowerCase().includes(selectedLocation)
-        );
+        filteredFacilities = filteredFacilities.filter(f => (f.address || '').toLowerCase().includes(selectedLocation));
     }
-    
+
     // Apply search term filter if provided
     if (searchTerm) {
-        // Filter based on selected search type
         switch (selectedSearchType) {
             case 'name':
-                filteredFacilities = filteredFacilities.filter(facility => 
-                    facility.name.toLowerCase().includes(searchTerm)
-                );
+                filteredFacilities = filteredFacilities.filter(f => (f.name || '').toLowerCase().includes(searchTerm));
                 break;
             case 'location':
-                filteredFacilities = filteredFacilities.filter(facility => {
-                    // Extract city from address (assumes format like "Address, City, NE Zip")
-                    const addressParts = facility.address.split(',');
-                    if (addressParts.length > 1) {
-                        const city = addressParts[1].trim().toLowerCase();
-                        return city.includes(searchTerm);
+                filteredFacilities = filteredFacilities.filter(f => {
+                    const address = f.address || '';
+                    const parts = address.split(',');
+                    let city = '';
+                    if (parts.length >= 3) {
+                        city = parts[1].trim().toLowerCase();
+                    } else if (parts.length === 2) {
+                        city = parts[0].trim().toLowerCase();
                     }
-                    return false;
+                    return city ? city.includes(searchTerm) : false;
                 });
                 break;
             case 'address':
-                filteredFacilities = filteredFacilities.filter(facility => 
-                    facility.address.toLowerCase().includes(searchTerm)
-                );
+                filteredFacilities = filteredFacilities.filter(f => (f.address || '').toLowerCase().includes(searchTerm));
                 break;
-            case 'phone':
-                filteredFacilities = filteredFacilities.filter(facility => 
-                    facility.phone.toLowerCase().replace(/\D/g, '').includes(searchTerm.replace(/\D/g, ''))
-                );
+            case 'phone': {
+                const termDigits = searchTerm.replace(/\D/g, '');
+                filteredFacilities = filteredFacilities.filter(f => {
+                    const digits = f.phoneDigits || (f.phone || '').replace(/\D/g, '');
+                    return digits.includes(termDigits);
+                });
                 break;
+            }
             case 'treatment':
-                filteredFacilities = filteredFacilities.filter(facility => 
-                    facility.treatment_type.toLowerCase().includes(searchTerm) ||
-                    facility.description.toLowerCase().includes(searchTerm)
-                );
+                filteredFacilities = filteredFacilities.filter(f => {
+                    const treatments = Array.isArray(f.treatmentTypes) && f.treatmentTypes.length > 0
+                        ? f.treatmentTypes
+                        : [f.treatmentType || f.treatment_type || ''];
+                    const desc = (f.description || '').toLowerCase();
+                    return treatments.some(t => (t || '').toLowerCase().includes(searchTerm)) || desc.includes(searchTerm);
+                });
                 break;
             case 'all':
             default:
-                filteredFacilities = filteredFacilities.filter(facility => 
-                    facility.name.toLowerCase().includes(searchTerm) || 
-                    facility.address.toLowerCase().includes(searchTerm) ||
-                    facility.phone.toLowerCase().includes(searchTerm) ||
-                    (facility.description && facility.description.toLowerCase().includes(searchTerm))
-                );
+                filteredFacilities = filteredFacilities.filter(f => {
+                    const combined = (f.searchIndex || '').toLowerCase();
+                    const desc = (f.description || '').toLowerCase();
+                    return combined.includes(searchTerm) || desc.includes(searchTerm);
+                });
                 break;
         }
     }
-    
+
     // Remove facilities already associated with the provider
-    const availableFacilities = filteredFacilities.filter(facility => 
-        !currentProvider.facilities || !currentProvider.facilities.includes(facility.id)
-    );
-    
+    const availableFacilities = filteredFacilities.filter(f => !currentProvider.facilities || !currentProvider.facilities.includes(f.id));
+
     // Display search info
     searchInfo.textContent = `Found ${availableFacilities.length} facilities available for association`;
-    
+
     // Display results
     if (availableFacilities.length === 0) {
         searchResults.innerHTML = '<div class="empty-state"><p>No facilities found matching your search criteria.</p></div>';
         return;
     }
-    
+
     searchResults.innerHTML = '';
-    availableFacilities.forEach(facility => {
+    availableFacilities.forEach(f => {
         const resultItem = document.createElement('div');
         resultItem.className = 'search-item';
-        resultItem.dataset.id = facility.id;
-        
+        resultItem.dataset.id = f.id;
+
         // Determine treatment type display
-        let treatmentDisplay = facility.treatment_type;
-        if (facility.treatment_type === 'Both') {
-            treatmentDisplay = 'Substance Abuse & Mental Health';
-        }
-        
+        const safeFacility = window.FacilityUtils
+            ? window.FacilityUtils.sanitizeFacilityForRender(f)
+            : null;
+
+        const treatmentDisplay = safeFacility && safeFacility.treatmentTypes && safeFacility.treatmentTypes.length > 1
+            ? safeFacility.treatmentTypes.join(', ')
+            : safeFacility?.primaryTreatmentType || '';
+
+        const age = safeFacility?.ageGroup || '';
+        const gender = safeFacility?.genderServed || '';
+
         resultItem.innerHTML = `
-            <div class="search-item-name">${facility.name}</div>
-            <div class="search-item-address">${facility.address}</div>
+            <div class="search-item-name">${safeFacility ? safeFacility.name : (f.name || '')}</div>
+            <div class="search-item-address">${safeFacility ? safeFacility.address : (f.address || '')}</div>
             <div class="search-item-details">
-                <span class="search-item-phone">${facility.phone}</span> | 
-                <span class="search-item-type">${facility.age_group} ${facility.gender_served} - ${treatmentDisplay}</span>
+                <span class="search-item-phone">${safeFacility ? safeFacility.phone : (f.phone || '')}</span> |
+                <span class="search-item-type">${[age, gender].filter(Boolean).join(' ')}${treatmentDisplay ? ` - ${treatmentDisplay}` : ''}</span>
             </div>
         `;
-        
-        resultItem.addEventListener('click', () => openAssociationModal(facility));
+
+        resultItem.addEventListener('click', () => openAssociationModal(f));
         searchResults.appendChild(resultItem);
     });
 }
@@ -640,6 +715,7 @@ function clearSearch() {
     searchType.value = 'all';
     locationFilter.value = '';
     treatmentFilter.value = '';
+    if (facilityTypeFilter) facilityTypeFilter.value = '';
     searchInfo.textContent = '';
     searchResults.innerHTML = '';
 }
@@ -688,10 +764,13 @@ function openAssociationModal(facility) {
     associationFacilityId.value = facility.id;
     
     // Display facility info
+    const safeFacility = window.FacilityUtils
+        ? window.FacilityUtils.sanitizeFacilityForRender(facility)
+        : null;
     associationFacilityInfo.innerHTML = `
-        <p><strong>${facility.name}</strong></p>
-        <p>${facility.address}</p>
-        <p>Phone: ${facility.phone}</p>
+        <p><strong>${safeFacility ? safeFacility.name : facility.name}</strong></p>
+        <p>${safeFacility ? safeFacility.address : (facility.address || '')}</p>
+        <p>Phone: ${safeFacility ? safeFacility.phone : (facility.phone || '')}</p>
     `;
     
     // Reset form

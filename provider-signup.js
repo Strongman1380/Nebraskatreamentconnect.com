@@ -6,28 +6,89 @@ const passwordInput = document.getElementById('password');
 const confirmPasswordInput = document.getElementById('confirm-password');
 
 // Mock database for providers (in a real app, this would be server-side)
-let mockProviders = JSON.parse(localStorage.getItem('mockProviders')) || [];
+let mockProviders = [];
+
+function mockAuthEnabled() {
+    return !!(window.APP_CONFIG && window.APP_CONFIG.ALLOW_DEV_MOCK_AUTH);
+}
+
+async function loadMockProviders() {
+    const stored = JSON.parse(localStorage.getItem('mockProviders')) || [];
+    let updated = false;
+    const sanitized = [];
+
+    for (const provider of stored) {
+        const entry = { ...provider };
+
+        // Migrate plain passwords to hashed passwords
+        if (entry.password && !entry.passwordHash) {
+            entry.passwordHash = await getPasswordHash(entry.password);
+            delete entry.password;
+            updated = true;
+        }
+        sanitized.push(entry);
+    }
+
+    if (updated) {
+        localStorage.setItem('mockProviders', JSON.stringify(sanitized));
+    }
+
+    mockProviders = sanitized;
+    return sanitized;
+}
+
+function saveMockProviders(providers) {
+    mockProviders = providers.slice();
+    localStorage.setItem('mockProviders', JSON.stringify(mockProviders));
+}
+
+async function getPasswordHash(password) {
+    const value = password || '';
+    if (window.crypto && window.crypto.subtle) {
+        const encoder = new TextEncoder();
+        const data = encoder.encode(value);
+        const hashBuffer = await window.crypto.subtle.digest('SHA-256', data);
+        const hashArray = Array.from(new Uint8Array(hashBuffer));
+        return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+    }
+
+    // Fallback for browsers without crypto.subtle (should be rare)
+    // NOTE: This is NOT secure - only use for development/demo
+    try {
+        // Modern replacement for deprecated unescape()
+        return window.btoa(encodeURIComponent(value).replace(/%([0-9A-F]{2})/g,
+            (match, p1) => String.fromCharCode(parseInt(p1, 16))
+        ));
+    } catch (error) {
+        console.error('Password hashing failed:', error);
+        return value;
+    }
+}
 
 // Initialize the page
 async function init() {
-    try {
-        // Initialize Firebase
-        await window.firebaseAuth.init();
-        
-        // Set up event listeners
-        signupForm.addEventListener('submit', handleSignup);
-        passwordInput.addEventListener('input', validatePassword);
-        confirmPasswordInput.addEventListener('input', validatePasswordMatch);
-        
-        // Check if user is already logged in
-        if (window.firebaseAuth.isAuthenticated()) {
-            // Auto-redirect to dashboard if already logged in
-            window.location.href = 'provider-dashboard.html';
-            return;
+    let firebaseReady = false;
+
+    if (window.FIREBASE_CONFIG && window.firebaseAuth?.init) {
+        try {
+            await window.firebaseAuth.init();
+            firebaseReady = true;
+        } catch (error) {
+            console.warn('Firebase initialization failed, falling back to local demo mode:', error);
         }
-    } catch (error) {
-        console.error('Initialization error:', error);
-        showError('Failed to initialize authentication system. Please refresh the page.');
+    }
+
+    // Set up event listeners regardless of Firebase availability
+    signupForm.addEventListener('submit', handleSignup);
+    passwordInput.addEventListener('input', validatePassword);
+    confirmPasswordInput.addEventListener('input', validatePasswordMatch);
+
+    if (mockAuthEnabled()) {
+        await loadMockProviders();
+    }
+    
+    if (firebaseReady && window.firebaseAuth.isAuthenticated()) {
+        window.location.href = 'provider-dashboard.html';
     }
 }
 
@@ -62,8 +123,11 @@ async function handleSignup(e) {
     submitButton.textContent = 'Creating Account...';
     
     try {
-        // Try Firebase signup
-        const result = await window.firebaseAuth.signUp(userData.email, password, userData);
+        let result = { success: false };
+        
+        if (window.FIREBASE_CONFIG && window.firebaseAuth?.signUp) {
+            result = await window.firebaseAuth.signUp(userData.email, password, userData);
+        }
         
         if (result.success) {
             showSuccess(result.message);
@@ -74,15 +138,18 @@ async function handleSignup(e) {
             }, 3000);
         } else {
             // If Firebase fails, try fallback to localStorage (for development)
-            const fallbackResult = await tryLocalStorageFallback(userData, password);
-            
-            if (fallbackResult.success) {
-                showSuccess(fallbackResult.message);
-                setTimeout(() => {
-                    window.location.href = 'provider-signin.html';
-                }, 2000);
+            if (!mockAuthEnabled()) {
+                showError('Provider signup is currently unavailable. Please try again later.');
             } else {
-                showError(result.error || fallbackResult.error);
+                const fallbackResult = await tryLocalStorageFallback(userData, password);
+                if (fallbackResult.success) {
+                    showSuccess(fallbackResult.message);
+                    setTimeout(() => {
+                        window.location.href = 'provider-signin.html';
+                    }, 2000);
+                } else {
+                    showError(fallbackResult.error);
+                }
             }
         }
     } catch (error) {
@@ -97,28 +164,37 @@ async function handleSignup(e) {
 
 // Fallback to localStorage signup (for development)
 async function tryLocalStorageFallback(userData, password) {
-    try {
-        const provider = {
-            id: Date.now(),
-            ...userData,
-            password: password, // In a real app, this would be hashed
-            isVerifiedByAdmin: true, // Auto-approve for demo purposes
-            emailVerifiedAt: new Date().toISOString(),
-            createdAt: new Date().toISOString(),
-            facilities: []
+    if (!mockAuthEnabled()) {
+        return {
+            success: false,
+            error: 'Local signup fallback is disabled in this environment.'
         };
-        
-        // Check if email already exists
-        if (mockProviders.some(p => p.email === provider.email)) {
+    }
+
+    try {
+        const providers = await loadMockProviders();
+        const normalizedEmail = userData.email;
+
+        if (providers.some(p => p.email === normalizedEmail)) {
             return {
                 success: false,
                 error: 'An account with this email already exists. Please use a different email or sign in.'
             };
         }
-        
-        // Save provider to mock database
-        mockProviders.push(provider);
-        localStorage.setItem('mockProviders', JSON.stringify(mockProviders));
+
+        const passwordHash = await getPasswordHash(password);
+        const provider = {
+            id: Date.now(),
+            ...userData,
+            isVerifiedByAdmin: true, // Auto-approve for demo purposes
+            emailVerifiedAt: new Date().toISOString(),
+            createdAt: new Date().toISOString(),
+            facilities: [],
+            passwordHash
+        };
+
+        const updatedProviders = [...providers, provider];
+        saveMockProviders(updatedProviders);
         
         return {
             success: true,

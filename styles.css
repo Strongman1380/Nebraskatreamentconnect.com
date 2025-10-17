@@ -88,9 +88,58 @@ nav ul li a {
 }
 
 nav ul li a.active,
-nav ul li a:hover {
+nav ul li a:hover,
+nav ul li a:focus {
     color: #1a73e8;
     border-bottom: 2px solid #1a73e8;
+    outline: 2px solid transparent;
+}
+
+/* Enhanced focus styles for accessibility */
+*:focus {
+    outline: 2px solid #1a73e8;
+    outline-offset: 2px;
+}
+
+button:focus,
+input:focus,
+select:focus,
+textarea:focus {
+    outline: 2px solid #1a73e8;
+    outline-offset: 2px;
+    box-shadow: 0 0 0 3px rgba(26, 115, 232, 0.1);
+}
+
+/* Skip link for keyboard navigation */
+.skip-link {
+    position: absolute;
+    top: -40px;
+    left: 6px;
+    background: #1a73e8;
+    color: white;
+    padding: 8px;
+    text-decoration: none;
+    border-radius: 4px;
+    z-index: 1000;
+    transition: top 0.3s;
+}
+
+.skip-link:focus {
+    top: 6px;
+    outline: 2px solid #fff;
+}
+
+/* Visually hidden utility class for screen readers */
+.visually-hidden {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    padding: 0 !important;
+    margin: -1px !important;
+    overflow: hidden !important;
+    clip: rect(0, 0, 0, 0) !important;
+    white-space: nowrap !important;
+    border: 0 !important;
 }
 
 /* Main content styles */

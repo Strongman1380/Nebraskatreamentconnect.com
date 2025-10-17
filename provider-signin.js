@@ -2,6 +2,7 @@
 const signinForm = document.getElementById('signin-form');
 const errorMessage = document.getElementById('error-message');
 const successMessage = document.getElementById('success-message');
+let mockProviders = [];
 
 // Initialize the page
 async function init() {
@@ -18,9 +19,20 @@ async function init() {
         // Check if user is already logged in
         const currentProvider = localStorage.getItem('currentProvider');
         if (currentProvider) {
-            // Auto-redirect to dashboard if already logged in
-            window.location.href = 'provider-dashboard.html';
-            return;
+            try {
+                const parsedProvider = JSON.parse(currentProvider);
+                // Validate stored provider data
+                if (parsedProvider && parsedProvider.email && parsedProvider.id) {
+                    // Auto-redirect to dashboard if already logged in
+                    window.location.href = 'provider-dashboard.html';
+                    return;
+                } else {
+                    // Invalid session data, clear it
+                    localStorage.removeItem('currentProvider');
+                }
+            } catch (error) {
+                localStorage.removeItem('currentProvider');
+            }
         }
         
         // Initialize mock data for development
@@ -32,71 +44,87 @@ async function init() {
     }
 }
 
-// Initialize mock data for development
+function mockAuthEnabled() {
+    return !!(window.APP_CONFIG && window.APP_CONFIG.ALLOW_DEV_MOCK_AUTH);
+}
+
+// Initialize mock data for development - Only in development environment
 function initializeMockData() {
-    // Check if mock providers exist
-    const mockProviders = JSON.parse(localStorage.getItem('mockProviders')) || [];
+    if (!mockAuthEnabled()) {
+        return;
+    }
+
+    const isDevelopment = window.location.hostname === 'localhost' || 
+                         window.location.hostname === '127.0.0.1' || 
+                         window.location.hostname.includes('.local');
     
-    // If no providers exist, create some sample data for development
-    if (mockProviders.length === 0) {
-        // Create sample providers
-        const sampleProviders = [
-            {
-                id: 1,
-                firstName: 'John',
-                lastName: 'Doe',
-                email: 'admin@test.com',
-                password: 'password123',
-                agencyName: 'Example Treatment Center',
-                jobTitle: 'Director',
-                workPhone: '(402) 555-1234',
-                isVerifiedByAdmin: true,
-                emailVerifiedAt: new Date().toISOString(),
-                createdAt: new Date().toISOString(),
-                facilities: [1, 2] // IDs of managed facilities
-            },
-            {
-                id: 2,
-                firstName: 'Jane',
-                lastName: 'Smith',
-                email: 'provider@test.com',
-                password: 'password123',
-                agencyName: 'Community Health Services',
-                jobTitle: 'Administrator',
-                workPhone: '(402) 555-5678',
-                isVerifiedByAdmin: true,
-                emailVerifiedAt: new Date().toISOString(),
-                createdAt: new Date().toISOString(),
-                facilities: [3, 4] // IDs of managed facilities
-            }
-        ];
-        
-        // Save to localStorage
-        localStorage.setItem('mockProviders', JSON.stringify(sampleProviders));
-        
-        // Show test credentials
-        showTestCredentials();
+    if (!isDevelopment) {
+        return; // Skip mock data if not in development
+    }
+    
+    // Show development warning
+    showDevelopmentWarning();
+    showDevelopmentNotice();
+
+    // Clean and load any existing demo providers
+    loadMockProviders().catch((error) => {
+        console.warn('Unable to load legacy mock providers:', error);
+    });
+}
+
+// Show development warning
+function showDevelopmentWarning() {
+    const warningBanner = document.createElement('div');
+    warningBanner.style.cssText = `
+        background-color: #fff3cd;
+        border: 1px solid #ffc107;
+        border-radius: 4px;
+        padding: 15px;
+        margin: 20px 0;
+        text-align: center;
+    `;
+    warningBanner.innerHTML = `
+        <p><strong>⚠️ Development Mode</strong></p>
+        <p>This is a development environment. Provider portal functionality is limited.</p>
+        <button class="dismiss-banner" style="background: #6c757d; color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer; margin-top: 10px;">Dismiss</button>
+    `;
+
+    // Add event listener for dismiss button
+    const dismissBtn = warningBanner.querySelector('.dismiss-banner');
+    if (dismissBtn) {
+        dismissBtn.addEventListener('click', () => warningBanner.remove());
+    }
+
+    const container = document.querySelector('.signin-container');
+    const form = document.querySelector('.signin-form');
+    if (container && form) {
+        container.insertBefore(warningBanner, form);
     }
 }
 
-// Show test credentials to users
-function showTestCredentials() {
+// Show development instructions - only in development
+function showDevelopmentNotice() {
     const credentialsBanner = document.createElement('div');
     credentialsBanner.style.cssText = `
-        background-color: #e8f5e8;
-        border: 1px solid #4caf50;
+        background-color: #f8f9fa;
+        border: 1px solid #dee2e6;
         border-radius: 4px;
         padding: 15px;
         margin: 20px 0;
         text-align: center;
     `;
     credentialsBanner.innerHTML = `
-        <p><strong>Test Credentials:</strong></p>
-        <p>Email: <code>admin@test.com</code> | Password: <code>password123</code></p>
-        <p>Email: <code>provider@test.com</code> | Password: <code>password123</code></p>
-        <button onclick="this.parentElement.remove()" style="background: #666; color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer; margin-top: 10px;">Hide</button>
+        <p><strong>Local Mock Auth Enabled</strong></p>
+        <p>Create demo providers via the <em>Provider Sign Up</em> page. Accounts stay on this browser only.</p>
+        <button class="dismiss-banner" style="background: #6c757d; color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer; margin-top: 10px;">Dismiss</button>
     `;
-    
+
+    // Add event listener for dismiss button
+    const dismissBtn = credentialsBanner.querySelector('.dismiss-banner');
+    if (dismissBtn) {
+        dismissBtn.addEventListener('click', () => credentialsBanner.remove());
+    }
+
     const container = document.querySelector('.signin-container');
     const form = document.querySelector('.signin-form');
     if (container && form) {
@@ -104,7 +132,53 @@ function showTestCredentials() {
     }
 }
 
+async function loadMockProviders() {
+    const stored = JSON.parse(localStorage.getItem('mockProviders')) || [];
+    let updated = false;
+    const sanitized = [];
 
+    for (const provider of stored) {
+        const entry = { ...provider };
+
+        // Migrate plain passwords to hashed passwords
+        if (entry.password && !entry.passwordHash) {
+            entry.passwordHash = await getPasswordHash(entry.password);
+            delete entry.password;
+            updated = true;
+        }
+        sanitized.push(entry);
+    }
+
+    if (updated) {
+        localStorage.setItem('mockProviders', JSON.stringify(sanitized));
+    }
+
+    mockProviders = sanitized;
+    return sanitized;
+}
+
+async function getPasswordHash(password) {
+    const value = password || '';
+    if (window.crypto && window.crypto.subtle) {
+        const encoder = new TextEncoder();
+        const data = encoder.encode(value);
+        const hashBuffer = await window.crypto.subtle.digest('SHA-256', data);
+        const hashArray = Array.from(new Uint8Array(hashBuffer));
+        return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+    }
+
+    // Fallback for browsers without crypto.subtle (should be rare)
+    // NOTE: This is NOT secure - only use for development/demo
+    try {
+        // Modern replacement for deprecated unescape()
+        return window.btoa(encodeURIComponent(value).replace(/%([0-9A-F]{2})/g,
+            (match, p1) => String.fromCharCode(parseInt(p1, 16))
+        ));
+    } catch (error) {
+        console.error('Password hashing failed:', error);
+        return value;
+    }
+}
 
 // Handle form submission
 async function handleSignin(e) {
@@ -153,12 +227,18 @@ async function handleSignin(e) {
 
 // localStorage authentication
 async function tryLocalStorageAuth(email, password) {
+    if (!mockAuthEnabled()) {
+        return {
+            success: false,
+            error: 'Provider sign-in is currently disabled. Please try again later.'
+        };
+    }
+
     try {
-        // Get providers from local storage
-        const mockProviders = JSON.parse(localStorage.getItem('mockProviders')) || [];
+        const providers = await loadMockProviders();
+        const passwordHash = await getPasswordHash(password);
         
-        // Find provider with matching credentials
-        const provider = mockProviders.find(p => p.email === email && p.password === password);
+        const provider = providers.find(p => p.email === email && p.passwordHash === passwordHash);
         
         if (!provider) {
             return {
@@ -166,15 +246,10 @@ async function tryLocalStorageAuth(email, password) {
                 error: 'Invalid email or password. Please try again.'
             };
         }
-        
-        // Check if provider is verified
-        if (!provider.isVerifiedByAdmin) {
-            return {
-                success: false,
-                error: 'Your account is pending approval. Please contact the administrator.'
-            };
-        }
-        
+
+        // NOTE: In production, implement proper admin verification
+        // For now, mock auth allows sign-in without server-side verification
+
         // Create a session (store provider info without sensitive data)
         const providerSession = {
             id: provider.id,
@@ -210,24 +285,36 @@ async function tryLocalStorageAuth(email, password) {
 async function handleForgotPassword(e) {
     e.preventDefault();
     
-    const email = prompt('Please enter your email address:');
+    const emailInput = prompt('Please enter your email address:');
     
-    if (!email) {
+    if (!emailInput) {
         return; // User cancelled
     }
-    
-    // Validate email format
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
+
+    // Validate email format using improved validation
+    if (!window.SecurityUtils || !window.SecurityUtils.validateEmail(emailInput)) {
         showError('Please enter a valid email address.');
         return;
     }
-    
-    // For demo purposes, show test credentials
-    if (email === 'admin@test.com' || email === 'provider@test.com') {
-        showSuccess('Password reset: Your password is "password123"');
-    } else {
-        showError('Email not found. Use admin@test.com or provider@test.com for testing.');
+
+    if (!mockAuthEnabled()) {
+        showSuccess('If an account exists, you will receive password reset instructions shortly.');
+        return;
+    }
+
+    try {
+        const providers = await loadMockProviders();
+        const normalizedEmail = emailInput.trim().toLowerCase();
+        const exists = providers.some(provider => provider.email === normalizedEmail);
+
+        if (!exists) {
+            console.info('Password reset requested for non-existent account:', normalizedEmail);
+        }
+
+        showSuccess('If an account exists, you will receive password reset instructions shortly.');
+    } catch (error) {
+        console.error('Password reset lookup failed:', error);
+        showError('Unable to process password reset at this time. Please try again later.');
     }
 }
 

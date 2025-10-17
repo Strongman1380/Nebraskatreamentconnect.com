@@ -11,7 +11,10 @@ let userLocation = null;
 // Initialize the application
 document.addEventListener('DOMContentLoaded', function() {
     // Load static data
-    allFacilities = window.ALL_FACILITIES_DATA || [];
+    const dataset = window.ALL_FACILITIES_DATA || [];
+    allFacilities = window.FacilityUtils
+        ? window.FacilityUtils.normalizeFacilityDataset(dataset)
+        : dataset;
     filteredFacilities = [...allFacilities];
     
     // Initialize UI
@@ -87,52 +90,18 @@ function debounce(func, wait) {
 }
 
 function handleSearch() {
-    const searchTerm = document.getElementById('search-input')?.value.toLowerCase() || '';
-    const radius = parseInt(document.getElementById('search-radius')?.value) || 999;
-    const ageGroup = document.getElementById('age-group')?.value || '';
-    const genderServed = document.getElementById('gender-served')?.value || '';
-    const treatmentType = document.getElementById('treatment-type')?.value || '';
-    const facilityType = document.getElementById('facility-type')?.value || '';
-    
-    filteredFacilities = allFacilities.filter(facility => {
-        // Text search
-        const matchesSearch = !searchTerm || 
-            facility.name.toLowerCase().includes(searchTerm) ||
-            facility.address.toLowerCase().includes(searchTerm) ||
-            facility.phone.includes(searchTerm);
-        
-        // Filter by age group
-        const matchesAge = !ageGroup || 
-            facility.ageGroup === ageGroup || 
-            facility.ageGroup === 'Both';
-        
-        // Filter by gender
-        const matchesGender = !genderServed || 
-            facility.genderServed === genderServed || 
-            facility.genderServed === 'Co-ed';
-        
-        // Filter by treatment type
-        const matchesTreatment = !treatmentType || 
-            facility.treatmentType === treatmentType || 
-            facility.treatmentType === 'Both';
-        
-        // Filter by facility type
-        const matchesFacilityType = !facilityType || 
-            facility.type === facilityType;
-        
-        // Distance filter (if user location is available)
-        let matchesDistance = true;
-        if (userLocation && radius < 999 && facility.coordinates) {
-            const distance = calculateDistance(
-                userLocation.lat, userLocation.lng,
-                facility.coordinates.lat, facility.coordinates.lng
-            );
-            matchesDistance = distance <= radius;
-        }
-        
-        return matchesSearch && matchesAge && matchesGender && 
-               matchesTreatment && matchesFacilityType && matchesDistance;
-    });
+    const criteria = {
+        searchTerm: document.getElementById('search-input')?.value || '',
+        radius: document.getElementById('search-radius')?.value || '999',
+        ageGroup: document.getElementById('age-group')?.value || '',
+        genderServed: document.getElementById('gender-served')?.value || '',
+        treatmentType: document.getElementById('treatment-type')?.value || '',
+        facilityType: document.getElementById('facility-type')?.value || ''
+    };
+
+    filteredFacilities = window.FacilityUtils
+        ? window.FacilityUtils.filterFacilities(allFacilities, criteria, userLocation)
+        : allFacilities.slice();
     
     displayFacilities(filteredFacilities);
     updateResultsCount();
@@ -158,39 +127,50 @@ function displayFacilities(facilities) {
         return;
     }
     
-    facilitiesList.innerHTML = facilities.map(facility => createFacilityCard(facility)).join('');
+    facilitiesList.innerHTML = facilities.map((facility, index) => createFacilityCard(facility, index)).join('');
+
+    facilitiesList.removeEventListener('click', handleFacilityActions);
+    facilitiesList.addEventListener('click', handleFacilityActions);
 }
 
-function createFacilityCard(facility) {
+function createFacilityCard(facility, index = 0) {
+    const safeFacility = window.FacilityUtils
+        ? window.FacilityUtils.sanitizeFacilityForRender(facility)
+        : null;
+    if (!safeFacility) return '';
+
     const statusClass = getStatusClass(facility.status);
     const statusIcon = getStatusIcon(facility.status);
+    const treatmentLabel = safeFacility.treatmentTypes && safeFacility.treatmentTypes.length > 1
+        ? safeFacility.treatmentTypes.join(', ')
+        : safeFacility.primaryTreatmentType;
     
     return `
-        <div class="facility-card">
+        <div class="facility-card" data-facility-index="${index}">
             <div class="facility-header">
-                <h3>${facility.name}</h3>
+                <h3>${safeFacility.name}</h3>
                 <div class="status-indicator ${statusClass}">
                     <i class="${statusIcon}"></i>
-                    <span>${facility.status}</span>
+                    <span>${safeFacility.status}</span>
                 </div>
             </div>
             <div class="facility-details">
-                <p><strong>Type:</strong> ${facility.type}</p>
-                <p><strong>Address:</strong> ${facility.address}</p>
-                <p><strong>Phone:</strong> ${facility.phone}</p>
-                <p><strong>Age Group:</strong> ${facility.ageGroup}</p>
-                <p><strong>Gender Served:</strong> ${facility.genderServed}</p>
-                <p><strong>Treatment Type:</strong> ${facility.treatmentType}</p>
-                ${facility.lastUpdated ? `<p class="last-updated">Status updated: ${formatDate(facility.lastUpdated)}</p>` : ''}
+                <p><strong>Type:</strong> ${safeFacility.type}</p>
+                <p><strong>Address:</strong> ${safeFacility.address}</p>
+                <p><strong>Phone:</strong> ${safeFacility.phone}</p>
+                <p><strong>Age Group:</strong> ${safeFacility.ageGroup}</p>
+                <p><strong>Gender Served:</strong> ${safeFacility.genderServed}</p>
+                <p><strong>Treatment Type:</strong> ${treatmentLabel}</p>
+                ${safeFacility.lastUpdated ? `<p class="last-updated">Status updated: ${formatDate(safeFacility.lastUpdated)}</p>` : ''}
             </div>
             <div class="facility-actions">
-                <button onclick="getDirections('${facility.address}')" class="action-btn directions-btn">
+                <button data-action="directions" data-address="${safeFacility.dataAttributes?.address || ''}" class="action-btn directions-btn">
                     <i class="fas fa-directions"></i> Directions
                 </button>
-                <button onclick="callFacility('${facility.phone}')" class="action-btn call-btn">
+                <button data-action="call" data-phone="${safeFacility.dataAttributes?.phone || ''}" class="action-btn call-btn">
                     <i class="fas fa-phone"></i> Call
                 </button>
-                ${facility.website ? `<button onclick="visitWebsite('${facility.website}')" class="action-btn website-btn">
+                ${safeFacility.website ? `<button data-action="website" data-website="${safeFacility.dataAttributes?.website || ''}" class="action-btn website-btn">
                     <i class="fas fa-globe"></i> Website
                 </button>` : ''}
             </div>
@@ -238,17 +218,54 @@ function updateResultsCount() {
 
 // Action functions
 function getDirections(address) {
-    const encodedAddress = encodeURIComponent(address);
+    const sanitizedAddress = window.SecurityUtils ? window.SecurityUtils.sanitizeAttribute(address) : address;
+    const encodedAddress = encodeURIComponent(sanitizedAddress);
     const url = `https://www.google.com/maps/dir/?api=1&destination=${encodedAddress}`;
-    window.open(url, '_blank');
+    window.open(url, '_blank', 'noopener,noreferrer');
 }
 
 function callFacility(phone) {
-    window.location.href = `tel:${phone}`;
+    const cleanPhone = window.SecurityUtils ? window.SecurityUtils.sanitizePhone(phone) : phone;
+    if (cleanPhone) {
+        window.location.href = `tel:${cleanPhone}`;
+    }
 }
 
 function visitWebsite(website) {
-    window.open(website, '_blank');
+    const cleanURL = window.SecurityUtils ? window.SecurityUtils.sanitizeURL(website) : website;
+    if (cleanURL) {
+        window.open(cleanURL, '_blank', 'noopener,noreferrer');
+    }
+}
+
+function handleFacilityActions(event) {
+    const button = event.target.closest('button[data-action]');
+    if (!button) return;
+
+    event.preventDefault();
+
+    const action = button.getAttribute('data-action');
+    const address = button.getAttribute('data-address');
+    const phone = button.getAttribute('data-phone');
+    const website = button.getAttribute('data-website');
+
+    switch (action) {
+        case 'directions':
+            if (address) {
+                getDirections(address);
+            }
+            break;
+        case 'call':
+            if (phone) {
+                callFacility(phone);
+            }
+            break;
+        case 'website':
+            if (website) {
+                visitWebsite(website);
+            }
+            break;
+    }
 }
 
 // Location functionality
@@ -313,18 +330,6 @@ function reverseGeocode(lat, lng) {
             }
         }
     });
-}
-
-// Distance calculation
-function calculateDistance(lat1, lng1, lat2, lng2) {
-    const R = 3959; // Earth's radius in miles
-    const dLat = (lat2 - lat1) * Math.PI / 180;
-    const dLng = (lng2 - lng1) * Math.PI / 180;
-    const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
-              Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
-              Math.sin(dLng/2) * Math.sin(dLng/2);
-    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-    return R * c;
 }
 
 // View switching
@@ -422,27 +427,106 @@ function updateMapMarkers() {
 }
 
 function getMarkerIcon(status) {
-    const color = getStatusClass(status).includes('available') ? 'green' :
-                  getStatusClass(status).includes('full') ? 'red' :
-                  getStatusClass(status).includes('waitlist') ? 'orange' :
-                  getStatusClass(status).includes('assessment') ? 'blue' :
-                  getStatusClass(status).includes('emergency') ? 'purple' : 'gray';
-    
+    let color = 'gray';
+
+    switch (status) {
+        case 'Openings Available':
+            color = 'green';
+            break;
+        case 'No Openings':
+            color = 'red';
+            break;
+        case 'Waitlist':
+            color = 'orange';
+            break;
+        case 'Accepting Assessments':
+            color = 'blue';
+            break;
+        case 'Emergency/Crisis Only':
+            color = 'purple';
+            break;
+        default:
+            color = 'gray';
+            break;
+    }
+
     return `https://maps.google.com/mapfiles/ms/icons/${color}-dot.png`;
 }
 
 function createInfoWindowContent(facility) {
-    return `
-        <div class="info-window">
-            <h4>${facility.name}</h4>
-            <p><strong>Status:</strong> <span class="${getStatusClass(facility.status)}">${facility.status}</span></p>
-            <p><strong>Address:</strong> ${facility.address}</p>
-            <p><strong>Phone:</strong> ${facility.phone}</p>
-            <p><strong>Type:</strong> ${facility.type}</p>
-            <div class="info-actions">
-                <button onclick="callFacility('${facility.phone}')" class="info-btn">Call</button>
-                ${facility.website ? `<button onclick="visitWebsite('${facility.website}')" class="info-btn">Website</button>` : ''}
-            </div>
-        </div>
-    `;
+    const safeFacility = window.FacilityUtils
+        ? window.FacilityUtils.sanitizeFacilityForRender(facility)
+        : null;
+    if (!safeFacility) {
+        const fallback = document.createElement('div');
+        fallback.textContent = 'Facility details unavailable.';
+        return fallback;
+    }
+
+    const statusClass = getStatusClass(facility.status);
+
+    const container = document.createElement('div');
+    container.className = 'info-window';
+
+    const title = document.createElement('h4');
+    title.textContent = safeFacility.name;
+    container.appendChild(title);
+
+    const statusRow = document.createElement('p');
+    const statusLabel = document.createElement('strong');
+    statusLabel.textContent = 'Status:';
+    statusRow.appendChild(statusLabel);
+    statusRow.append(document.createTextNode(' '));
+    const statusValue = document.createElement('span');
+    statusValue.className = statusClass;
+    statusValue.textContent = safeFacility.status;
+    statusRow.appendChild(statusValue);
+    container.appendChild(statusRow);
+
+    const addressRow = document.createElement('p');
+    const addressLabel = document.createElement('strong');
+    addressLabel.textContent = 'Address:';
+    addressRow.appendChild(addressLabel);
+    addressRow.append(document.createTextNode(` ${safeFacility.address}`));
+    container.appendChild(addressRow);
+
+    const phoneRow = document.createElement('p');
+    const phoneLabel = document.createElement('strong');
+    phoneLabel.textContent = 'Phone:';
+    phoneRow.appendChild(phoneLabel);
+    phoneRow.append(document.createTextNode(` ${safeFacility.phone}`));
+    container.appendChild(phoneRow);
+
+    const typeRow = document.createElement('p');
+    const typeLabel = document.createElement('strong');
+    typeLabel.textContent = 'Type:';
+    typeRow.appendChild(typeLabel);
+    const typeValue = safeFacility.facilityTypes && safeFacility.facilityTypes.length > 1
+        ? safeFacility.facilityTypes.join(', ')
+        : safeFacility.type;
+    typeRow.append(document.createTextNode(` ${typeValue}`));
+    container.appendChild(typeRow);
+
+    const actions = document.createElement('div');
+    actions.className = 'info-actions';
+
+    if (safeFacility.phone) {
+        const callBtn = document.createElement('button');
+        callBtn.className = 'info-btn';
+        callBtn.textContent = 'Call';
+        callBtn.addEventListener('click', () => callFacility(safeFacility.phone));
+        actions.appendChild(callBtn);
+    }
+
+    if (safeFacility.website) {
+        const websiteBtn = document.createElement('button');
+        websiteBtn.className = 'info-btn';
+        websiteBtn.textContent = 'Website';
+        websiteBtn.addEventListener('click', () => visitWebsite(safeFacility.website));
+        actions.appendChild(websiteBtn);
+    }
+
+    container.appendChild(actions);
+
+    return container;
 }

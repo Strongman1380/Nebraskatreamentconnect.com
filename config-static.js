@@ -1,7 +1,9 @@
 // Static deployment configuration
 // This version works without Firebase - perfect for static hosting
 
-window.GOOGLE_MAPS_API_KEY = "AIzaSyDUDTg2qpuIh3Yf0b80T0aViBmP2Dv1x7s"; // Your existing API key
+// SECURITY: API key should be injected at build time or from environment
+// Never commit actual API keys to version control
+window.GOOGLE_MAPS_API_KEY = window.ENV_GOOGLE_MAPS_API_KEY || "YOUR_API_KEY_HERE";
 
 // Disable Firebase for static deployment
 window.FIREBASE_CONFIG = null;
@@ -32,9 +34,24 @@ window.APP_CONFIG = {
     
     // Default map zoom level
     DEFAULT_MAP_ZOOM: 7,
-    
+
+    // Special value for unlimited radius search
+    UNLIMITED_RADIUS: 999,
+
+    // Read tool character limit per line
+    MAX_LINE_LENGTH: 2000,
+
+    // Default limit for search results display
+    DEFAULT_RESULT_LIMIT: 100,
+
     // Static deployment settings
     ENABLE_PROVIDER_PORTAL: false, // Disable provider features for static deployment
     ENABLE_STATUS_UPDATES: false,  // Disable real-time updates
-    SHOW_DEMO_MESSAGE: true        // Show message about static demo
+    SHOW_DEMO_MESSAGE: true,       // Show message about static demo
+
+    // Development helpers (disabled in static build)
+    ALLOW_DEV_MOCK_AUTH: false,
+
+    // Logging configuration
+    LOG_LEVEL: 'error' // Options: 'debug', 'info', 'warn', 'error', 'none'
 };

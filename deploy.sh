@@ -20,6 +20,8 @@ echo "📋 Copying files for static deployment..."
 cp index-static.html deploy/index.html
 cp config-static.js deploy/config.js
 cp static-data.js deploy/
+cp security.js deploy/
+cp facility-utils.js deploy/
 cp scripts-static.js deploy/scripts.js
 cp styles.css deploy/
 cp netlify.toml deploy/

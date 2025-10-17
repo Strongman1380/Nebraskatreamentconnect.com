@@ -130,6 +130,9 @@
     </script>
 </head>
 <body>
+    <!-- Skip link for accessibility -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    
     <header>
         <div class="container">
             <div class="logo">
@@ -147,7 +150,7 @@
         </div>
     </header>
 
-    <main>
+    <main id="main-content">
         <section id="search-section" class="container">
             <h1>Find Residential Treatment & Detox Centers in Nebraska</h1>
             <div class="search-container">
@@ -158,10 +161,11 @@
             <p style="text-align: center; color: #666; font-size: 0.9rem; margin-top: 10px;">
                 <i class="fas fa-map-marker-alt"></i> Search for your city or <i class="fas fa-crosshairs"></i> use your current location
             </p>
-            <div class="filters-container">
+            <div class="filters-container" role="group" aria-labelledby="filters-heading">
+                <h2 id="filters-heading" class="visually-hidden">Search Filters</h2>
                 <div class="filter-group">
                     <label for="search-radius">Search Radius</label>
-                    <select id="search-radius">
+                    <select id="search-radius" aria-describedby="search-radius-desc">
                         <option value="25">25 miles</option>
                         <option value="50">50 miles</option>
                         <option value="75">75 miles</option>
@@ -169,28 +173,31 @@
                         <option value="150">150 miles</option>
                         <option value="999" selected>All distances</option>
                     </select>
+                    <div id="search-radius-desc" class="visually-hidden">Select maximum distance to search for facilities</div>
                 </div>
                 <div class="filter-group">
                     <label for="age-group">Age Group</label>
-                    <select id="age-group">
+                    <select id="age-group" aria-describedby="age-group-desc">
                         <option value="">All</option>
                         <option value="Adult">Adult</option>
                         <option value="Juvenile">Juvenile</option>
                         <option value="Both">Both</option>
                     </select>
+                    <div id="age-group-desc" class="visually-hidden">Filter facilities by age group served</div>
                 </div>
                 <div class="filter-group">
                     <label for="gender-served">Gender Served</label>
-                    <select id="gender-served">
+                    <select id="gender-served" aria-describedby="gender-served-desc">
                         <option value="">All</option>
                         <option value="Male">Male</option>
                         <option value="Female">Female</option>
                         <option value="Co-ed">Co-ed</option>
                     </select>
+                    <div id="gender-served-desc" class="visually-hidden">Filter facilities by gender served</div>
                 </div>
                 <div class="filter-group">
                     <label for="treatment-type">Treatment Type</label>
-                    <select id="treatment-type">
+                    <select id="treatment-type" aria-describedby="treatment-type-desc">
                         <option value="">All</option>
                         <option value="Substance Abuse">Substance Abuse</option>
                         <option value="Mental Health">Mental Health</option>
@@ -198,16 +205,18 @@
                         <option value="Halfway House">Halfway House</option>
                         <option value="Outpatient">Outpatient</option>
                     </select>
+                    <div id="treatment-type-desc" class="visually-hidden">Filter facilities by type of treatment offered</div>
                 </div>
                 <div class="filter-group">
                     <label for="facility-type">Facility Type</label>
-                    <select id="facility-type">
+                    <select id="facility-type" aria-describedby="facility-type-desc">
                         <option value="">All</option>
                         <option value="Treatment Center">Treatment Center</option>
                         <option value="Halfway House">Halfway House</option>
                         <option value="Outpatient">Outpatient</option>
-                        <option value="Detox Center">Detox Centers</option>
+                        <option value="Detox">Detox Centers</option>
                     </select>
+                    <div id="facility-type-desc" class="visually-hidden">Filter by type of treatment facility</div>
                 </div>
             </div>
         </section>
@@ -301,6 +310,12 @@
 
     <!-- Configuration -->
     <script src="config.js"></script>
+    
+    <!-- Security Utilities -->
+    <script src="security.js"></script>
+
+    <!-- Shared Facility Helpers -->
+    <script src="facility-utils.js"></script>
     
     <!-- Static Data -->
     <script src="static-data.js"></script>

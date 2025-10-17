@@ -899,12 +899,28 @@ window.STATIC_DETOX_DATA = [
 ];
 
 // Combined data for search functionality
-window.STATIC_ALL_FACILITIES_DATA = [
+const __RAW_ALL_FACILITIES_DATA = [
     ...window.STATIC_FACILITIES_DATA,
     ...window.STATIC_HALFWAY_HOUSES_DATA,
     ...window.STATIC_OUTPATIENT_DATA,
     ...window.STATIC_DETOX_DATA
 ];
+
+if (window.FacilityUtils && typeof window.FacilityUtils.normalizeFacilityDataset === 'function') {
+    const __normalizedAllFacilities = window.FacilityUtils.normalizeFacilityDataset(__RAW_ALL_FACILITIES_DATA);
+
+    window.STATIC_ALL_FACILITIES_DATA = __normalizedAllFacilities;
+    const facilityMatches = (facility, keyword) =>
+        Array.isArray(facility.facilityTypes) &&
+        facility.facilityTypes.some(type => (type || '').toLowerCase().includes(keyword));
+
+    window.STATIC_FACILITIES_DATA = __normalizedAllFacilities.filter(facility => facilityMatches(facility, 'treatment center'));
+    window.STATIC_HALFWAY_HOUSES_DATA = __normalizedAllFacilities.filter(facility => facilityMatches(facility, 'halfway house'));
+    window.STATIC_OUTPATIENT_DATA = __normalizedAllFacilities.filter(facility => facilityMatches(facility, 'outpatient'));
+    window.STATIC_DETOX_DATA = __normalizedAllFacilities.filter(facility => facilityMatches(facility, 'detox'));
+} else {
+    window.STATIC_ALL_FACILITIES_DATA = __RAW_ALL_FACILITIES_DATA;
+}
 
 // Mock provider data for demo (if needed)
 window.STATIC_PROVIDERS_DATA = [

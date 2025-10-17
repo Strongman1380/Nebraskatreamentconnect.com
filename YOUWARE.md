@@ -40,10 +40,11 @@ The application includes:
 - Responsive map design for mobile and desktop
 
 ## Google Maps Integration
-- API Key: `AIzaSyDUDTg2qpuIh3Yf0b80T0aViBmP2Dv1x7s` (included in code)
+- API Key: Configured via environment variable (see `.env.example`)
 - Used for geocoding search terms and facility addresses
 - Provides directions from user's location or searched location
 - Calculates distances using Haversine formula
+- **Security**: API key should never be committed to version control
 
 ## Data Structure
 Facilities contain:
