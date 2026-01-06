@@ -62,7 +62,7 @@
     <link rel="dns-prefetch" href="//cdnjs.cloudflare.com">
     
     <!-- Stylesheets -->
-    <link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" href="styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     
@@ -133,46 +133,106 @@
     <!-- Skip link for accessibility -->
     <a href="#main-content" class="skip-link">Skip to main content</a>
     
-    <!-- Simplified Header -->
     <header>
         <div class="container">
-            <div class="header-content">
-                <h1 class="site-title"><a href="index.html">Nebraska Treatment Connect</a></h1>
-                <a href="provider-signin.html" class="provider-portal-btn">Provider Portal</a>
+            <div class="logo">
+                <h1><a href="index.html">Nebraska Treatment Connect</a></h1>
             </div>
+            <nav>
+                <ul>
+                    <li><a href="index.html" class="active">Residential & Detox</a></li>
+                    <li><a href="halfway-houses.html">Halfway Houses</a></li>
+                    <li><a href="outpatient.html">Outpatient Services</a></li>
+                    <li><a href="detox.html">Detox Information</a></li>
+                    <li><a href="provider-signin.html" id="provider-portal-btn">Provider Portal</a></li>
+                </ul>
+            </nav>
         </div>
     </header>
 
     <main id="main-content">
-        <!-- Compact Search Section -->
-        <section id="compact-search-section" class="container">
-            <div class="search-container-compact">
-                <div class="search-box">
-                    <input type="text" id="search-input" placeholder="Search by name, city, or ZIP code..." aria-label="Search for treatment facilities">
-                    <button id="search-btn" aria-label="Search for facilities"><i class="fas fa-search" aria-hidden="true"></i></button>
-                    <button id="use-location-btn" title="Use my current location" aria-label="Use my current location"><i class="fas fa-crosshairs" aria-hidden="true"></i></button>
+        <section id="search-section" class="container">
+            <div class="search-layout">
+                <div class="search-main">
+                    <h1>Find Residential Treatment & Detox Centers in Nebraska</h1>
+                    <div class="category-chips" role="tablist" aria-label="Facility categories">
+                        <button class="category-chip active" data-link="index.html">Residential & Detox</button>
+                        <button class="category-chip" data-link="halfway-houses.html">Halfway Houses</button>
+                        <button class="category-chip" data-link="outpatient.html">Outpatient Services</button>
+                        <button class="category-chip" data-link="detox.html">Detox Information</button>
+                    </div>
+                    <div class="search-container">
+                        <input type="text" id="search-input" placeholder="Search by name, city, or ZIP code..." aria-label="Search for treatment facilities">
+                        <button id="search-btn" aria-label="Search for facilities"><i class="fas fa-search" aria-hidden="true"></i></button>
+                        <button id="use-location-btn" title="Use my current location" aria-label="Use my current location"><i class="fas fa-crosshairs" aria-hidden="true"></i></button>
+                    </div>
+                    <p class="search-hint">
+                        <i class="fas fa-map-marker-alt"></i> Search for your city or <i class="fas fa-crosshairs"></i> use your current location
+                    </p>
+                    <div id="recent-searches" class="recent-searches" aria-live="polite"></div>
                 </div>
+                <aside class="filters-container" aria-labelledby="filters-heading">
+                    <h2 id="filters-heading" class="filters-title">Filters</h2>
+                    <div class="filter-group">
+                        <label for="search-radius">Search Radius</label>
+                        <select id="search-radius" aria-describedby="search-radius-desc">
+                            <option value="25">25 miles</option>
+                            <option value="50">50 miles</option>
+                            <option value="75">75 miles</option>
+                            <option value="100">100 miles</option>
+                            <option value="150">150 miles</option>
+                            <option value="999" selected>All distances</option>
+                        </select>
+                        <div id="search-radius-desc" class="visually-hidden">Select maximum distance to search for facilities</div>
+                    </div>
+                    <div class="filter-group">
+                        <label for="age-group">Age Group</label>
+                        <select id="age-group" aria-describedby="age-group-desc">
+                            <option value="">All</option>
+                            <option value="Adult">Adult</option>
+                            <option value="Juvenile">Juvenile</option>
+                            <option value="Both">Both</option>
+                        </select>
+                        <div id="age-group-desc" class="visually-hidden">Filter facilities by age group served</div>
+                    </div>
+                    <div class="filter-group">
+                        <label for="gender-served">Gender Served</label>
+                        <select id="gender-served" aria-describedby="gender-served-desc">
+                            <option value="">All</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                            <option value="Co-ed">Co-ed</option>
+                        </select>
+                        <div id="gender-served-desc" class="visually-hidden">Filter facilities by gender served</div>
+                    </div>
+                    <div class="filter-group">
+                        <label for="treatment-type">Treatment Type</label>
+                        <select id="treatment-type" aria-describedby="treatment-type-desc">
+                            <option value="">All</option>
+                            <option value="Substance Abuse">Substance Abuse</option>
+                            <option value="Mental Health">Mental Health</option>
+                            <option value="Both">Both</option>
+                            <option value="Halfway House">Halfway House</option>
+                            <option value="Outpatient">Outpatient</option>
+                        </select>
+                        <div id="treatment-type-desc" class="visually-hidden">Filter facilities by type of treatment offered</div>
+                    </div>
+                    <div class="filter-group">
+                        <label for="facility-type">Facility Type</label>
+                        <select id="facility-type" aria-describedby="facility-type-desc">
+                            <option value="">All</option>
+                            <option value="Treatment Center">Treatment Center</option>
+                            <option value="Halfway House">Halfway House</option>
+                            <option value="Outpatient">Outpatient</option>
+                            <option value="Detox">Detox Centers</option>
+                        </select>
+                        <div id="facility-type-desc" class="visually-hidden">Filter by type of treatment facility</div>
+                    </div>
+                </aside>
             </div>
         </section>
 
-        <!-- Results Section with Facility Tabs -->
         <section id="results-section" class="container">
-            <!-- Facility Type Navigation -->
-            <div class="facility-nav-tabs" role="tablist" aria-label="Facility types">
-                <button class="facility-tab active" data-facility-type="Treatment Center" data-link="index.html">
-                    <i class="fas fa-hospital"></i> Residential & Detox
-                </button>
-                <button class="facility-tab" data-facility-type="Halfway House" data-link="halfway-houses.html">
-                    <i class="fas fa-home"></i> Halfway Houses
-                </button>
-                <button class="facility-tab" data-facility-type="Outpatient" data-link="outpatient.html">
-                    <i class="fas fa-calendar-check"></i> Outpatient Services
-                </button>
-                <button class="facility-tab" data-facility-type="Detox" data-link="detox.html">
-                    <i class="fas fa-medical-kit"></i> Detox Centers
-                </button>
-            </div>
-
             <div class="results-header">
                 <div class="results-count">
                     <span id="total-results">0</span> facilities found
@@ -199,62 +259,6 @@
                 <div id="google-map"></div>
             </div>
         </section>
-
-        <!-- Advanced Filters (Collapsible) -->
-        <section id="filters-section" class="container">
-            <div class="filters-toggle">
-                <button id="toggle-filters-btn" class="filters-toggle-btn">
-                    <i class="fas fa-filter"></i> Advanced Filters
-                    <i class="fas fa-chevron-down"></i>
-                </button>
-            </div>
-            <div id="advanced-filters" class="advanced-filters" style="display: none;">
-                <div class="filters-grid">
-                    <div class="filter-group">
-                        <label for="search-radius">Search Radius</label>
-                        <select id="search-radius">
-                            <option value="25">25 miles</option>
-                            <option value="50">50 miles</option>
-                            <option value="75">75 miles</option>
-                            <option value="100">100 miles</option>
-                            <option value="150">150 miles</option>
-                            <option value="999" selected>All distances</option>
-                        </select>
-                    </div>
-                    <div class="filter-group">
-                        <label for="age-group">Age Group</label>
-                        <select id="age-group">
-                            <option value="">All</option>
-                            <option value="Adult">Adult</option>
-                            <option value="Juvenile">Juvenile</option>
-                            <option value="Both">Both</option>
-                        </select>
-                    </div>
-                    <div class="filter-group">
-                        <label for="gender-served">Gender Served</label>
-                        <select id="gender-served">
-                            <option value="">All</option>
-                            <option value="Male">Male</option>
-                            <option value="Female">Female</option>
-                            <option value="Co-ed">Co-ed</option>
-                        </select>
-                    </div>
-                    <div class="filter-group">
-                        <label for="treatment-type">Treatment Type</label>
-                        <select id="treatment-type">
-                            <option value="">All</option>
-                            <option value="Substance Abuse">Substance Abuse</option>
-                            <option value="Mental Health">Mental Health</option>
-                            <option value="Both">Both</option>
-                            <option value="Halfway House">Halfway House</option>
-                            <option value="Outpatient">Outpatient</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Filter Summary and Drawer -->
         <div id="filter-summary-bar" class="filter-summary-bar" aria-live="polite">
             <div class="summary-text"></div>
             <button id="clear-filters-btn" class="clear-filters-btn" type="button">
@@ -329,14 +333,8 @@
 
                 <h3>Getting Help in Nebraska</h3>
                 <p>If you or a loved one is struggling with addiction or mental health issues, help is available. Nebraska offers a wide range of treatment options, from intensive residential programs to flexible outpatient services. Our directory makes it easy to find licensed, professional treatment facilities that meet your specific needs.</p>
-
-                <div style="background: #e8f5e9; padding: 20px; border-radius: 8px; margin-top: 20px; border-left: 4px solid #4caf50;">
-                    <h4 style="color: #2e7d32; margin-bottom: 10px;"><i class="fas fa-phone-alt" style="margin-right: 8px;"></i>Need Immediate Help?</h4>
-                    <p style="margin: 0; color: #333;">
-                        <strong>SAMHSA National Helpline:</strong> <a href="tel:1-800-662-4357" style="color: #1976d2; font-weight: bold;">1-800-662-4357</a> (Free, confidential, 24/7)<br>
-                        <strong>Crisis Text Line:</strong> Text HOME to <strong>741741</strong>
-                    </p>
-                </div>
+                
+                <p><strong>Crisis Resources:</strong> If you're experiencing a mental health crisis, call 988 (Suicide & Crisis Lifeline) or go to your nearest emergency room. For substance abuse emergencies, contact your local emergency services at 911.</p>
             </div>
         </section>
     </main>
@@ -347,11 +345,17 @@
         </div>
     </footer>
 
-    <!-- Runtime Configuration -->
-    <script src="/config.js"></script>
-    <script src="/security.js"></script>
-    <script src="/facility-utils.js"></script>
-    <script src="/static-data.js"></script>
-    <script src="/scripts.js"></script>
+    <!-- Configuration -->
+    <script src="config.js"></script>
+    
+    <!-- Security Utilities -->
+    <script src="security.js?v=20251019"></script>
+
+    <!-- Shared Facility Helpers -->
+    <script src="facility-utils.js?v=20251019"></script>
+    
+    <!-- Static Data -->
+    <script src="static-data.js?v=20251019"></script>
+    <script src="scripts-static.js?v=20251019"></script>
 </body>
 </html>

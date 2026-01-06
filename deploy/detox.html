@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detox and Withdrawal Services - Nebraska Treatment Connect</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        .detox-container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .detox-header {
+            margin-bottom: 30px;
+        }
+
+        .detox-content {
+            line-height: 1.8;
+        }
+
+        .detox-content h2 {
+            margin-top: 30px;
+            margin-bottom: 15px;
+            color: #1a73e8;
+        }
+
+        .detox-content p {
+            margin-bottom: 20px;
+        }
+
+        .detox-content ul {
+            margin-bottom: 20px;
+            padding-left: 20px;
+        }
+
+        .detox-content li {
+            margin-bottom: 10px;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 20px;
+            color: #1a73e8;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 10px 20px;
+            border: 2px solid #1a73e8;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .back-link:hover {
+            background-color: #1a73e8;
+            color: white;
+            text-decoration: none;
+        }
+
+        .emergency-box {
+            background-color: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .emergency-box h3 {
+            color: #856404;
+            margin-top: 0;
+            margin-bottom: 10px;
+        }
+
+        .emergency-box p {
+            color: #856404;
+            margin-bottom: 0;
+        }
+
+        .service-highlight {
+            background-color: #e8f5e8;
+            border-left: 4px solid #28a745;
+            padding: 15px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">
+                <h1><a href="index.html">Nebraska Treatment Connect</a></h1>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Residential & Detox</a></li>
+                    <li><a href="halfway-houses.html">Halfway Houses</a></li>
+                    <li><a href="outpatient.html">Outpatient Services</a></li>
+                    <li><a href="detox.html" class="active">Detox Information</a></li>
+                    <li><a href="provider-signin.html" id="provider-portal-btn">Provider Portal</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main id="main-content">
+        <section id="search-section" class="container">
+            <div class="search-layout">
+                <div class="search-main">
+                    <h1>Detox & Withdrawal Services in Nebraska</h1>
+                    <div class="category-chips" role="tablist" aria-label="Facility categories">
+                        <button class="category-chip" data-link="index.html">Residential & Detox</button>
+                        <button class="category-chip" data-link="halfway-houses.html">Halfway Houses</button>
+                        <button class="category-chip" data-link="outpatient.html">Outpatient Services</button>
+                        <button class="category-chip active" data-link="detox.html">Detox Information</button>
+                    </div>
+                    <div class="search-container">
+                        <input type="text" id="search-input" placeholder="Search by name, city, or ZIP code..." aria-label="Search for detox facilities">
+                        <button id="search-btn" aria-label="Search for detox facilities"><i class="fas fa-search" aria-hidden="true"></i></button>
+                        <button id="use-location-btn" title="Use my current location" aria-label="Use my current location"><i class="fas fa-crosshairs" aria-hidden="true"></i></button>
+                    </div>
+                    <p class="search-hint">
+                        <i class="fas fa-map-marker-alt"></i> Search for your city or <i class="fas fa-crosshairs"></i> use your current location
+                    </p>
+                    <div id="recent-searches" class="recent-searches" aria-live="polite"></div>
+                    <p class="search-description">
+                        Medical detoxification and withdrawal management programs across Nebraska
+                    </p>
+                </div>
+                <aside class="filters-container" aria-labelledby="filters-heading">
+                    <h2 id="filters-heading" class="filters-title">Filters</h2>
+                    <div class="filter-group">
+                        <label for="search-radius">Search Radius</label>
+                        <select id="search-radius" aria-describedby="search-radius-desc">
+                            <option value="25">25 miles</option>
+                            <option value="50">50 miles</option>
+                            <option value="75">75 miles</option>
+                            <option value="100">100 miles</option>
+                            <option value="150">150 miles</option>
+                            <option value="999" selected>All distances</option>
+                        </select>
+                        <div id="search-radius-desc" class="visually-hidden">Select maximum distance to search for facilities</div>
+                    </div>
+                    <div class="filter-group">
+                        <label for="age-group">Age Group</label>
+                        <select id="age-group" aria-describedby="age-group-desc">
+                            <option value="">All</option>
+                            <option value="Adult">Adult</option>
+                            <option value="Juvenile">Juvenile</option>
+                            <option value="Both">Both</option>
+                        </select>
+                        <div id="age-group-desc" class="visually-hidden">Filter facilities by age group served</div>
+                    </div>
+                    <div class="filter-group">
+                        <label for="gender-served">Gender Served</label>
+                        <select id="gender-served" aria-describedby="gender-served-desc">
+                            <option value="">All</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                            <option value="Co-ed">Co-ed</option>
+                        </select>
+                        <div id="gender-served-desc" class="visually-hidden">Filter facilities by gender served</div>
+                    </div>
+                    <div class="filter-group">
+                        <label for="treatment-type">Treatment Type</label>
+                        <select id="treatment-type" aria-describedby="treatment-type-desc">
+                            <option value="">All</option>
+                            <option value="Detox">Detox</option>
+                            <option value="Substance Abuse">Substance Abuse</option>
+                            <option value="Mental Health">Mental Health</option>
+                            <option value="Both">Both</option>
+                        </select>
+                        <div id="treatment-type-desc" class="visually-hidden">Filter facilities by type of treatment offered</div>
+                    </div>
+                    <div class="filter-group">
+                        <label for="facility-type">Facility Type</label>
+                        <select id="facility-type" aria-describedby="facility-type-desc">
+                            <option value="" selected>All</option>
+                            <option value="Detox">Detox Centers</option>
+                            <option value="Treatment Center">Treatment Center</option>
+                            <option value="Halfway House">Halfway House</option>
+                            <option value="Outpatient">Outpatient</option>
+                        </select>
+                        <div id="facility-type-desc" class="visually-hidden">Filter by type of treatment facility</div>
+                    </div>
+                </aside>
+            </div>
+        </section>
+
+        <section id="results-section" class="container">
+            <div class="results-header">
+                <div class="results-count">
+                    <span id="total-results">0</span> detox facilities found
+                </div>
+                <div class="results-actions">
+                    <div class="view-toggle">
+                        <button id="list-view-btn" class="view-btn active">
+                            <i class="fas fa-list"></i> List View
+                        </button>
+                        <button id="map-view-btn" class="view-btn">
+                            <i class="fas fa-map"></i> Map View
+                        </button>
+                    </div>
+                    <div id="mini-map-preview" class="mini-map-preview" aria-hidden="true">
+                        <div id="mini-map"></div>
+                        <p class="mini-map-placeholder">Select a facility to preview its location</p>
+                    </div>
+                </div>
+            </div>
+            <div id="facilities-list">
+                <!-- Facility cards will be dynamically inserted here -->
+            </div>
+            <div id="map-container" style="display: none;">
+                <div id="google-map"></div>
+            </div>
+        </section>
+        <div id="filter-summary-bar" class="filter-summary-bar" aria-live="polite">
+            <div class="summary-text"></div>
+            <button id="clear-filters-btn" class="clear-filters-btn" type="button">
+                <i class="fas fa-times-circle"></i> Clear filters
+            </button>
+        </div>
+        <div id="facility-detail-drawer" class="facility-detail-drawer" aria-hidden="true">
+            <button id="drawer-close-btn" class="drawer-close-btn" aria-label="Close facility details">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="drawer-content">
+                <div class="drawer-header">
+                    <h3 id="drawer-facility-name"></h3>
+                    <span class="facility-type-badge" id="drawer-facility-type"></span>
+                </div>
+                <div id="drawer-status" class="drawer-status"></div>
+                <div id="drawer-details" class="drawer-details"></div>
+                <div id="drawer-actions" class="drawer-actions"></div>
+            </div>
+        </div>
+
+        <section class="container">
+            <div class="detox-container">
+                <div class="detox-header">
+                    <h2>Detox and Withdrawal Support</h2>
+                    <p class="subtitle">Learn more about detoxification, withdrawal management, and next steps after detox.</p>
+                </div>
+
+                <div class="detox-content">
+                <div class="emergency-box">
+                    <h3><i class="fas fa-exclamation-triangle"></i> Emergency Detox Services</h3>
+                    <p><strong>If you or someone you know is experiencing a medical emergency related to substance withdrawal, call 911 immediately.</strong> Many facilities listed above offer 24/7 emergency detox services.</p>
+                </div>
+
+                <h2>What Are Detox Services?</h2>
+                <p>Detoxification (detox) services provide medical supervision and support during the withdrawal process from alcohol or drugs. These programs help individuals safely manage withdrawal symptoms while their body eliminates harmful substances.</p>
+
+                <div class="service-highlight">
+                    <h3><i class="fas fa-heart"></i> Types of Detox Available</h3>
+                    <ul>
+                        <li><strong>Medical Detox:</strong> 24/7 medical supervision with medication assistance</li>
+                        <li><strong>Inpatient Detox:</strong> Residential programs with comprehensive support</li>
+                        <li><strong>Outpatient Detox:</strong> Daily check-ins while living at home</li>
+                        <li><strong>Emergency Detox:</strong> Immediate crisis intervention services</li>
+                    </ul>
+                </div>
+
+                <h2>Services Provided</h2>
+                <ul>
+                    <li><strong>Medically Supervised Withdrawal:</strong> Safe management of withdrawal symptoms with medical oversight</li>
+                    <li><strong>24/7 Monitoring:</strong> Continuous health monitoring during the detox process</li>
+                    <li><strong>Medication Management:</strong> FDA-approved medications to reduce withdrawal symptoms</li>
+                    <li><strong>Crisis Intervention:</strong> Emergency services for acute withdrawal situations</li>
+                    <li><strong>Assessment and Evaluation:</strong> Comprehensive substance use evaluations</li>
+                    <li><strong>Stabilization:</strong> Physical and emotional stabilization before treatment</li>
+                    <li><strong>Treatment Planning:</strong> Coordination with ongoing treatment programs</li>
+                    <li><strong>Family Support:</strong> Education and support for family members</li>
+                </ul>
+
+                <h2>Who Can Benefit</h2>
+                <p>Detox services are designed for individuals who:</p>
+                <ul>
+                    <li>Are experiencing physical dependence on alcohol or drugs</li>
+                    <li>Need medical supervision during withdrawal</li>
+                    <li>Have tried to quit on their own but experienced severe withdrawal symptoms</li>
+                    <li>Are ready to begin recovery but need safe detox first</li>
+                    <li>Require emergency intervention for dangerous withdrawal symptoms</li>
+                    <li>Need stabilization before entering residential or outpatient treatment</li>
+                </ul>
+
+                <h2>What to Expect</h2>
+                <p>Detox programs typically involve:</p>
+                <ul>
+                    <li><strong>Initial Assessment:</strong> Medical and psychological evaluation</li>
+                    <li><strong>Medical Monitoring:</strong> Regular vital sign checks and health assessments</li>
+                    <li><strong>Symptom Management:</strong> Medication and comfort measures for withdrawal symptoms</li>
+                    <li><strong>Length of Stay:</strong> Typically 3-7 days, depending on substance and individual needs</li>
+                    <li><strong>Discharge Planning:</strong> Coordination with ongoing treatment providers</li>
+                    <li><strong>Aftercare Referrals:</strong> Connections to residential or outpatient programs</li>
+                </ul>
+
+                <h2>Specialized Programs Available</h2>
+                <ul>
+                    <li><strong>Alcohol Detox:</strong> Specialized protocols for alcohol withdrawal</li>
+                    <li><strong>Drug Detox:</strong> Programs for opioid, stimulant, and other drug withdrawal</li>
+                    <li><strong>Dual Diagnosis:</strong> Treatment for co-occurring mental health conditions</li>
+                    <li><strong>Youth Programs:</strong> Age-appropriate detox services for adolescents</li>
+                    <li><strong>Women's Services:</strong> Gender-specific detox programs</li>
+                    <li><strong>LGBTQ+ Affirming:</strong> Culturally competent care for LGBTQ+ individuals</li>
+                </ul>
+
+                <div class="emergency-box">
+                    <h3><i class="fas fa-phone"></i> 24/7 Crisis Resources</h3>
+                    <p><strong>National Suicide Prevention Lifeline:</strong> 988<br>
+                    <strong>SAMHSA National Helpline:</strong> 1-800-662-4357<br>
+                    <strong>Crisis Text Line:</strong> Text HOME to 741741</p>
+                </div>
+
+                <h2>Getting Started</h2>
+                <p>Most detox programs accept walk-ins or have 24/7 admission services. Some may require:</p>
+                <ul>
+                    <li>Insurance verification (many accept Medicaid/Medicare)</li>
+                    <li>Basic medical screening</li>
+                    <li>Assessment of withdrawal risk</li>
+                    <li>Emergency contact information</li>
+                </ul>
+
+                <p><strong>Important:</strong> Detox is often the first step in recovery. Many programs help coordinate ongoing treatment to support long-term sobriety after detox is complete.</p>
+
+                <a href="index.html" class="back-link">
+                    <i class="fas fa-arrow-left"></i> Search More Treatment Centers
+                </a>
+            </div>
+        </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Nebraska Treatment Connect. All rights reserved. | <a href="terms.html">Terms of Service</a> | <a href="privacy.html">Privacy Policy</a></p>
+        </div>
+    </footer>
+
+    <!-- Configuration -->
+    <script src="config.js"></script>
+
+    <!-- Security Utilities -->
+    <script src="security.js?v=20251019"></script>
+
+    <!-- Shared Facility Helpers -->
+    <script src="facility-utils.js?v=20251019"></script>
+    
+    <!-- Static Data -->
+    <script src="static-data.js?v=20251019"></script>
+    
+    <script src="scripts.js?v=20251019"></script>
+</body>
+</html>

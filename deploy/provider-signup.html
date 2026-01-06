@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Provider Sign-Up - Nebraska Treatment Connect</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        .signup-container {
+            max-width: 600px;
+            margin: 40px auto;
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .signup-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .signup-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .form-row {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .form-row .form-group {
+            flex: 1;
+        }
+        
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .form-group label {
+            font-weight: 500;
+            margin-bottom: 5px;
+            color: #333;
+        }
+        
+        .form-group input,
+        .form-group select {
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #1a73e8;
+        }
+        
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 20px 0;
+        }
+        
+        .checkbox-group input[type="checkbox"] {
+            width: auto;
+        }
+        
+        .btn-signup {
+            background-color: #1a73e8;
+            color: white;
+            padding: 15px;
+            border: none;
+            border-radius: 6px;
+            font-size: 1.1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .btn-signup:hover {
+            background-color: #1558b6;
+        }
+        
+        .existing-user {
+            text-align: center;
+            margin-top: 20px;
+        }
+        
+        .error-message {
+            color: #c5221f;
+            background-color: #fce8e6;
+            padding: 10px;
+            border-radius: 4px;
+            margin: 10px 0;
+            display: none;
+        }
+        
+        .success-message {
+            color: #137333;
+            background-color: #e6f4ea;
+            padding: 10px;
+            border-radius: 4px;
+            margin: 10px 0;
+            display: none;
+        }
+        
+        .password-requirements {
+            font-size: 0.85rem;
+            color: #666;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">
+                <h1><a href="index.html">Nebraska Treatment Connect</a></h1>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Find Treatment</a></li>
+                    <li><a href="halfway-houses.html">Halfway Houses</a></li>
+                    <li><a href="outpatient.html">Outpatient Services</a></li>
+                    <li><a href="detox.html">Detox Services</a></li>
+                    <li><a href="provider-signin.html">Provider Portal</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+            <div class="signup-container">
+                <div class="signup-header">
+                    <h2>Provider Sign-Up</h2>
+                    <p>Join the Nebraska Treatment Connect network to manage your facility's information</p>
+                </div>
+
+                <div class="error-message" id="error-message"></div>
+                <div class="success-message" id="success-message"></div>
+
+                <form class="signup-form" id="signup-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="first-name">First Name *</label>
+                            <input type="text" id="first-name" name="firstName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="last-name">Last Name *</label>
+                            <input type="text" id="last-name" name="lastName" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email Address *</label>
+                        <input type="email" id="email" name="email" required>
+                        <small>This will be your username for logging in</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="agency-name">Agency/Organization Name *</label>
+                        <input type="text" id="agency-name" name="agencyName" required>
+                        <small>The name of the treatment facility or organization you represent</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="job-title">Job Title</label>
+                        <select id="job-title" name="jobTitle">
+                            <option value="">Select your role (optional)</option>
+                            <option value="Director">Director</option>
+                            <option value="Administrator">Administrator</option>
+                            <option value="Admissions Coordinator">Admissions Coordinator</option>
+                            <option value="Clinical Coordinator">Clinical Coordinator</option>
+                            <option value="Program Manager">Program Manager</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="work-phone">Work Phone Number</label>
+                        <input type="tel" id="work-phone" name="workPhone" placeholder="(402) 555-1234">
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="password">Password *</label>
+                            <input type="password" id="password" name="password" required>
+                            <div class="password-requirements">
+                                Minimum 8 characters with uppercase, lowercase, and number
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="confirm-password">Confirm Password *</label>
+                            <input type="password" id="confirm-password" name="confirmPassword" required>
+                        </div>
+                    </div>
+
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="terms" name="terms" required>
+                        <label for="terms">I agree to the <a href="terms.html" target="_blank">Terms of Service</a> and <a href="privacy.html" target="_blank">Privacy Policy</a></label>
+                    </div>
+
+                    <button type="submit" class="btn-signup">Create Account</button>
+                </form>
+
+                <div class="existing-user">
+                    <p>Already have an account? <a href="provider-signin.html">Sign in here</a></p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Nebraska Treatment Connect. All rights reserved. | <a href="terms.html">Terms of Service</a> | <a href="privacy.html">Privacy Policy</a></p>
+        </div>
+    </footer>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+    
+    <!-- Configuration -->
+    <script src="config.js"></script>
+    
+    <!-- Firebase Authentication Service -->
+    <script src="firebase-auth.js"></script>
+    
+    <!-- Page-specific JavaScript -->
+    <script src="provider-signup.js"></script>
+</body>
+</html>
