@@ -1,17 +1,19 @@
-// Static data for facilities - replaces Firebase for static deployment - CLEANED VERSION
+// Static data for facilities - replaces Firebase for static deployment
 
 // Treatment Center Data
 window.STATIC_FACILITIES_DATA = [
+    
     {
         id: 1,
         name: "Revive Inc Horizon Recovery and Counseling Center",
-        type: "Treatment Center",
+        type: "Outpatient",
         address: "2205 Osborne Drive East, Suite 115, Hastings, NE 68901",
-        phone: "(402) 462-2066",
-        website: "https://www.reviveinc.org",
+        phone: "402-462-2066",
+        website: "http://www.reviveinc.org",
         ageGroup: "Adult",
         genderServed: "Co-ed",
         treatmentType: "Substance Abuse",
+        description: "Outpatient substance abuse treatment center offering counseling, recovery support services, and transitional housing. Faith-based and 12-step methodologies available.",
         status: "Contact for Availability",
         lastUpdated: "2025-01-27",
         coordinates: { lat: 40.6089061, lng: -98.3835624 }
@@ -21,11 +23,12 @@ window.STATIC_FACILITIES_DATA = [
         name: "Mid Plains Center for Behavioral Healthcare Services Inc",
         type: "Treatment Center",
         address: "914 Baumann Drive, Grand Island, NE 68803",
-        phone: "(308) 385-5250",
-        website: "https://www.midplainscenter.org",
+        phone: "308-385-5250",
+        website: "http://www.midplainscenter.org",
         ageGroup: "Adult",
         genderServed: "Co-ed",
-        treatmentType: "Both",
+        treatmentType: "Dual Diagnosis",
+        description: "Residential treatment center with detox services. Crisis Stabilization Unit for mental health and medically assisted detox. Inpatient dual diagnosis treatment, residential substance abuse treatment, and outpatient services.",
         status: "Contact for Availability",
         lastUpdated: "2025-01-27",
         coordinates: { lat: 40.9270149, lng: -98.3634847 }
@@ -35,22 +38,23 @@ window.STATIC_FACILITIES_DATA = [
         name: "CenterPointe Adult Long Term Residential Program",
         type: "Treatment Center",
         address: "2220 South 10th Street, Lincoln, NE 68502",
-        phone: "(402) 475-8748",
-        website: "https://www.centerpointe.org",
+        phone: "402-475-8748",
+        website: "http://www.centerpointe.org",
         ageGroup: "Adult",
         genderServed: "Co-ed",
-        treatmentType: "Both",
+        treatmentType: "Dual Diagnosis",
+        description: "Long-term residential treatment for adults 19+ with co-occurring mental illness and substance dependence. 6-8 month stay with 42 hours weekly group therapy. Bio-psycho-social treatment model, CBT, and MAT available.",
         status: "Contact for Availability",
         lastUpdated: "2025-01-27",
         coordinates: { lat: 40.7905172, lng: -96.7062497 }
     },
     {
-        id: 4,
+        id: 5,
         name: "CenterPointe Campus for Health and WellBeing",
         type: "Treatment Center",
         address: "2202 South 11th Street, Lincoln, NE 68502",
-        phone: "(402) 475-5161",
-        website: "https://www.centerpointe.org",
+        phone: "402-475-5161",
+        website: "http://www.centerpointe.org/",
         ageGroup: "Adult",
         genderServed: "Co-ed",
         treatmentType: "Mental Health",
@@ -59,82 +63,160 @@ window.STATIC_FACILITIES_DATA = [
         coordinates: { lat: 40.7906329, lng: -96.7050452 }
     },
     {
-        id: 5,
+        id: 6,
         name: "Bridge Behavioral Health",
         type: "Treatment Center",
         address: "721 K Street, Lincoln, NE 68508",
-        phone: "(402) 477-3951",
-        website: "https://thebridgenebraska.org",
+        phone: "402-477-3951",
+        website: "http://www.thebridgenebraska.org",
         ageGroup: "Adult",
-        genderServed: "Co-ed",
-        treatmentType: "Both",
+        genderServed: "Male",
+        treatmentType: "Substance Abuse",
+        description: "Residential treatment for men 19 and older. Programs range from 30 days to 10 months. Offers medically monitored detox, residential treatment, counseling, and crisis stabilization.",
         status: "Contact for Availability",
         lastUpdated: "2025-01-27",
         coordinates: { lat: 40.8088716, lng: -96.7108461 }
     },
     {
-        id: 6,
-        name: "Saint Monicas Behavioral Health Services",
+        id: 8,
+        name: "Saint Monicas Behavioral Health Servs Women Are Sacred",
         type: "Treatment Center",
         address: "1100 Military Road, Lincoln, NE 68508",
-        phone: "(402) 441-3768",
-        website: "https://www.stmonicas.com",
+        phone: "402-441-3768",
+        website: "http://www.stmonicas.com",
         ageGroup: "Adult",
-        genderServed: "Co-ed",
+        genderServed: "Female",
         treatmentType: "Substance Abuse",
+        description: "Residential substance abuse treatment for Native American women. Gender-specific programming with trauma-informed care, EMDR, and DBT.",
         status: "Contact for Availability",
         lastUpdated: "2025-01-27",
         coordinates: { lat: 40.8310343, lng: -96.7050537 }
     },
     {
-        id: 7,
-        name: "Houses of Hope of Nebraska Inc",
+        id: 9,
+        name: "Saint Monicas Behavioral Health Servs Project Mother and Child",
         type: "Treatment Center",
-        address: "1124 North Cotner Boulevard, Lincoln, NE 68505",
-        phone: "(402) 435-3165",
-        website: "https://www.housesofhope.com",
+        address: "6420 Colby Street, Lincoln, NE 68505",
+        phone: "402-441-3768",
+        website: "http://www.stmonicas.com",
         ageGroup: "Adult",
-        genderServed: "Co-ed",
-        treatmentType: "Mental Health",
+        genderServed: "Female",
+        treatmentType: "Substance Abuse",
+        description: "Residential treatment for pregnant and parenting mothers who have completed primary treatment. Trauma-informed care with child assessments and family-focused programming. Halfway house and transitional living available.",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 40.8310343, lng: -96.7050537 }
+    },
+    {
+        id: 10,
+        name: "Houses of Hope of Nebraska Inc Halfway House",
+        type: "Halfway House",
+        address: "1124 North Cotner Boulevard, Lincoln, NE 68505",
+        phone: "402-435-3165 x112",
+        website: "http://www.housesofhope.com",
+        ageGroup: "Adult",
+        genderServed: "Male",
+        treatmentType: "Substance Abuse",
+        description: "Transitional living halfway house for adult men who have completed substance abuse treatment. Three sober living homes with recovery support, 12-step groups, and life skills training.",
         status: "Contact for Availability",
         lastUpdated: "2025-01-27",
         coordinates: { lat: 40.8242072, lng: -96.6328112 }
     },
     {
-        id: 8,
+        id: 11,
         name: "Whitehall Program",
         type: "Treatment Center",
-        address: "5900 Walker Avenue, Lincoln, NE 68507",
-        phone: "(402) 471-6969",
-        website: "https://dhhs.ne.gov/Pages/Behavioral-Health.aspx",
-        ageGroup: "Adult",
-        genderServed: "Co-ed",
-        treatmentType: "Mental Health",
+        address: "5903 Walker Avenue, Lincoln, NE 68507",
+        phone: "402-471-6969",
+        website: "https://dhhs.ne.gov/pages/YRTC-Facilities.aspx",
+        ageGroup: "Juvenile",
+        genderServed: "Male",
+        treatmentType: "Substance Abuse",
+        description: "Residential psychiatric treatment for male adolescents ages 13-18. Substance use disorder program for youth with moderate to severe substance abuse diagnoses. Trauma therapy, family therapy, and educational services.",
         status: "Contact for Availability",
         lastUpdated: "2025-01-27",
         coordinates: { lat: 40.8369741, lng: -96.639674 }
     },
     {
-        id: 9,
+        id: 12,
+        name: "Saint Monicas Affirming Womens Empowerment",
+        type: "Halfway House",
+        address: "105 Wedgewood Drive, Lincoln, NE 68510",
+        phone: "402-441-3768",
+        website: "http://www.stmonicas.com",
+        ageGroup: "Adult",
+        genderServed: "Female",
+        treatmentType: "Substance Abuse",
+        description: "Transitional living and halfway house program for women in recovery. Step-down residential program with ongoing counseling and recovery support services.",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 40.8125387, lng: -96.6233429 }
+    },
+    {
+        id: 13,
+        name: "Saint Monicas Behavioral Health Servs Short Term Residential",
+        type: "Treatment Center",
+        address: "120 Wedgewood Drive, Lincoln, NE 68510",
+        phone: "402-441-3768",
+        website: "http://www.stmonicas.com",
+        ageGroup: "Adult",
+        genderServed: "Female",
+        treatmentType: "Substance Abuse",
+        description: "8-week intensive residential treatment for women in early recovery. Evidence-based therapies including EMDR, DBT, and trauma-informed care. Art therapy and holistic programming available.",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 40.8123341, lng: -96.6225218 }
+    },
+    {
+        id: 14,
+        name: "Saint Monicas Behavioral Health Servs Therapeutic Community",
+        type: "Treatment Center",
+        address: "120 Skyway Drive, Lincoln, NE 68510",
+        phone: "402-441-3768",
+        website: "http://www.stmonicas.com",
+        ageGroup: "Adult",
+        genderServed: "Female",
+        treatmentType: "Substance Abuse",
+        description: "Residential therapeutic community for women with 30+ days of sobriety. Extended care programming in a supportive living environment with peer-based recovery model.",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 40.81398, lng: -96.6157804 }
+    },
+    {
+        id: 15,
         name: "Behavioral Health Specialists Inc Seekers for Serenity",
         type: "Treatment Center",
         address: "4432 Sunrise Place, Columbus, NE 68601",
-        phone: "(402) 564-9994",
-        website: "https://www.4bhs.org",
+        phone: "402-564-9994",
+        website: "http://",
         ageGroup: "Adult",
         genderServed: "Co-ed",
-        treatmentType: "Both",
+        treatmentType: "Mental Health",
         status: "Contact for Availability",
         lastUpdated: "2025-01-27",
         coordinates: { lat: 41.4295473, lng: -97.3814131 }
     },
     {
-        id: 10,
+        id: 16,
+        name: "Behavioral Health Specialists Inc Seekers of Serenity Place",
+        type: "Treatment Center",
+        address: "4432 Sunrise Place, Columbus, NE 68601",
+        phone: "402-564-9994",
+        website: "http://www.4bhs.org",
+        ageGroup: "Adult",
+        genderServed: "Co-ed",
+        treatmentType: "Substance Abuse",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 41.4295473, lng: -97.3814131 }
+    },
+    {
+        id: 17,
         name: "Community Alliance",
         type: "Treatment Center",
         address: "7150 Arbor Street, Omaha, NE 68106",
-        phone: "(402) 341-5128",
-        website: "https://community-alliance.org",
+        phone: "402-341-5128",
+        website: "https://community-alliance.org/",
         ageGroup: "Adult",
         genderServed: "Co-ed",
         treatmentType: "Substance Abuse",
@@ -143,12 +225,12 @@ window.STATIC_FACILITIES_DATA = [
         coordinates: { lat: 41.236914, lng: -96.0230252 }
     },
     {
-        id: 11,
+        id: 18,
         name: "Community Alliance Orchard House",
         type: "Treatment Center",
         address: "Omaha, NE 68117",
-        phone: "(402) 341-5128",
-        website: "https://community-alliance.org",
+        phone: "402-341-5128",
+        website: "http://community-alliance.org",
         ageGroup: "Adult",
         genderServed: "Co-ed",
         treatmentType: "Mental Health",
@@ -157,12 +239,12 @@ window.STATIC_FACILITIES_DATA = [
         coordinates: { lat: 41.2074, lng: -95.996 }
     },
     {
-        id: 12,
+        id: 19,
         name: "Community Alliance Cole Creek",
         type: "Treatment Center",
         address: "Omaha, NE 68134",
-        phone: "(402) 341-5128",
-        website: "https://community-alliance.org",
+        phone: "402-341-5128",
+        website: "http://community-alliance.org",
         ageGroup: "Adult",
         genderServed: "Co-ed",
         treatmentType: "Mental Health",
@@ -171,12 +253,12 @@ window.STATIC_FACILITIES_DATA = [
         coordinates: { lat: 41.2952, lng: -96.0546 }
     },
     {
-        id: 13,
+        id: 20,
         name: "Community Alliance Arbor House",
         type: "Treatment Center",
         address: "Omaha, NE 68106",
-        phone: "(402) 341-5128",
-        website: "https://community-alliance.org",
+        phone: "402-341-5128",
+        website: "http://community-alliance.org",
         ageGroup: "Adult",
         genderServed: "Co-ed",
         treatmentType: "Mental Health",
@@ -185,12 +267,26 @@ window.STATIC_FACILITIES_DATA = [
         coordinates: { lat: 41.2389, lng: -96.0014 }
     },
     {
-        id: 14,
+        id: 21,
+        name: "Community Alliance Alliance House",
+        type: "Treatment Center",
+        address: "Omaha, NE 68106",
+        phone: "402-341-5128",
+        website: "http://community-alliance.org",
+        ageGroup: "Adult",
+        genderServed: "Co-ed",
+        treatmentType: "Mental Health",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 41.2389, lng: -96.0014 }
+    },
+    {
+        id: 22,
         name: "Inroads to Recovery Inc",
         type: "Treatment Center",
         address: "2808 North 75th Street, Omaha, NE 68134",
-        phone: "(402) 932-2248",
-        website: "https://inroadstorecovery.com",
+        phone: "402-932-2248",
+        website: "http://inroadstorecovery.com",
         ageGroup: "Adult",
         genderServed: "Co-ed",
         treatmentType: "Substance Abuse",
@@ -199,360 +295,392 @@ window.STATIC_FACILITIES_DATA = [
         coordinates: { lat: 41.2842075, lng: -96.0283009 }
     },
     {
-        id: 15,
+        id: 23,
         name: "Stephen Center Inc",
         type: "Treatment Center",
         address: "5217 South 28th Street, Omaha, NE 68107",
-        phone: "(402) 715-5449",
-        website: "https://www.stephencenter.org",
+        phone: "402-715-5449",
+        website: "http://www.stephencenter.org",
         ageGroup: "Adult",
         genderServed: "Co-ed",
-        treatmentType: "Both",
+        treatmentType: "Dual Diagnosis",
+        description: "Residential treatment, detox, halfway house, and outpatient services for substance abuse and mental health. Comprehensive recovery programs for men and women.",
         status: "Contact for Availability",
         lastUpdated: "2025-01-27",
         coordinates: { lat: 41.2048342, lng: -95.9544201 }
     },
     {
-        id: 16,
+        id: 25,
         name: "Nebraska Urban Indian Health Coalition Intertribal Treatment Center",
         type: "Treatment Center",
         address: "2226 North Street, Omaha, NE 68107",
-        phone: "(402) 346-0902",
-        website: "https://www.nuihc.org",
+        phone: "402-346-0902 x202",
+        website: "http://www.nuihc.org",
         ageGroup: "Adult",
         genderServed: "Co-ed",
-        treatmentType: "Both",
+        treatmentType: "Dual Diagnosis",
+        description: "Residential and outpatient treatment for Native Americans. Culturally-sensitive substance abuse and mental health services.",
         status: "Contact for Availability",
         lastUpdated: "2025-01-27",
         coordinates: { lat: 41.2099802, lng: -95.9453188 }
+    },
+    {
+        id: 300,
+        name: "Boys Town Residential Treatment Center (PRTF)",
+        type: "Treatment Center",
+        address: "13603 Flanagan Blvd, Boys Town, NE 68010",
+        phone: "(531) 355-5210",
+        website: "http://www.boystown.org",
+        ageGroup: "Juvenile",
+        genderServed: "Co-ed",
+        treatmentType: "Mental Health",
+        description: "Psychiatric Residential Treatment Facility for youth ages 5-17. Provides intensive mental health treatment for children and adolescents with behavioral and emotional challenges.",
+        status: "Contact for Availability",
+        lastUpdated: "2025-10-19",
+        coordinates: { lat: 41.2629, lng: -96.1337 }
+    },
+    {
+        id: 301,
+        name: "CHI Health Immanuel PRTF",
+        type: "Treatment Center",
+        address: "6845 N 68th Plaza, Omaha, NE 68122",
+        phone: "(402) 572-2040",
+        website: "http://www.chihealth.com",
+        ageGroup: "Juvenile",
+        genderServed: "Co-ed",
+        treatmentType: "Mental Health",
+        status: "Contact for Availability",
+        lastUpdated: "2025-10-19",
+        coordinates: { lat: 41.3219, lng: -96.0080 }
+    },
+    {
+        id: 302,
+        name: "NOVA Treatment Community PRTF",
+        type: "Treatment Center",
+        address: "8502 Mormon Bridge Road, Omaha, NE 68152",
+        phone: "(402) 455-8303",
+        website: "",
+        ageGroup: "Juvenile",
+        genderServed: "Co-ed",
+        treatmentType: "Mental Health",
+        status: "Contact for Availability",
+        lastUpdated: "2025-10-19",
+        coordinates: { lat: 41.3444, lng: -96.0013 }
+    },
+    {
+        id: 303,
+        name: "Lincoln Regional Center - Whitehall PRTF",
+        type: "Treatment Center",
+        address: "5845 Huntington Ave, Lincoln, NE 68509",
+        phone: "(402) 471-6969",
+        website: "",
+        ageGroup: "Juvenile",
+        genderServed: "Male",
+        treatmentType: "Mental Health",
+        status: "Contact for Availability",
+        lastUpdated: "2025-10-19",
+        coordinates: { lat: 40.8379, lng: -96.6280 }
+    },
+    {
+        id: 304,
+        name: "The Bridge Inc - Women's Residential Treatment",
+        type: "Treatment Center",
+        address: "1108 E. 7th Street, Hastings, NE 68901",
+        phone: "402-463-3965",
+        website: "http://www.thehastingsbridge.com",
+        ageGroup: "Adult",
+        genderServed: "Female",
+        treatmentType: "Substance Abuse",
+        description: "Long-term residential treatment for women (6-18 months). Comprehensive substance abuse treatment with Mom & Me program for mothers. CARF accredited with specialized care for women's needs, veterans, and teens.",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 40.5925, lng: -98.3839 }
     }
+
 ];
 
 // Halfway Houses Data
 window.STATIC_HALFWAY_HOUSES_DATA = [
+    
     {
-        id: 17,
+        id: 27,
         name: "VA Nebraska/Western Iowa HCS Grand Island CBOC",
         type: "Halfway House",
         address: "2201 North Broadwell Avenue, Grand Island, NE 68803",
-        phone: "(402) 995-4473",
-        website: "https://www.nebraska.va.gov/locations/Grand_Island.asp",
+        phone: "402-995-4473 x2134",
+        website: "http://www.nebraska.va.gov/locations/Grand_Island.asp",
         ageGroup: "Adult",
         genderServed: "Co-ed",
         treatmentType: "Substance Abuse",
         status: "Contact for Availability",
         lastUpdated: "2025-01-27",
-        coordinates: { lat: 40.9333, lng: -98.3420 }
+        coordinates: { lat: 40.9576, lng: -98.494 }
     },
     {
-        id: 18,
+        id: 28,
         name: "Friendship House Inc",
         type: "Halfway House",
         address: "406 West Koenig Street, Grand Island, NE 68801",
-        phone: "(308) 675-3345",
-        website: "https://www.thefriendshiphouse.net",
+        phone: "308-675-3345 x18",
+        website: "http://www.thefriendshiphouse.net",
         ageGroup: "Adult",
         genderServed: "Co-ed",
         treatmentType: "Substance Abuse",
         status: "Contact for Availability",
         lastUpdated: "2025-01-27",
-        coordinates: { lat: 40.9264, lng: -98.3420 }
-    },
-    {
-        id: 19,
-        name: "Womens Empowering Life Line Inc Intermediate Residential",
-        type: "Halfway House",
-        address: "200 South 13th Street, Norfolk, NE 68701",
-        phone: "(402) 860-8483",
-        website: "https://www.womenslifeline.net",
-        ageGroup: "Adult",
-        genderServed: "Female",
-        treatmentType: "Substance Abuse",
-        status: "Contact for Availability",
-        lastUpdated: "2025-01-27",
-        coordinates: { lat: 42.0281, lng: -97.4170 }
-    },
-    {
-        id: 20,
-        name: "The Link Inc",
-        type: "Halfway House",
-        address: "1001 West Norfolk Avenue, Norfolk, NE 68701",
-        phone: "(402) 371-5310",
-        website: "https://link-recovery.org",
-        ageGroup: "Adult",
-        genderServed: "Co-ed",
-        treatmentType: "Substance Abuse",
-        status: "Contact for Availability",
-        lastUpdated: "2025-01-27",
-        coordinates: { lat: 42.0281, lng: -97.4170 }
-    },
-    {
-        id: 21,
-        name: "Human Services Inc",
-        type: "Halfway House",
-        address: "419 West 25th Street, Alliance, NE 69301",
-        phone: "(308) 762-7177",
-        website: "https://www.hsinc.org",
-        ageGroup: "Adult",
-        genderServed: "Co-ed",
-        treatmentType: "Substance Abuse",
-        status: "Contact for Availability",
-        lastUpdated: "2025-01-27",
-        coordinates: { lat: 42.1025, lng: -102.8676 }
-    },
-    {
-        id: 22,
-        name: "Houses of Hope of Nebraska Inc Halfway House",
-        type: "Halfway House",
-        address: "1124 North Cotner Boulevard, Lincoln, NE 68505",
-        phone: "(402) 435-3165",
-        website: "https://www.housesofhope.com",
-        ageGroup: "Adult",
-        genderServed: "Co-ed",
-        treatmentType: "Substance Abuse",
-        status: "Contact for Availability",
-        lastUpdated: "2025-01-27",
-        coordinates: { lat: 40.8242072, lng: -96.6328112 }
-    },
-    {
-        id: 23,
-        name: "ARCH Inc OHanlon House",
-        type: "Halfway House",
-        address: "1502 North 58th Street, Omaha, NE 68104",
-        phone: "(402) 556-6425",
-        website: "https://www.archhalfwayhouse.org",
-        ageGroup: "Adult",
-        genderServed: "Co-ed",
-        treatmentType: "Substance Abuse",
-        status: "Contact for Availability",
-        lastUpdated: "2025-01-27",
-        coordinates: { lat: 41.2725, lng: -95.9758 }
-    },
-    {
-        id: 24,
-        name: "Heartland Family Service",
-        type: "Halfway House",
-        address: "4847 Sahler Street, Omaha, NE 68104",
-        phone: "(402) 342-9555",
-        website: "https://www.heartlandfamilyservice.org",
-        ageGroup: "Adult",
-        genderServed: "Co-ed",
-        treatmentType: "Substance Abuse",
-        status: "Contact for Availability",
-        lastUpdated: "2025-01-27",
-        coordinates: { lat: 41.2725, lng: -95.9758 }
-    },
-    {
-        id: 25,
-        name: "Santa Monica Inc",
-        type: "Halfway House",
-        address: "401 South 39th Street, Omaha, NE 68131",
-        phone: "(402) 558-7088",
-        website: "https://www.santamonicahouse.org",
-        ageGroup: "Adult",
-        genderServed: "Co-ed",
-        treatmentType: "Substance Abuse",
-        status: "Contact for Availability",
-        lastUpdated: "2025-01-27",
-        coordinates: { lat: 41.2565, lng: -95.9758 }
-    },
-    {
-        id: 26,
-        name: "ARCH Inc",
-        type: "Halfway House",
-        address: "604 South 37th Street, Omaha, NE 68105",
-        phone: "(402) 346-8898",
-        website: "https://www.archhalfwayhouse.org",
-        ageGroup: "Adult",
-        genderServed: "Co-ed",
-        treatmentType: "Substance Abuse",
-        status: "Contact for Availability",
-        lastUpdated: "2025-01-27",
-        coordinates: { lat: 41.2565, lng: -95.9758 }
-    },
-    {
-        id: 27,
-        name: "Open Door Missions Mens Ministries",
-        type: "Halfway House",
-        address: "2705 North 20th Street East, Omaha, NE 68110",
-        phone: "(402) 422-1111",
-        website: "https://www.opendoormission.org",
-        ageGroup: "Adult",
-        genderServed: "Male",
-        treatmentType: "Substance Abuse",
-        status: "Contact for Availability",
-        lastUpdated: "2025-01-27",
-        coordinates: { lat: 41.2725, lng: -95.9345 }
-    }
-];
-
-// Outpatient Services Data
-window.STATIC_OUTPATIENT_DATA = [
-    {
-        id: 28,
-        name: "Lexington Regional Health Center",
-        type: "Outpatient",
-        address: "1201 North Erie Street, Lexington, NE 68850",
-        phone: "(308) 324-5651",
-        website: "https://www.lexingtonregional.org",
-        ageGroup: "Adult",
-        genderServed: "Co-ed",
-        treatmentType: "Both",
-        status: "Contact for Availability",
-        lastUpdated: "2025-01-27",
-        coordinates: { lat: 40.7858929, lng: -99.7589814 }
+        coordinates: { lat: 40.9322928, lng: -98.3830796 }
     },
     {
         id: 29,
-        name: "Lutheran Family Services of Nebraska Lexington",
-        type: "Outpatient",
-        address: "800 North Washington Street, Suite 2, Lexington, NE 68850",
-        phone: "(308) 532-0587",
-        website: "https://www.onelfs.org",
-        ageGroup: "Adult",
-        genderServed: "Co-ed",
-        treatmentType: "Both",
-        status: "Contact for Availability",
-        lastUpdated: "2025-01-27",
-        coordinates: { lat: 40.7812316, lng: -99.7409967 }
-    },
-    {
-        id: 30,
-        name: "Heartland Counseling Clinic",
-        type: "Outpatient",
-        address: "307 East 5th Street, Lexington, NE 68850",
-        phone: "(308) 324-6754",
-        website: "https://www.r2hs.com",
-        ageGroup: "Adult",
-        genderServed: "Co-ed",
-        treatmentType: "Both",
-        status: "Contact for Availability",
-        lastUpdated: "2025-01-27",
-        coordinates: { lat: 40.7779918, lng: -99.7380302 }
-    },
-    {
-        id: 31,
-        name: "Valley County Health System Heritage Program for Seniors",
-        type: "Outpatient",
-        address: "110 South 26th Street, Ord, NE 68862",
-        phone: "(308) 728-4340",
-        website: "https://www.valleycountyhealthsystem.org",
-        ageGroup: "Adult",
-        genderServed: "Co-ed",
-        treatmentType: "Mental Health",
-        status: "Contact for Availability",
-        lastUpdated: "2025-01-27",
-        coordinates: { lat: 41.6031461, lng: -98.9413518 }
-    },
-    {
-        id: 32,
-        name: "Lutheran Family Services North Platte",
-        type: "Outpatient",
-        address: "120 East 12th Street, North Platte, NE 69101",
-        phone: "(308) 532-0587",
-        website: "https://www.onelfs.org",
-        ageGroup: "Adult",
-        genderServed: "Co-ed",
-        treatmentType: "Both",
-        status: "Contact for Availability",
-        lastUpdated: "2025-01-27",
-        coordinates: { lat: 41.1459158, lng: -100.7602155 }
-    },
-    {
-        id: 33,
-        name: "Psychiatric Hope",
-        type: "Outpatient",
-        address: "321 East 3rd Street, North Platte, NE 69101",
-        phone: "(308) 520-7794",
-        website: "https://www.psychiatrichope.com",
+        name: "Revive Inc Unity Houses - Sober Living",
+        type: "Halfway House",
+        address: "Hastings, NE 68901",
+        phone: "402-462-2066",
+        website: "http://www.reviveinc.org",
         ageGroup: "Adult",
         genderServed: "Co-ed",
         treatmentType: "Substance Abuse",
-        status: "Contact for Availability",
-        lastUpdated: "2025-01-27",
-        coordinates: { lat: 41.1353248, lng: -100.759992 }
-    }
-];
-
-// Detox Services Data
-window.STATIC_DETOX_DATA = [
-    {
-        id: 34,
-        name: "Lexington Regional Health Center Detox",
-        type: "Detox",
-        address: "1201 North Erie Street, Lexington, NE 68850",
-        phone: "(308) 324-5651",
-        website: "https://www.lexingtonregional.org",
-        ageGroup: "Adult",
-        genderServed: "Co-ed",
-        treatmentType: "Detox",
-        status: "Contact for Availability",
-        lastUpdated: "2025-01-27",
-        coordinates: { lat: 40.7858929, lng: -99.7589814 }
-    },
-    {
-        id: 35,
-        name: "Psychiatric Hope Detox",
-        type: "Detox",
-        address: "321 East 3rd Street, North Platte, NE 69101",
-        phone: "(308) 221-4651",
-        website: "https://www.psychiatrichope.com",
-        ageGroup: "Adult",
-        genderServed: "Co-ed",
-        treatmentType: "Detox",
-        status: "Contact for Availability",
-        lastUpdated: "2025-01-27",
-        coordinates: { lat: 41.1353248, lng: -100.759992 }
-    },
-    {
-        id: 36,
-        name: "Mid Plains Center Detox",
-        type: "Detox",
-        address: "914 Baumann Drive, Grand Island, NE 68803",
-        phone: "(308) 385-5250",
-        website: "https://www.midplainscenter.org",
-        ageGroup: "Adult",
-        genderServed: "Co-ed",
-        treatmentType: "Detox",
-        status: "Contact for Availability",
-        lastUpdated: "2025-01-27",
-        coordinates: { lat: 40.9265447331352, lng: -98.3632822752136 }
-    },
-    {
-        id: 37,
-        name: "Valley Hope of O'Neill",
-        type: "Detox",
-        address: "1421 North 10th Street, O'Neill, NE 68763",
-        phone: "(785) 877-5111",
-        website: "https://www.valleyhope.org",
-        ageGroup: "Adult",
-        genderServed: "Co-ed",
-        treatmentType: "Detox",
-        status: "Contact for Availability",
-        lastUpdated: "2025-01-27",
-        coordinates: { lat: 42.4694532, lng: -98.6393916 }
-    },
-    {
-        id: 38,
-        name: "Revive Inc Detox",
-        type: "Detox",
-        address: "2205 Osborne Drive East, Suite 115, Hastings, NE 68901",
-        phone: "(402) 462-2066",
-        website: "https://www.reviveinc.org",
-        ageGroup: "Adult",
-        genderServed: "Co-ed",
-        treatmentType: "Detox",
+        description: "Sober living halfway house with three homes for up to 31 individuals. Clean, drug-free transitional living for those in Revive's treatment programs. Recovery coaching and 12-step support available.",
         status: "Contact for Availability",
         lastUpdated: "2025-01-27",
         coordinates: { lat: 40.6089061, lng: -98.3835624 }
     },
     {
+        id: 30,
+        name: "Womens Empowering Life Line Inc Intermediate Residential",
+        type: "Halfway House",
+        address: "200 South 13th Street, Norfolk, NE 68701",
+        phone: "402-860-8483",
+        website: "http://www.womenslifeline.net",
+        ageGroup: "Adult",
+        genderServed: "Female",
+        treatmentType: "Substance Abuse",
+        description: "Intermediate residential and halfway house program for women in recovery. Transitional living with recovery support services.",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 42.0311075, lng: -97.4254637 }
+    },
+    {
+        id: 31,
+        name: "The Link Inc",
+        type: "Halfway House",
+        address: "1001 West Norfolk Avenue, Norfolk, NE 68701",
+        phone: "402-371-5310",
+        website: "http://link-recovery.org",
+        ageGroup: "Adult",
+        genderServed: "Male",
+        treatmentType: "Substance Abuse",
+        description: "Halfway house for men 19 and older in recovery from alcohol and drug addiction. Provides transitional housing, peer support, and recovery services.",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 42.0323678, lng: -97.420666 }
+    },
+    {
+        id: 32,
+        name: "Human Services Inc",
+        type: "Halfway House",
+        address: "419 West 25th Street, Alliance, NE 69301",
+        phone: "308-762-7177",
+        website: "http://www.hsinc.org",
+        ageGroup: "Adult",
+        genderServed: "Co-ed",
+        treatmentType: "Substance Abuse",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 42.1193758, lng: -102.8757697 }
+    },
+    {
+        id: 33,
+        name: "Houses of Hope of Nebraska Inc Halfway House",
+        type: "Halfway House",
+        address: "1124 North Cotner Boulevard, Lincoln, NE 68505",
+        phone: "402-435-3165 x112",
+        website: "http://www.housesofhope.com",
+        ageGroup: "Adult",
+        genderServed: "Male",
+        treatmentType: "Substance Abuse",
+        description: "Transitional living halfway house for adult men who have completed treatment. Three sober living homes providing peer support, 12-step groups, job training, and life skills.",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 40.8242072, lng: -96.6328112 }
+    },
+    {
+        id: 34,
+        name: "Saint Monicas Affirming Womens Empowerment",
+        type: "Halfway House",
+        address: "105 Wedgewood Drive, Lincoln, NE 68510",
+        phone: "402-441-3768",
+        website: "http://www.stmonicas.com",
+        ageGroup: "Adult",
+        genderServed: "Female",
+        treatmentType: "Substance Abuse",
+        description: "Transitional living and halfway house for women in recovery. Step-down residential program with ongoing counseling and recovery support services.",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 40.8125387, lng: -96.6233429 }
+    },
+    {
+        id: 35,
+        name: "ARCH Inc OHanlon House",
+        type: "Halfway House",
+        address: "1502 North 58th Street, Omaha, NE 68104",
+        phone: "402-556-6425",
+        website: "http://www.archhalfwayhouse.org",
+        ageGroup: "Adult",
+        genderServed: "Male",
+        treatmentType: "Substance Abuse",
+        description: "Halfway house for men in recovery. Part of ARCH Inc's recovery housing network providing transitional living and peer support for adult men.",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 41.2495756, lng: -96.0046918 }
+    },
+    {
+        id: 36,
+        name: "Heartland Family Service - Family Works",
+        type: "Halfway House",
+        address: "4847 Sahler Street, Omaha, NE 68104",
+        phone: "402-342-9555",
+        website: "http://www.heartlandfamilyservice.org",
+        ageGroup: "Adult",
+        genderServed: "Female",
+        treatmentType: "Substance Abuse",
+        description: "Family Works residential program for women with children. Provides substance abuse treatment, parenting support, and transitional housing for mothers in recovery.",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 41.2963002, lng: -95.987687 }
+    },
+    {
+        id: 37,
+        name: "Santa Monica Inc",
+        type: "Halfway House",
+        address: "401 South 39th Street, Omaha, NE 68131",
+        phone: "402-558-7088",
+        website: "http://www.santamonicahouse.org",
+        ageGroup: "Adult",
+        genderServed: "Female",
+        treatmentType: "Substance Abuse",
+        description: "Transitional housing for women 18 and older in recovery from substance abuse. Provides supportive housing, case management, and recovery support services.",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 41.2495756, lng: -96.0046918 }
+    },
+    {
+        id: 38,
+        name: "ARCH Inc",
+        type: "Halfway House",
+        address: "604 South 37th Street, Omaha, NE 68105",
+        phone: "402-346-8898",
+        website: "http://www.archhalfwayhouse.org",
+        ageGroup: "Adult",
+        genderServed: "Male",
+        treatmentType: "Substance Abuse",
+        description: "ARCH (Addiction Recovery Comes from the Heart) provides halfway house services for adult men in recovery. Offers transitional housing, peer support, and recovery services.",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 41.2495756, lng: -96.0046918 }
+    },
+    {
         id: 39,
-        name: "Behavioral Health Specialists Inc Detox",
+        name: "Stephen Center Inc",
+        type: "Halfway House",
+        address: "5217 South 28th Street, Omaha, NE 68107",
+        phone: "402-715-5449",
+        website: "http://www.stephencenter.org",
+        ageGroup: "Adult",
+        genderServed: "Co-ed",
+        treatmentType: "Substance Abuse",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 41.2048342, lng: -95.9544201 }
+    },
+    {
+        id: 40,
+        name: "Open Door Mission - Mens Ministries",
+        type: "Halfway House",
+        address: "2705 North 20th Street East, Omaha, NE 68110",
+        phone: "402-422-1111",
+        website: "http://www.opendoormission.org",
+        ageGroup: "Adult",
+        genderServed: "Male",
+        treatmentType: "Substance Abuse",
+        description: "Men's residential recovery program offering faith-based substance abuse treatment, transitional housing, and job training for adult men.",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 41.2495756, lng: -96.0046918 }
+    }
+
+];
+
+// Outpatient Services Data - Complete dataset with all 216 providers
+
+// Detox Services Data
+window.STATIC_DETOX_DATA = [
+    
+    {
+        id: 51,
+        name: "Lexington Regional Health Center",
+        type: "Detox",
+        address: "1201 North Erie Street, Lexington, NE 68850",
+        phone: "308-324-5651",
+        website: "http://www.lexingtonregional.org",
+        ageGroup: "Adult",
+        genderServed: "Co-ed",
+        treatmentType: "Detox",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 40.7858929, lng: -99.7589814 }
+    },
+    {
+        id: 52,
+        name: "Psychiatric Hope",
+        type: "Detox",
+        address: "321 East 3rd Street, North Platte, NE 69101",
+        phone: "308-221-4651",
+        website: "http://www.psychiatrichope.com",
+        ageGroup: "Adult",
+        genderServed: "Co-ed",
+        treatmentType: "Detox",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 41.1353248, lng: -100.759992 }
+    },
+    {
+        id: 53,
+        name: "Mid Plains Center for Behavioral Healthcare Services Inc",
+        type: "Detox",
+        address: "914 Baumann Drive, Grand Island, NE 68803",
+        phone: "308-385-5250",
+        website: "http://www.midplainscenter.org",
+        ageGroup: "Adult",
+        genderServed: "Co-ed",
+        treatmentType: "Detox",
+        description: "Crisis Stabilization Unit with medically assisted detox and residential treatment. 24/7 detox services for alcohol, methamphetamines, cocaine, and opioids. 3-5 day stabilization with residential treatment options available.",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 40.9265447331352, lng: -98.3632822752136 }
+    },
+    {
+        id: 54,
+        name: "Valley Hope of O'Neill",
+        type: "Detox",
+        address: "1421 North 10th Street, O'Neill, NE 68763",
+        phone: "785-877-5111",
+        website: "http://www.valleyhope.org",
+        ageGroup: "Adult",
+        genderServed: "Co-ed",
+        treatmentType: "Detox",
+        description: "Medical detox and residential treatment for ages 16+. Provides medically supervised withdrawal management and inpatient rehabilitation services.",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 42.4694532, lng: -98.6393916 }
+    },
+    {
+        id: 56,
+        name: "Behavioral Health Specialists Inc Seekers of Serenity Place",
         type: "Detox",
         address: "4432 Sunrise Place, Columbus, NE 68601",
-        phone: "(402) 564-9994",
-        website: "https://www.4bhs.org",
+        phone: "402-564-9994",
+        website: "http://www.4bhs.org",
         ageGroup: "Adult",
         genderServed: "Co-ed",
         treatmentType: "Detox",
@@ -561,12 +689,12 @@ window.STATIC_DETOX_DATA = [
         coordinates: { lat: 41.4295473, lng: -97.3814131 }
     },
     {
-        id: 40,
+        id: 57,
         name: "Behavioral Health Specialists Inc Sunrise Place",
         type: "Detox",
         address: "1900 Vicki Lane, Norfolk, NE 68701",
-        phone: "(402) 379-0040",
-        website: "https://www.4bhs.org",
+        phone: "402-379-0040",
+        website: "http://www.4bhs.org",
         ageGroup: "Adult",
         genderServed: "Co-ed",
         treatmentType: "Detox",
@@ -575,26 +703,27 @@ window.STATIC_DETOX_DATA = [
         coordinates: { lat: 42.0240841, lng: -97.435609 }
     },
     {
-        id: 41,
-        name: "Bridge Behavioral Health Detox",
+        id: 58,
+        name: "Bridge Behavioral Health",
         type: "Detox",
         address: "721 K Street, Lincoln, NE 68508",
-        phone: "(402) 477-3951",
-        website: "https://thebridgenebraska.org",
+        phone: "402-477-3951",
+        website: "http://www.thebridgenebraska.org",
         ageGroup: "Adult",
-        genderServed: "Co-ed",
+        genderServed: "Male",
         treatmentType: "Detox",
+        description: "Medically monitored detox for men 19 and older. Part of comprehensive residential treatment program with crisis stabilization and continuing care services.",
         status: "Contact for Availability",
         lastUpdated: "2025-01-27",
         coordinates: { lat: 40.8088716, lng: -96.7108461 }
     },
     {
-        id: 42,
+        id: 59,
         name: "Bryan Medical Center West Independence Center",
         type: "Detox",
         address: "1640 Lake Street, Lincoln, NE 68502",
-        phone: "(402) 481-5268",
-        website: "https://www.bryanhealth.com/services/alcohol-drug-treatment",
+        phone: "402-481-5268",
+        website: "http://www.bryanhealth.com/services/alcohol-drug-treatment",
         ageGroup: "Adult",
         genderServed: "Co-ed",
         treatmentType: "Detox",
@@ -603,12 +732,12 @@ window.STATIC_DETOX_DATA = [
         coordinates: { lat: 40.7884103, lng: -96.6980563 }
     },
     {
-        id: 43,
+        id: 60,
         name: "Pine Lake Behavioral Health/Medical",
         type: "Detox",
         address: "9100 Andermatt Drive, Suite 1, Lincoln, NE 68526",
-        phone: "(402) 434-2730",
-        website: "https://www.pinelakebh.com",
+        phone: "402-434-2730 x1",
+        website: "http://www.pinelakebh.com",
         ageGroup: "Adult",
         genderServed: "Co-ed",
         treatmentType: "Detox",
@@ -617,12 +746,12 @@ window.STATIC_DETOX_DATA = [
         coordinates: { lat: 40.7335633, lng: -96.5931464 }
     },
     {
-        id: 44,
+        id: 61,
         name: "Nebraska Medical Center",
         type: "Detox",
         address: "4350 Dewey Avenue, Omaha, NE 68105",
-        phone: "(800) 922-0000",
-        website: "https://www.nebraskamed.com",
+        phone: "800-922-0000",
+        website: "http://www.nebraskamed.com",
         ageGroup: "Adult",
         genderServed: "Co-ed",
         treatmentType: "Detox",
@@ -631,12 +760,12 @@ window.STATIC_DETOX_DATA = [
         coordinates: { lat: 41.2562523, lng: -95.9764351 }
     },
     {
-        id: 45,
+        id: 62,
         name: "BAART Community Healthcare Inc",
         type: "Detox",
         address: "1941 South 42nd Street, Suite 210, Omaha, NE 68105",
-        phone: "(402) 341-6220",
-        website: "https://www.baartprograms.com",
+        phone: "402-341-6220",
+        website: "http://www.baartprograms.com",
         ageGroup: "Adult",
         genderServed: "Co-ed",
         treatmentType: "Detox",
@@ -645,12 +774,12 @@ window.STATIC_DETOX_DATA = [
         coordinates: { lat: 41.2406369, lng: -95.9750427 }
     },
     {
-        id: 46,
+        id: 63,
         name: "Douglas County Mental Health Center",
         type: "Detox",
         address: "1490 North 16th Street, Omaha, NE 68102",
-        phone: "(402) 444-1975",
-        website: "https://cmhc.douglascounty-ne.gov",
+        phone: "402-444-1975",
+        website: "http://cmhc.douglascounty-ne.gov",
         ageGroup: "Adult",
         genderServed: "Co-ed",
         treatmentType: "Detox",
@@ -658,33 +787,9 @@ window.STATIC_DETOX_DATA = [
         lastUpdated: "2025-01-27",
         coordinates: { lat: 41.272717, lng: -95.9384233 }
     }
+
 ];
 
-// Combined data for search functionality
-const __RAW_ALL_FACILITIES_DATA = [
-    ...window.STATIC_FACILITIES_DATA,
-    ...window.STATIC_HALFWAY_HOUSES_DATA,
-    ...window.STATIC_OUTPATIENT_DATA,
-    ...window.STATIC_DETOX_DATA
-];
-
-if (window.FacilityUtils && typeof window.FacilityUtils.normalizeFacilityDataset === 'function') {
-    const __normalizedAllFacilities = window.FacilityUtils.normalizeFacilityDataset(__RAW_ALL_FACILITIES_DATA);
-
-    window.STATIC_ALL_FACILITIES_DATA = __normalizedAllFacilities;
-    const facilityMatches = (facility, keyword) =>
-        Array.isArray(facility.facilityTypes) &&
-        facility.facilityTypes.some(type => (type || '').toLowerCase().includes(keyword));
-
-    window.STATIC_FACILITIES_DATA = __normalizedAllFacilities.filter(facility => facilityMatches(facility, 'treatment center'));
-    window.STATIC_HALFWAY_HOUSES_DATA = __normalizedAllFacilities.filter(facility => facilityMatches(facility, 'halfway house'));
-    window.STATIC_OUTPATIENT_DATA = __normalizedAllFacilities.filter(facility => facilityMatches(facility, 'outpatient'));
-    window.STATIC_DETOX_DATA = __normalizedAllFacilities.filter(facility => facilityMatches(facility, 'detox'));
-} else {
-    window.STATIC_ALL_FACILITIES_DATA = __RAW_ALL_FACILITIES_DATA;
-}
-
-// Mock provider data for demo (if needed)
 window.STATIC_PROVIDERS_DATA = [
     {
         id: "provider1",
@@ -701,3 +806,2321 @@ window.STATIC_PROVIDERS_DATA = [
         isActive: true
     }
 ];
+window.STATIC_OUTPATIENT_DATA = [
+    
+    {
+        id: 41,
+        name: "Lexington Regional Health Center",
+        type: "Outpatient",
+        address: "1201 North Erie Street, Lexington, NE 68850",
+        phone: "308-324-5651",
+        website: "http://www.lexingtonregional.org",
+        ageGroup: "Adult",
+        genderServed: "Co-ed",
+        treatmentType: "Dual Diagnosis",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 40.7858929, lng: -99.7589814 }
+    },
+    {
+        id: 43,
+        name: "Lutheran Family Services of Nebraska Lexington",
+        type: "Outpatient",
+        address: "800 North Washington Street, Suite 2, Lexington, NE 68850",
+        phone: "308-532-0587",
+        website: "http://www.onelfs.org",
+        ageGroup: "Adult",
+        genderServed: "Co-ed",
+        treatmentType: "Dual Diagnosis",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 40.7812316, lng: -99.7409967 }
+    },
+    {
+        id: 45,
+        name: "Heartland Counseling Clinic",
+        type: "Outpatient",
+        address: "307 East 5th Street, Lexington, NE 68850",
+        phone: "308-324-6754",
+        website: "http://www.r2hs.com",
+        ageGroup: "Adult",
+        genderServed: "Co-ed",
+        treatmentType: "Dual Diagnosis",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 40.7779918, lng: -99.7380302 }
+    },
+    {
+        id: 47,
+        name: "Valley County Health System Heritage Program for Seniors",
+        type: "Outpatient",
+        address: "110 South 26th Street, Ord, NE 68862",
+        phone: "308-728-4340",
+        website: "http://www.valleycountyhealthsystem.org",
+        ageGroup: "Adult",
+        genderServed: "Co-ed",
+        treatmentType: "Mental Health",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 41.6031461, lng: -98.9413518 }
+    },
+    {
+        id: 48,
+        name: "Lutheran Family Services",
+        type: "Outpatient",
+        address: "120 East 12th Street, North Platte, NE 69101",
+        phone: "308-532-0587",
+        website: "http://www.onelfs.org",
+        ageGroup: "Adult",
+        genderServed: "Co-ed",
+        treatmentType: "Dual Diagnosis",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 41.1459158, lng: -100.7602155 }
+    },
+    {
+        id: 50,
+        name: "Psychiatric Hope",
+        type: "Outpatient",
+        address: "321 East 3rd Street, North Platte, NE 69101",
+        phone: "308-520-7794",
+        website: "http://www.psychiatrichope.com",
+        ageGroup: "Adult",
+        genderServed: "Co-ed",
+        treatmentType: "Substance Abuse",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 41.1353248, lng: -100.759992 }
+    },
+    {
+        id: 51,
+        name: "VA Nebraska/Western Iowa HCS North Platte CBOC",
+        type: "Outpatient",
+        address: "300 East 3rd Street, Suite 302, North Platte, NE 69101",
+        phone: "800-698-2411 x4473",
+        website: "http://www.nebraska.va.gov/locations/North_Platte.asp",
+        ageGroup: "Adult",
+        genderServed: "Co-ed",
+        treatmentType: "Mental Health",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 41.1348167, lng: -100.7604358 }
+    },
+    {
+        id: 52,
+        name: "Family Matters Counseling Services LLC",
+        type: "Outpatient",
+        address: "410 East B Street, North Platte, NE 69101",
+        phone: "308-534-3351",
+        website: "http://",
+        ageGroup: "Adult",
+        genderServed: "Co-ed",
+        treatmentType: "Dual Diagnosis",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 41.1323222, lng: -100.7598851 }
+    },
+    {
+        id: 54,
+        name: "Beacon of Hope Counseling Center LLC",
+        type: "Outpatient",
+        address: "308 West 4th Street, North Platte, NE 69101",
+        phone: "308-532-0777",
+        website: "http://www.beaconofhopenp.com",
+        ageGroup: "Adult",
+        genderServed: "Co-ed",
+        treatmentType: "Dual Diagnosis",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 41.1367742, lng: -100.7662444 }
+    },
+    {
+        id: 56,
+        name: "Heartland Counseling Clinic",
+        type: "Outpatient",
+        address: "110 North Bailey Street, North Platte, NE 69103",
+        phone: "308-534-6029",
+        website: "http://www.r2hs.com",
+        ageGroup: "Adult",
+        genderServed: "Co-ed",
+        treatmentType: "Dual Diagnosis",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 41.1237, lng: -100.7653 }
+    },
+    {
+        id: 58,
+        name: "South Central Behavioral Services Inc Kearney Clinic",
+        type: "Outpatient",
+        address: "3810 Central Avenue, Kearney, NE 68848",
+        phone: "308-237-5951",
+        website: "http://www.scbsne.com",
+        ageGroup: "Adult",
+        genderServed: "Co-ed",
+        treatmentType: "Dual Diagnosis",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 40.8397, lng: -98.9774 }
+    },
+    {
+        id: 60,
+        name: "South Central Behavioral Services Inc Unity House",
+        type: "Outpatient",
+        address: "3800 Central Avenue, Kearney, NE 68847",
+        phone: "308-698-0535",
+        website: "http://www.scbsne.com",
+        ageGroup: "Adult",
+        genderServed: "Co-ed",
+        treatmentType: "Mental Health",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 40.7129769, lng: -99.0822938 }
+    },
+    {
+        id: 61,
+        name: "VA Nebraska Western Iowa HCS Holdrege Comm Based Outpatient",
+        type: "Outpatient",
+        address: "1118 Burlington Street, Holdrege, NE 68949",
+        phone: "308-995-3760",
+        website: "http://www.nebraska.va.gov/locations/Holdrege.asp",
+        ageGroup: "Adult",
+        genderServed: "Co-ed",
+        treatmentType: "Mental Health",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 40.4458177, lng: -99.3788426 }
+    },
+    {
+        id: 62,
+        name: "VA Nebraska/Western Iowa HCS Grand Island CBOC",
+        type: "Outpatient",
+        address: "2201 North Broadwell Avenue, Grand Island, NE 68803",
+        phone: "402-995-4473 x2134",
+        website: "http://www.nebraska.va.gov/locations/Grand_Island.asp",
+        ageGroup: "Adult",
+        genderServed: "Co-ed",
+        treatmentType: "Dual Diagnosis",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 40.9576, lng: -98.494 }
+    },
+    {
+        id: 64,
+        name: "Mid Plains Center for Behavioral Healthcare Services Inc",
+        type: "Outpatient",
+        address: "914 Baumann Drive, Grand Island, NE 68803",
+        phone: "308-385-5250",
+        website: "http://www.midplainscenter.org",
+        ageGroup: "Adult",
+        genderServed: "Co-ed",
+        treatmentType: "Dual Diagnosis",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 40.9270149, lng: -98.3634847 }
+    },
+    {
+        id: 66,
+        name: "CHI Health Saint Francis Saint Francis Alc and Drug Trt Center",
+        type: "Outpatient",
+        address: "2112 West Faidley Avenue, Grand Island, NE 68803",
+        phone: "308-398-5427",
+        website: "http://www.chihealth.com/st-francis.html",
+        ageGroup: "Adult",
+        genderServed: "Co-ed",
+        treatmentType: "Substance Abuse",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 40.9247086, lng: -98.3638623 }
+    },
+    {
+        id: 67,
+        name: "Goodwill Industries of Greater NE Grand Island Office",
+        type: "Outpatient",
+        address: "1804 South Eddy Street, Grand Island, NE 68802",
+        phone: "308-384-7896 x160",
+        website: "http://www.goodwillne.org",
+        ageGroup: "Adult",
+        genderServed: "Co-ed",
+        treatmentType: "Dual Diagnosis",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 40.9253, lng: -98.3418 }
+    },
+    {
+        id: 69,
+        name: "Live Well Csl Ctr of Greater Nebraska",
+        type: "Outpatient",
+        address: "3532 West Capital Avenue, Grand Island, NE 68802",
+        phone: "308-381-7487",
+        website: "http://www.livewell-gi.com",
+        ageGroup: "Adult",
+        genderServed: "Co-ed",
+        treatmentType: "Substance Abuse",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 40.9253, lng: -98.3418 }
+    },
+    {
+        id: 70,
+        name: "Heartland Counseling Services Inc ONeill Satellite",
+        type: "Outpatient",
+        address: "221 West Douglas Street, O'Neill, NE 68763",
+        phone: "402-336-2800",
+        website: "http://www.heartlandcounselingservices.org",
+        ageGroup: "Adult",
+        genderServed: "Co-ed",
+        treatmentType: "Dual Diagnosis",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 42.4574424, lng: -98.6553962 }
+    },
+    {
+        id: 72,
+        name: "Ally Counseling Services",
+        type: "Outpatient",
+        address: "614 North 4th Street, Suite 108, O'Neill, NE 68763",
+        phone: "402-336-1306",
+        website: "https://www.allycounselingservicesllc.com",
+        ageGroup: "Adult",
+        genderServed: "Co-ed",
+        treatmentType: "Dual Diagnosis",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 42.464599, lng: -98.6474179 }
+    },
+    {
+        id: 74,
+        name: "Heartland Counseling Clinic",
+        type: "Outpatient",
+        address: "1012 West 3rd Street, McCook, NE 69001",
+        phone: "308-345-2770",
+        website: "http://www.r2hs.com",
+        ageGroup: "Adult",
+        genderServed: "Co-ed",
+        treatmentType: "Mental Health",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 40.2076861, lng: -100.630169 }
+    },
+    {
+        id: 75,
+        name: "Heartland Counseling Clinic",
+        type: "Outpatient",
+        address: "1012 West 3rd Street, Mc Cook, NE 69001",
+        phone: "308-345-2770",
+        website: "http://www.r2hs.com",
+        ageGroup: "Adult",
+        genderServed: "Co-ed",
+        treatmentType: "Substance Abuse",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 40.2076861, lng: -100.630169 }
+    },
+    {
+        id: 76,
+        name: "Heartland Counseling Clinic",
+        type: "Outpatient",
+        address: "401 West 1st Street, Ogallala, NE 69153",
+        phone: "308-284-6767",
+        website: "http://www.r2hs.com",
+        ageGroup: "Adult",
+        genderServed: "Co-ed",
+        treatmentType: "Dual Diagnosis",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 41.1245779, lng: -101.7227762 }
+    },
+    {
+        id: 78,
+        name: "Revive Inc Horizon Recovery and Counseling Center",
+        type: "Outpatient",
+        address: "2205 Osborne Drive East, Suite 115, Hastings, NE 68901",
+        phone: "402-462-2066",
+        website: "http://www.reviveinc.org",
+        ageGroup: "Adult",
+        genderServed: "Co-ed",
+        treatmentType: "Substance Abuse",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 40.6089061, lng: -98.3835624 }
+    },
+    {
+        id: 79,
+        name: "South Central Behavioral Services Inc Hastings Clinic",
+        type: "Outpatient",
+        address: "616 West 5th Street, Hastings, NE 68901",
+        phone: "402-463-5684",
+        website: "http://www.scbsne.com",
+        ageGroup: "Adult",
+        genderServed: "Co-ed",
+        treatmentType: "Dual Diagnosis",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 40.5881136, lng: -98.3892571 }
+    },
+    {
+        id: 81,
+        name: "South Central Behavioral Services Inc Opportunity House",
+        type: "Outpatient",
+        address: "724 South Burlington Avenue, Hastings, NE 68902",
+        phone: "402-463-7435",
+        website: "http://www.scbsne.com",
+        ageGroup: "Adult",
+        genderServed: "Co-ed",
+        treatmentType: "Mental Health",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 40.5864, lng: -98.3882 }
+    },
+    {
+        id: 82,
+        name: "South Central Behavioral Services Inc Assertive Community Treatment",
+        type: "Outpatient",
+        address: "835 South Burlington Avenue, Suite 107, Hastings, NE 68901",
+        phone: "402-462-4200",
+        website: "http://www.scbsne.com",
+        ageGroup: "Adult",
+        genderServed: "Co-ed",
+        treatmentType: "Mental Health",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 40.574424, lng: -98.392152 }
+    },
+    {
+        id: 83,
+        name: "Mary Lanning Healthcare Lanning Center",
+        type: "Outpatient",
+        address: "835 South Burlington Avenue, Suite 108, Hastings, NE 68901",
+        phone: "402-463-7711",
+        website: "http://marylanning.org",
+        ageGroup: "Adult",
+        genderServed: "Co-ed",
+        treatmentType: "Mental Health",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 40.5742097, lng: -98.3919239 }
+    },
+    {
+        id: 84,
+        name: "Blue Valley Behavioral Health York Office",
+        type: "Outpatient",
+        address: "722 South Lincoln Avenue, Suite 1, York, NE 68467",
+        phone: "402-362-6128",
+        website: "http://www.bvbh.net",
+        ageGroup: "Adult",
+        genderServed: "Co-ed",
+        treatmentType: "Dual Diagnosis",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 40.8553097, lng: -97.596047 }
+    },
+    {
+        id: 86,
+        name: "Midtown Health Center Madison",
+        type: "Outpatient",
+        address: "222 Main Street, Madison, NE 68748",
+        phone: "402-371-8000",
+        website: "http://midtownhealthne.org",
+        ageGroup: "Adult",
+        genderServed: "Co-ed",
+        treatmentType: "Dual Diagnosis",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 41.8281213, lng: -97.4540667 }
+    },
+    {
+        id: 88,
+        name: "Ponca Tribe of Nebraska Tribal Headquarters",
+        type: "Outpatient",
+        address: "2523 Woodbine Street, Niobrara, NE 68760",
+        phone: "402-857-3391",
+        website: "http://www.poncatribe-ne.gov",
+        ageGroup: "Adult",
+        genderServed: "Co-ed",
+        treatmentType: "Dual Diagnosis",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 42.7512034, lng: -98.0329667 }
+    },
+    {
+        id: 90,
+        name: "Behavioral Health Specialists Inc Seekers of Serenity Place",
+        type: "Outpatient",
+        address: "4432 Sunrise Place, Columbus, NE 68601",
+        phone: "402-564-9994",
+        website: "http://www.4bhs.org",
+        ageGroup: "Adult",
+        genderServed: "Co-ed",
+        treatmentType: "Substance Abuse",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 41.4295473, lng: -97.3814131 }
+    },
+    {
+        id: 91,
+        name: "Behavioral Health Specialists Inc Seekers for Serenity",
+        type: "Outpatient",
+        address: "4432 Sunrise Place, Columbus, NE 68601",
+        phone: "402-564-9994",
+        website: "http://",
+        ageGroup: "Adult",
+        genderServed: "Co-ed",
+        treatmentType: "Mental Health",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 41.4295473, lng: -97.3814131 }
+    },
+    {
+        id: 92,
+        name: "Good Neighbor Community Health Center",
+        type: "Outpatient",
+        address: "4321 41st Avenue, Columbus, NE 68601",
+        phone: "402-562-7500",
+        website: "http://goodneighborcommunityhealthcenter.com",
+        ageGroup: "Adult",
+        genderServed: "Co-ed",
+        treatmentType: "Dual Diagnosis",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 41.4580464, lng: -97.376727 }
+    },
+    {
+        id: 94,
+        name: "Good Life Counseling and Support LLC",
+        type: "Outpatient",
+        address: "200 North 34th Street, Norfolk, NE 68702",
+        phone: "402-371-3044",
+        website: "http://www.goodlifecounseling.com",
+        ageGroup: "Adult",
+        genderServed: "Co-ed",
+        treatmentType: "Dual Diagnosis",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 42.0338455, lng: -97.46159 }
+    },
+    {
+        id: 95,
+        name: "Goodwill Industries of Greater NE Columbus Office",
+        type: "Outpatient",
+        address: "3100 23rd Street, Suite 23, Columbus, NE 68601",
+        phone: "402-942-9007",
+        website: "http://goodwillne.org",
+        ageGroup: "Adult",
+        genderServed: "Co-ed",
+        treatmentType: "Dual Diagnosis",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 41.4398554, lng: -97.3656675 }
+    },
+    {
+        id: 97,
+        name: "Oasis Counseling International",
+        type: "Outpatient",
+        address: "333 West Norfolk Avenue, Suite 201, Norfolk, NE 68701",
+        phone: "402-379-2030 x100",
+        website: "http://www.ocinternational.org",
+        ageGroup: "Adult",
+        genderServed: "Co-ed",
+        treatmentType: "Dual Diagnosis",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 42.032497, lng: -97.455877 }
+    },
+    {
+        id: 98,
+        name: "The Well Columbus",
+        type: "Outpatient",
+        address: "2718 13th Street, Columbus, NE 68601",
+        phone: "402-371-0220",
+        website: "https://thewellne.org/",
+        ageGroup: "Adult",
+        genderServed: "Co-ed",
+        treatmentType: "Dual Diagnosis",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 41.4295811, lng: -97.361489 }
+    },
+    {
+        id: 100,
+        name: "GLC",
+        type: "Outpatient",
+        address: "2277 22nd Avenue, Columbus, NE 68601",
+        phone: "402-562-0400",
+        website: "http://www.goodlifecounseling.com",
+        ageGroup: "Adult",
+        genderServed: "Co-ed",
+        treatmentType: "Dual Diagnosis",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 41.4383598, lng: -97.354008 }
+    },
+    {
+        id: 102,
+        name: "Behavioral Health Specialists Inc Sunrise Place",
+        type: "Outpatient",
+        address: "1900 Vicki Lane, Norfolk, NE 68701",
+        phone: "402-379-0040",
+        website: "http://www.4bhs.org",
+        ageGroup: "Adult",
+        genderServed: "Co-ed",
+        treatmentType: "Dual Diagnosis",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 42.0240841, lng: -97.435609 }
+    },
+    {
+        id: 104,
+        name: "Ponca Tribe of Nebraska Ponca Hills Health and Wellness Center",
+        type: "Outpatient",
+        address: "1800 Syracuse Avenue, Norfolk, NE 68701",
+        phone: "402-371-8834",
+        website: "http://www.poncatribe-ne.gov",
+        ageGroup: "Adult",
+        genderServed: "Co-ed",
+        treatmentType: "Dual Diagnosis",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 42.0493172, lng: -97.4325716 }
+    },
+    {
+        id: 106,
+        name: "The Well Outpatient",
+        type: "Outpatient",
+        address: "1203 South 8th Street, Norfolk, NE 68701",
+        phone: "402-371-0220",
+        website: "http://www.thewellne.org",
+        ageGroup: "Adult",
+        genderServed: "Co-ed",
+        treatmentType: "Dual Diagnosis",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 42.0195795, lng: -97.4176035 }
+    },
+    {
+        id: 108,
+        name: "The Link Inc",
+        type: "Outpatient",
+        address: "1001 West Norfolk Avenue, Norfolk, NE 68701",
+        phone: "402-371-5310",
+        website: "http://link-recovery.org",
+        ageGroup: "Adult",
+        genderServed: "Male",
+        treatmentType: "Substance Abuse",
+        description: "Outpatient services for men 19 and older. Offers continuing care, relapse prevention, and recovery support services.",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 42.0323678, lng: -97.420666 }
+    },
+    {
+        id: 111,
+        name: "Midtown Health Center Phillip Avenue",
+        type: "Outpatient",
+        address: "302 West Phillip Avenue, Norfolk, NE 68701",
+        phone: "402-371-8000",
+        website: "http://midtownhealthne.org",
+        ageGroup: "Adult",
+        genderServed: "Co-ed",
+        treatmentType: "Dual Diagnosis",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 42.0305906, lng: -97.4106923 }
+    },
+    {
+        id: 113,
+        name: "Liberty Centre Services",
+        type: "Outpatient",
+        address: "105 East Norfolk Avenue, Suite 118, Norfolk, NE 68701",
+        phone: "402-370-4204",
+        website: "http://www.libertycentreservices.com/",
+        ageGroup: "Adult",
+        genderServed: "Co-ed",
+        treatmentType: "Dual Diagnosis",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 42.0339417, lng: -97.4056801 }
+    },
+    {
+        id: 115,
+        name: "Fillmore County Hospital Integrated Health Services",
+        type: "Outpatient",
+        address: "1900 F Street, Geneva, NE 68361",
+        phone: "402-759-3192 x700",
+        website: "http://www.myfch.org",
+        ageGroup: "Adult",
+        genderServed: "Co-ed",
+        treatmentType: "Dual Diagnosis",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 40.5243796, lng: -97.5877697 }
+    },
+    {
+        id: 117,
+        name: "Blue Valley Behavioral Health David City Office",
+        type: "Outpatient",
+        address: "367 East Street, David City, NE 68632",
+        phone: "402-367-4216",
+        website: "http://www.bvbh.net",
+        ageGroup: "Adult",
+        genderServed: "Co-ed",
+        treatmentType: "Dual Diagnosis",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 41.25384508, lng: -97.13068753 }
+    },
+    {
+        id: 119,
+        name: "Blue Valley Behavioral Health Seward Office",
+        type: "Outpatient",
+        address: "459 South 6th Street, Suite 1, Seward, NE 68434",
+        phone: "402-643-3343",
+        website: "http://www.bvbh.net",
+        ageGroup: "Adult",
+        genderServed: "Co-ed",
+        treatmentType: "Dual Diagnosis",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 40.9044318, lng: -97.1005494 }
+    },
+    {
+        id: 121,
+        name: "Sandhills Center for Hope",
+        type: "Outpatient",
+        address: "212 Box Butte Avenue, Alliance, NE 69301",
+        phone: "308-761-4226",
+        website: "http://",
+        ageGroup: "Adult",
+        genderServed: "Co-ed",
+        treatmentType: "Dual Diagnosis",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 42.0965537, lng: -102.8710111 }
+    },
+    {
+        id: 123,
+        name: "Human Services Inc",
+        type: "Outpatient",
+        address: "419 West 25th Street, Alliance, NE 69301",
+        phone: "308-762-7177",
+        website: "http://www.hsinc.org",
+        ageGroup: "Adult",
+        genderServed: "Co-ed",
+        treatmentType: "Substance Abuse",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 42.1193757999754, lng: -102.875769693788 }
+    },
+    {
+        id: 124,
+        name: "Karuna Counseling",
+        type: "Outpatient",
+        address: "731 Illinois Street, Sidney, NE 69162",
+        phone: "308-249-7853",
+        website: "http://nekarunacounseling.com",
+        ageGroup: "Adult",
+        genderServed: "Co-ed",
+        treatmentType: "Substance Abuse",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 41.1446982, lng: -102.9738096 }
+    },
+    {
+        id: 125,
+        name: "Blue Valley Behavioral Health Crete Office",
+        type: "Outpatient",
+        address: "1212 Ivy Avenue, Crete, NE 68333",
+        phone: "402-826-2000",
+        website: "http://www.bvbh.net",
+        ageGroup: "Adult",
+        genderServed: "Co-ed",
+        treatmentType: "Dual Diagnosis",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 40.6245608, lng: -96.9564366 }
+    },
+    {
+        id: 127,
+        name: "The Well West Point",
+        type: "Outpatient",
+        address: "130 Anna Stalp Avenue, West Point, NE 68788",
+        phone: "402-371-0220",
+        website: "https://thewellne.org/",
+        ageGroup: "Adult",
+        genderServed: "Co-ed",
+        treatmentType: "Dual Diagnosis",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 41.8422943, lng: -96.7111677 }
+    },
+    {
+        id: 129,
+        name: "Midtown Health Center West Point",
+        type: "Outpatient",
+        address: "303 Plaza Drive, West Point, NE 68788",
+        phone: "402-371-8000",
+        website: "http://midtownhealthne.org",
+        ageGroup: "Adult",
+        genderServed: "Co-ed",
+        treatmentType: "Dual Diagnosis",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 41.8569479, lng: -96.707951 }
+    },
+    {
+        id: 131,
+        name: "Blue Valley Behavioral Health Fairbury Office",
+        type: "Outpatient",
+        address: "521 East Street, Fairbury, NE 68352",
+        phone: "402-729-2272",
+        website: "http://www.bvbh.net",
+        ageGroup: "Adult",
+        genderServed: "Co-ed",
+        treatmentType: "Dual Diagnosis",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 40.1370406, lng: -97.1803246 }
+    },
+    {
+        id: 133,
+        name: "Blue Valley Behavioral Health Wahoo Office",
+        type: "Outpatient",
+        address: "355 East 4th Street, Lower Level, Wahoo, NE 68066",
+        phone: "402-443-4414",
+        website: "http://www.bvbh.net",
+        ageGroup: "Adult",
+        genderServed: "Co-ed",
+        treatmentType: "Dual Diagnosis",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 41.2086802, lng: -96.6163657 }
+    },
+    {
+        id: 135,
+        name: "Lutheran Family Services of Nebraska Mourning Hope Clinic",
+        type: "Outpatient",
+        address: "1311 South Folsom Street, Lincoln, NE 68522",
+        phone: "402-441-7940",
+        website: "http://www.onelfs.org",
+        ageGroup: "Adult",
+        genderServed: "Co-ed",
+        treatmentType: "Mental Health",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 40.799909, lng: -96.730214 }
+    },
+    {
+        id: 136,
+        name: "Nebraska Mental Health Centers Wahoo Office",
+        type: "Outpatient",
+        address: "1320 East 31st Street, Wahoo, NE 68066",
+        phone: "402-483-6990",
+        website: "http://www.nmhc-clinics.com",
+        ageGroup: "Adult",
+        genderServed: "Co-ed",
+        treatmentType: "Dual Diagnosis",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 41.2357024, lng: -96.5996033 }
+    },
+    {
+        id: 138,
+        name: "Family Service Lincoln",
+        type: "Outpatient",
+        address: "501 South 7th Street, Lincoln, NE 68508",
+        phone: "402-441-7949",
+        website: "http://www.familyservicelincoln.org",
+        ageGroup: "Adult",
+        genderServed: "Co-ed",
+        treatmentType: "Mental Health",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 40.8088909, lng: -96.7119179 }
+    },
+    {
+        id: 139,
+        name: "Bridge Behavioral Health",
+        type: "Outpatient",
+        address: "721 K Street, Lincoln, NE 68508",
+        phone: "402-477-3951",
+        website: "http://www.thebridgenebraska.org",
+        ageGroup: "Adult",
+        genderServed: "Co-ed",
+        treatmentType: "Substance Abuse",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 40.8088716, lng: -96.7108461 }
+    },
+    {
+        id: 140,
+        name: "CenterPointe Campus for Health and WellBeing",
+        type: "Outpatient",
+        address: "2202 South 11th Street, Lincoln, NE 68502",
+        phone: "402-475-5161",
+        website: "http://www.centerpointe.org/",
+        ageGroup: "Adult",
+        genderServed: "Co-ed",
+        treatmentType: "Dual Diagnosis",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 40.7906329, lng: -96.7050452 }
+    },
+    {
+        id: 142,
+        name: "Integrated Behavioral Health Services",
+        type: "Outpatient",
+        address: "1430 South Street, Suite 110, Lincoln, NE 68502",
+        phone: "402-450-8645",
+        website: "http://ibhealthservices.com/",
+        ageGroup: "Adult",
+        genderServed: "Co-ed",
+        treatmentType: "Mental Health",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 40.7919435, lng: -96.7001142 }
+    },
+    {
+        id: 143,
+        name: "Bryan Medical Center West Behavioral Health Services",
+        type: "Outpatient",
+        address: "2300 South 16th Street, Lincoln, NE 68502",
+        phone: "402-481-5981",
+        website: "http://www.bryanhealth.com/services/counseling-mental-health/",
+        ageGroup: "Adult",
+        genderServed: "Co-ed",
+        treatmentType: "Mental Health",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 40.7894293, lng: -96.6980919 }
+    },
+    {
+        id: 144,
+        name: "Bryan Medical Center West Independence Center",
+        type: "Outpatient",
+        address: "1640 Lake Street, Lincoln, NE 68502",
+        phone: "402-481-5268",
+        website: "http://www.bryanhealth.com/services/alcohol-drug-treatment",
+        ageGroup: "Adult",
+        genderServed: "Co-ed",
+        treatmentType: "Substance Abuse",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 40.7884103, lng: -96.6980563 }
+    },
+    {
+        id: 145,
+        name: "Lutheran Family Services Health 360",
+        type: "Outpatient",
+        address: "2301 O Street, Lincoln, NE 68510",
+        phone: "402-441-7940",
+        website: "http://www.onelfs.org",
+        ageGroup: "Adult",
+        genderServed: "Co-ed",
+        treatmentType: "Dual Diagnosis",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 40.8128648, lng: -96.687709 }
+    },
+    {
+        id: 147,
+        name: "HopeSpoke Main Office",
+        type: "Outpatient",
+        address: "2444 O Street, Lincoln, NE 68510",
+        phone: "402-475-7666",
+        website: "http://www.hopespoke.org",
+        ageGroup: "Adult",
+        genderServed: "Co-ed",
+        treatmentType: "Mental Health",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 40.8138602, lng: -96.6854488 }
+    },
+    {
+        id: 148,
+        name: "Houses of Hope Short Term Residential Substance Use Treatment Program",
+        type: "Treatment Center",
+        address: "2633 P Street, Lincoln, NE 68503",
+        phone: "402-474-4343 x117",
+        website: "http://www.housesofhope.com",
+        ageGroup: "Adult",
+        genderServed: "Co-ed",
+        treatmentType: "Substance Abuse",
+        description: "Short-term residential substance abuse treatment program. Structured counseling, psychotherapy, case management, and nursing care for men and women in early recovery.",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 40.8143174, lng: -96.6828823 }
+    },
+    {
+        id: 149,
+        name: "CenterPointe PIER/ACT Team",
+        type: "Outpatient",
+        address: "2633 P Street, Lincoln, NE 68503",
+        phone: "402-435-4044",
+        website: "http://www.centerpointe.org",
+        ageGroup: "Adult",
+        genderServed: "Co-ed",
+        treatmentType: "Dual Diagnosis",
+        description: "Assertive Community Treatment team providing intensive outpatient services for individuals with co-occurring mental health and substance use disorders.",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 40.8143174, lng: -96.6828823 }
+    },
+    {
+        id: 152,
+        name: "CenterPointe MidPointe Day Rehabilitation",
+        type: "Outpatient",
+        address: "2966 O Street, Lincoln, NE 68510",
+        phone: "402-261-6065",
+        website: "http://www.centerpointe.org",
+        ageGroup: "Adult",
+        genderServed: "Co-ed",
+        treatmentType: "Dual Diagnosis",
+        description: "Day rehabilitation program for adults with co-occurring mental health and substance use disorders. Partial hospitalization and intensive outpatient services.",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 40.8138235, lng: -96.6779294 }
+    },
+    {
+        id: 154,
+        name: "Ponca Tribe of Nebraska Lincoln Health and Wellness Center",
+        type: "Outpatient",
+        address: "1600 Windhoek Drive, Lincoln, NE 68512",
+        phone: "531-248-3030",
+        website: "http://www.poncatribe-ne.gov",
+        ageGroup: "Adult",
+        genderServed: "Co-ed",
+        treatmentType: "Dual Diagnosis",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 40.7597501, lng: -96.6988107 }
+    },
+    {
+        id: 156,
+        name: "Choices Treatment Center",
+        type: "Outpatient",
+        address: "127 South 37th Street, Suite B, Lincoln, NE 68510",
+        phone: "402-476-2300",
+        website: "http://www.choicestreatmentcenter.com",
+        ageGroup: "Adult",
+        genderServed: "Co-ed",
+        treatmentType: "Substance Abuse",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 40.8128475, lng: -96.6686427 }
+    },
+    {
+        id: 157,
+        name: "BAART Programs Lincoln",
+        type: "Outpatient",
+        address: "4305 O Street, Lincoln, NE 68510",
+        phone: "402-488-2122",
+        website: "https://baartprograms.com/locations/nebraska/lincoln",
+        ageGroup: "Adult",
+        genderServed: "Co-ed",
+        treatmentType: "Substance Abuse",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 40.8132197, lng: -96.6594651 }
+    },
+    {
+        id: 158,
+        name: "Midplains Center for Behavioral Health Services",
+        type: "Outpatient",
+        address: "620 North 48th Street, Suite 303, Lincoln, NE 68504",
+        phone: "308-385-5250",
+        website: "http://www.midplainscenter.org",
+        ageGroup: "Adult",
+        genderServed: "Co-ed",
+        treatmentType: "Mental Health",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 40.8193845, lng: -96.6531828 }
+    },
+    {
+        id: 159,
+        name: "Blue Valley Behavioral Health Lincoln Office",
+        type: "Outpatient",
+        address: "3901 Normal Boulevard, Suite 201, Lincoln, NE 68506",
+        phone: "402-367-4216",
+        website: "http://bvbh.net",
+        ageGroup: "Adult",
+        genderServed: "Co-ed",
+        treatmentType: "Dual Diagnosis",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 40.7907176, lng: -96.6640895 }
+    },
+    {
+        id: 161,
+        name: "Lincoln Medical Education Partnership Stepping Stones",
+        type: "Outpatient",
+        address: "4600 Valley Road, Lincoln, NE 68510",
+        phone: "402-488-6511",
+        website: "http://steppingstoneslincoln.com",
+        ageGroup: "Adult",
+        genderServed: "Co-ed",
+        treatmentType: "Substance Abuse",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 40.8037778, lng: -96.6554196 }
+    },
+    {
+        id: 162,
+        name: "Associates in Counseling and Treatment DBA ACT",
+        type: "Outpatient",
+        address: "5600 P Street, Lincoln, NE 68505",
+        phone: "402-261-6667",
+        website: "http://www.actnebraska.org",
+        ageGroup: "Adult",
+        genderServed: "Co-ed",
+        treatmentType: "Substance Abuse",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 40.8148103, lng: -96.6438107 }
+    },
+    {
+        id: 163,
+        name: "Associates in Counseling and Treatment",
+        type: "Outpatient",
+        address: "5600 P Street, Lincoln, NE 68505",
+        phone: "402-261-6667",
+        website: "http://www.actnebraska.org",
+        ageGroup: "Adult",
+        genderServed: "Co-ed",
+        treatmentType: "Mental Health",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 40.8148103, lng: -96.6438107 }
+    },
+    {
+        id: 164,
+        name: "Methodist Fremont Health Inpatient Behavioral Medicine",
+        type: "Outpatient",
+        address: "450 East 23rd Street, Fremont, NE 68025",
+        phone: "402-941-7850",
+        website: "http://www.methodisthealthcare.com",
+        ageGroup: "Adult",
+        genderServed: "Co-ed",
+        treatmentType: "Mental Health",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 41.4532633, lng: -96.4915008 }
+    },
+    {
+        id: 165,
+        name: "Good Neighbor Community Health Center",
+        type: "Outpatient",
+        address: "2740 North Clarkson Street, Fremont, NE 68025",
+        phone: "402-721-0951",
+        website: "http://goodneighborcommunityhealthcenter.com",
+        ageGroup: "Adult",
+        genderServed: "Co-ed",
+        treatmentType: "Dual Diagnosis",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 41.4558682, lng: -96.4893978 }
+    },
+    {
+        id: 167,
+        name: "Saint Monicas Behavioral Health Servs Outpatient Services",
+        type: "Outpatient",
+        address: "120 Wedgewood Drive, Lincoln, NE 68510",
+        phone: "402-441-3768",
+        website: "http://www.stmonicas.com",
+        ageGroup: "Adult",
+        genderServed: "Female",
+        treatmentType: "Substance Abuse",
+        description: "Outpatient and intensive outpatient treatment for women. Gender-specific substance abuse and mental health services including individual and group counseling, EMDR, and DBT.",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 40.8123341, lng: -96.6225218 }
+    },
+    {
+        id: 169,
+        name: "Behavioral Health Resources LLC",
+        type: "Outpatient",
+        address: "7441 O Street, Suite 107, Lincoln, NE 68510",
+        phone: "402-486-1101",
+        website: "http://www.bhr-llc.com",
+        ageGroup: "Adult",
+        genderServed: "Co-ed",
+        treatmentType: "Dual Diagnosis",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 40.8122606, lng: -96.6178991 }
+    },
+    {
+        id: 171,
+        name: "Lutheran Family Services of Nebraska Rupert Dunklau Ctr for Healthy Fam",
+        type: "Outpatient",
+        address: "1420 East Military Avenue, Suite 100, Fremont, NE 68025",
+        phone: "402-441-7940",
+        website: "http://www.onelfs.org",
+        ageGroup: "Adult",
+        genderServed: "Co-ed",
+        treatmentType: "Dual Diagnosis",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 41.4351652, lng: -96.4801941 }
+    },
+    {
+        id: 173,
+        name: "Nebraska Mental Health Centers",
+        type: "Outpatient",
+        address: "4545 South 86th Street, Suite 100, Lincoln, NE 68526",
+        phone: "402-483-6990",
+        website: "http://www.nmhc-clinics.com",
+        ageGroup: "Adult",
+        genderServed: "Co-ed",
+        treatmentType: "Dual Diagnosis",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 40.7676663, lng: -96.6045277 }
+    },
+    {
+        id: 175,
+        name: "Pine Lake Behavioral Health/Medical",
+        type: "Outpatient",
+        address: "9100 Andermatt Drive, Suite 1, Lincoln, NE 68526",
+        phone: "402-434-2730 x1",
+        website: "http://www.pinelakebh.com",
+        ageGroup: "Adult",
+        genderServed: "Co-ed",
+        treatmentType: "Dual Diagnosis",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 40.7335633, lng: -96.5931464 }
+    },
+    {
+        id: 177,
+        name: "Blue Valley Behavioral Health Beatrice Office",
+        type: "Outpatient",
+        address: "1123 North 9th Street, Beatrice, NE 68310",
+        phone: "402-228-3386",
+        website: "http://www.bvbh.net",
+        ageGroup: "Adult",
+        genderServed: "Co-ed",
+        treatmentType: "Dual Diagnosis",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 40.2776036, lng: -96.7430014 }
+    },
+    {
+        id: 179,
+        name: "Nebraska Mental Health Centers Beatrice Office",
+        type: "Outpatient",
+        address: "110 North 9th Street, Beatrice, NE 68310",
+        phone: "402-483-6990",
+        website: "http://www.nmhc-clinics.com",
+        ageGroup: "Adult",
+        genderServed: "Co-ed",
+        treatmentType: "Dual Diagnosis",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 40.2663353, lng: -96.7423951 }
+    },
+    {
+        id: 181,
+        name: "Heartland Counseling Services Inc",
+        type: "Outpatient",
+        address: "1201 Arbor Drive, South Sioux City, NE 68776",
+        phone: "402-494-3337 x12",
+        website: "http://www.heartlandcounselingservices.org",
+        ageGroup: "Adult",
+        genderServed: "Co-ed",
+        treatmentType: "Dual Diagnosis",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 42.4768806, lng: -96.3961735 }
+    },
+    {
+        id: 183,
+        name: "CHI Health Psychiatric Associates Lakeside",
+        type: "Outpatient",
+        address: "16909 Lakeside Hills Court, Suite 400, Omaha, NE 68130",
+        phone: "402-758-5850",
+        website: "http://www.chihealth.com/",
+        ageGroup: "Adult",
+        genderServed: "Co-ed",
+        treatmentType: "Dual Diagnosis",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 41.2368145, lng: -96.1807976 }
+    },
+    {
+        id: 185,
+        name: "VA Panhandle of Nebraska Community Based Outreach Clinic",
+        type: "Outpatient",
+        address: "601 South 5th Avenue, Scottsbluff, NE 69361",
+        phone: "308-225-5330",
+        website: "http://www.blackhills.va.gov",
+        ageGroup: "Adult",
+        genderServed: "Co-ed",
+        treatmentType: "Dual Diagnosis",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 41.853456, lng: -103.6549044 }
+    },
+    {
+        id: 187,
+        name: "Community Action Partnership of Western Nebraska (CAPWN)",
+        type: "Outpatient",
+        address: "975 Cresent Drive, Gering, NE 69341",
+        phone: "308-632-2540",
+        website: "http://www.capwn.org",
+        ageGroup: "Adult",
+        genderServed: "Co-ed",
+        treatmentType: "Dual Diagnosis",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 41.8429347, lng: -103.6595172 }
+    },
+    {
+        id: 189,
+        name: "Omaha Insomnia and Psychiatric Servs",
+        type: "Outpatient",
+        address: "13917 Gold Circle, Omaha, NE 68144",
+        phone: "402-991-9630",
+        website: "http://www.omahainsomnia.com",
+        ageGroup: "Adult",
+        genderServed: "Co-ed",
+        treatmentType: "Mental Health",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 41.2345793, lng: -96.1306225 }
+    },
+    {
+        id: 190,
+        name: "Boys Town Center for Behavioral Health",
+        type: "Outpatient",
+        address: "13460 Walsh Drive, Boys Town, NE 68010",
+        phone: "531-355-3358",
+        website: "http://www.boystown.org",
+        ageGroup: "Adult",
+        genderServed: "Co-ed",
+        treatmentType: "Mental Health",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 41.2614801, lng: -96.1244534 }
+    },
+    {
+        id: 191,
+        name: "Complete Behavioral Health",
+        type: "Outpatient",
+        address: "4565 South 133rd Street, Omaha, NE 68137",
+        phone: "402-590-2947 x1",
+        website: "https://cbhomaha.com/",
+        ageGroup: "Adult",
+        genderServed: "Co-ed",
+        treatmentType: "Dual Diagnosis",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 41.214458, lng: -96.1210831 }
+    },
+    {
+        id: 193,
+        name: "Spence Counseling Center",
+        type: "Outpatient",
+        address: "12035 Q Street, Omaha, NE 68137",
+        phone: "402-991-0611",
+        website: "http://www.spencecounselingcenter.com",
+        ageGroup: "Adult",
+        genderServed: "Co-ed",
+        treatmentType: "Dual Diagnosis",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 41.2049992, lng: -96.1011051 }
+    },
+    {
+        id: 195,
+        name: "Valley Hope of Omaha",
+        type: "Outpatient",
+        address: "11815 M Street, Omaha, NE 68137",
+        phone: "402-991-8824",
+        website: "http://www.valleyhope.org",
+        ageGroup: "Adult",
+        genderServed: "Co-ed",
+        treatmentType: "Substance Abuse",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 41.2099894, lng: -96.0996647 }
+    },
+    {
+        id: 196,
+        name: "Arbor Family Counseling A Trivium Life Services Company",
+        type: "Outpatient",
+        address: "11605 Arbor Street, Suite 106, Omaha, NE 68144",
+        phone: "402-330-0960",
+        website: "http://www.arborfamilycounseling.com",
+        ageGroup: "Adult",
+        genderServed: "Co-ed",
+        treatmentType: "Dual Diagnosis",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 41.2355329, lng: -96.0943478 }
+    },
+    {
+        id: 198,
+        name: "At Ease USA",
+        type: "Outpatient",
+        address: "10605 Burt Circle, Omaha, NE 68114",
+        phone: "531-247-4040",
+        website: "http://www.AtEaseUSA.org",
+        ageGroup: "Adult",
+        genderServed: "Co-ed",
+        treatmentType: "Mental Health",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 41.2668029, lng: -96.0788351 }
+    },
+    {
+        id: 199,
+        name: "Gregory D Tvrdik PC Counseling Connections and Associates",
+        type: "Outpatient",
+        address: "9802 Nicholas Street, Suite 350, Omaha, NE 68114",
+        phone: "402-932-2296",
+        website: "http://www.ccaomaha.com",
+        ageGroup: "Adult",
+        genderServed: "Co-ed",
+        treatmentType: "Dual Diagnosis",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 41.2706634, lng: -96.0649786 }
+    },
+    {
+        id: 201,
+        name: "Omni Inventive Care",
+        type: "Outpatient",
+        address: "8715 Oak Street, Omaha, NE 68124",
+        phone: "402-333-0898",
+        website: "http://www.omniic.com",
+        ageGroup: "Adult",
+        genderServed: "Co-ed",
+        treatmentType: "Mental Health",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 41.2316578, lng: -96.0492035 }
+    },
+    {
+        id: 202,
+        name: "Lutheran Family Services Headquarters",
+        type: "Outpatient",
+        address: "7929 West Center Road, Omaha, NE 68124",
+        phone: "402-441-6603",
+        website: "http://www.onelfs.org",
+        ageGroup: "Adult",
+        genderServed: "Co-ed",
+        treatmentType: "Dual Diagnosis",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 41.2335418, lng: -96.035728 }
+    },
+    {
+        id: 204,
+        name: "Inroads to Recovery Inc",
+        type: "Outpatient",
+        address: "2808 North 75th Street, Omaha, NE 68134",
+        phone: "402-932-2248",
+        website: "http://inroadstorecovery.com",
+        ageGroup: "Adult",
+        genderServed: "Co-ed",
+        treatmentType: "Dual Diagnosis",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 41.2842075, lng: -96.0283009 }
+    },
+    {
+        id: 206,
+        name: "CHI Health Psychiatric Associates Immanuel",
+        type: "Outpatient",
+        address: "7101 Newport Avenue, Omaha, NE 68152",
+        phone: "402-717-4673",
+        website: "http://www.chihealth.com/",
+        ageGroup: "Adult",
+        genderServed: "Co-ed",
+        treatmentType: "Dual Diagnosis",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 41.3196172, lng: -96.021202 }
+    },
+    {
+        id: 208,
+        name: "Complete Behavioral Health",
+        type: "Outpatient",
+        address: "1237 Golden Gate Drive, Papillion, NE 68046",
+        phone: "402-614-0175",
+        website: "https://cbhomaha.com/",
+        ageGroup: "Adult",
+        genderServed: "Co-ed",
+        treatmentType: "Dual Diagnosis",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 41.1425037, lng: -96.0410118 }
+    },
+    {
+        id: 210,
+        name: "Community Alliance",
+        type: "Outpatient",
+        address: "7150 Arbor Street, Omaha, NE 68106",
+        phone: "402-341-5128",
+        website: "https://community-alliance.org/",
+        ageGroup: "Adult",
+        genderServed: "Co-ed",
+        treatmentType: "Dual Diagnosis",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 41.236914, lng: -96.0230252 }
+    },
+    {
+        id: 212,
+        name: "Heartland Family Service",
+        type: "Outpatient",
+        address: "302 American Parkway, Papillion, NE 68046",
+        phone: "402-553-3000",
+        website: "http://www.heartlandfamilyservice.org",
+        ageGroup: "Adult",
+        genderServed: "Co-ed",
+        treatmentType: "Dual Diagnosis",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 41.1586512, lng: -96.0327672 }
+    },
+    {
+        id: 214,
+        name: "VA Nebraska/Western Iowa HCS Sarpy County Community Based Outpt",
+        type: "Outpatient",
+        address: "1130 Jersey Street, Suite 102, Papillion, NE 68046",
+        phone: "402-995-4944",
+        website: "http://www.nebraska.va.gov/locations/Bellevue.asp",
+        ageGroup: "Adult",
+        genderServed: "Co-ed",
+        treatmentType: "Mental Health",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 41.17579, lng: -96.0279684 }
+    },
+    {
+        id: 215,
+        name: "Heartland Family Service",
+        type: "Outpatient",
+        address: "4847 Sahler Street OFC, Omaha, NE 68104",
+        phone: "402-342-9555",
+        website: "http://www.heartlandfamilyservice.org",
+        ageGroup: "Adult",
+        genderServed: "Co-ed",
+        treatmentType: "Mental Health",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 41.2963002, lng: -95.987687 }
+    },
+    {
+        id: 216,
+        name: "Heartland Family Service",
+        type: "Outpatient",
+        address: "4847 Sahler Street, Omaha, NE 68104",
+        phone: "402-342-9555",
+        website: "http://www.heartlandfamilyservice.org",
+        ageGroup: "Adult",
+        genderServed: "Co-ed",
+        treatmentType: "Substance Abuse",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 41.2963002, lng: -95.987687 }
+    },
+    {
+        id: 217,
+        name: "Affinity Counseling LLC",
+        type: "Outpatient",
+        address: "4224 South 50th Street, Suite 528, Omaha, NE 68117",
+        phone: "402-813-0501",
+        website: "http://",
+        ageGroup: "Adult",
+        genderServed: "Co-ed",
+        treatmentType: "Substance Abuse",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 41.217671, lng: -95.9906315 }
+    },
+    {
+        id: 218,
+        name: "Psychology Department Munroe Meyer Institute",
+        type: "Outpatient",
+        address: "985450 Nebraska Medical Center, Omaha, NE 68198",
+        phone: "402-559-6408",
+        website: "http://unmc.edu/mmi",
+        ageGroup: "Adult",
+        genderServed: "Co-ed",
+        treatmentType: "Mental Health",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 41.2552145, lng: -95.978879 }
+    },
+    {
+        id: 219,
+        name: "Nebraska Medical Center",
+        type: "Outpatient",
+        address: "4350 Dewey Avenue, Omaha, NE 68105",
+        phone: "800-922-0000",
+        website: "http://www.nebraskamed.com",
+        ageGroup: "Adult",
+        genderServed: "Co-ed",
+        treatmentType: "Dual Diagnosis",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 41.2562523, lng: -95.9764351 }
+    },
+    {
+        id: 221,
+        name: "Heartland Family Service",
+        type: "Outpatient",
+        address: "2101 South 42nd Street, Omaha, NE 68105",
+        phone: "402-553-3000",
+        website: "http://www.heartlandfamilyservice.org",
+        ageGroup: "Adult",
+        genderServed: "Co-ed",
+        treatmentType: "Dual Diagnosis",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 41.239749, lng: -95.975777 }
+    },
+    {
+        id: 223,
+        name: "Douglas County Community Mental Health Center",
+        type: "Outpatient",
+        address: "4102 Woolworth Avenue, Omaha, NE 68105",
+        phone: "402-444-7608",
+        website: "http://",
+        ageGroup: "Adult",
+        genderServed: "Co-ed",
+        treatmentType: "Dual Diagnosis",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 41.2459081, lng: -95.9745529 }
+    },
+    {
+        id: 225,
+        name: "Capstone Behavioral Health of Nebraska",
+        type: "Outpatient",
+        address: "1941 South 42nd Street, Suite 328, Omaha, NE 68105",
+        phone: "402-614-8444",
+        website: "http://www.capstonebehavioralhealth.com",
+        ageGroup: "Adult",
+        genderServed: "Co-ed",
+        treatmentType: "Dual Diagnosis",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 41.2413102, lng: -95.9751821 }
+    },
+    {
+        id: 227,
+        name: "BAART Community Healthcare Inc",
+        type: "Outpatient",
+        address: "1941 South 42nd Street, Suite 210, Omaha, NE 68105",
+        phone: "402-341-6220",
+        website: "http://www.baartprograms.com",
+        ageGroup: "Adult",
+        genderServed: "Co-ed",
+        treatmentType: "Substance Abuse",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 41.2406369, lng: -95.9750427 }
+    },
+    {
+        id: 228,
+        name: "Charles Drew Health Center Inc",
+        type: "Outpatient",
+        address: "5319 North 30th Street, Suite A, Omaha, NE 68111",
+        phone: "402-451-3553",
+        website: "http://www.charlesdrew.com",
+        ageGroup: "Adult",
+        genderServed: "Co-ed",
+        treatmentType: "Mental Health",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 41.3075937, lng: -95.9559992 }
+    },
+    {
+        id: 229,
+        name: "Charles Drew Health Center Inc",
+        type: "Outpatient",
+        address: "- - -, Omaha, NE 68105",
+        phone: "402-451-1200",
+        website: "http://",
+        ageGroup: "Adult",
+        genderServed: "Co-ed",
+        treatmentType: "Dual Diagnosis",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 41.2404, lng: -95.964 }
+    },
+    {
+        id: 231,
+        name: "Charles Drew Health Center",
+        type: "Outpatient",
+        address: "2915 Grant Street, Omaha, NE 68111",
+        phone: "402-453-1433",
+        website: "http://www.charlesdrew.com",
+        ageGroup: "Adult",
+        genderServed: "Co-ed",
+        treatmentType: "Mental Health",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 41.2795492, lng: -95.955411 }
+    },
+    {
+        id: 232,
+        name: "LFS Lutheran Family Services Kountz Commons",
+        type: "Outpatient",
+        address: "2661 Douglas Street, Omaha, NE 68131",
+        phone: "402-441-7940",
+        website: "http://www.onelfs.org",
+        ageGroup: "Adult",
+        genderServed: "Co-ed",
+        treatmentType: "Dual Diagnosis",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 41.2584272, lng: -95.9515669 }
+    },
+    {
+        id: 234,
+        name: "Stephen Center Inc",
+        type: "Outpatient",
+        address: "5217 South 28th Street, Omaha, NE 68107",
+        phone: "402-715-5449",
+        website: "http://www.stephencenter.org",
+        ageGroup: "Adult",
+        genderServed: "Co-ed",
+        treatmentType: "Dual Diagnosis",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 41.2048342, lng: -95.9544201 }
+    },
+    {
+        id: 236,
+        name: "Ponca Tribe of Nebraska Fred Leroy Health and Wellness Center",
+        type: "Outpatient",
+        address: "2602 J Street, Omaha, NE 68107",
+        phone: "402-734-5275",
+        website: "http://www.poncatribe-ne.gov",
+        ageGroup: "Adult",
+        genderServed: "Co-ed",
+        treatmentType: "Dual Diagnosis",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 41.2149126, lng: -95.9505202 }
+    },
+    {
+        id: 238,
+        name: "Bellevue Psychiatric Associates Bellevue",
+        type: "Outpatient",
+        address: "3308 Samson Way, Suite 203, Bellevue, NE 68123",
+        phone: "402-717-7681",
+        website: "http://www.chihealth.com",
+        ageGroup: "Adult",
+        genderServed: "Co-ed",
+        treatmentType: "Dual Diagnosis",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 41.1397089, lng: -95.9628288 }
+    },
+    {
+        id: 240,
+        name: "CenterPointe Campus for Hope",
+        type: "Outpatient",
+        address: "1490 North 16th Street, Omaha, NE 68102",
+        phone: "402-827-0570",
+        website: "http://www.centerpointe.org",
+        ageGroup: "Adult",
+        genderServed: "Co-ed",
+        treatmentType: "Dual Diagnosis",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 41.2728323, lng: -95.9377663 }
+    },
+    {
+        id: 242,
+        name: "Charles Drew Health Center",
+        type: "Outpatient",
+        address: "- - -, Omaha, NE 68110",
+        phone: "402-451-1200",
+        website: "http://charlesdrew.com/",
+        ageGroup: "Adult",
+        genderServed: "Co-ed",
+        treatmentType: "Dual Diagnosis",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 41.2993, lng: -95.9335 }
+    },
+    {
+        id: 244,
+        name: "Nebraska Urban Indian Health Coalition Intertribal Treatment Center",
+        type: "Outpatient",
+        address: "2226 North Street, Omaha, NE 68107",
+        phone: "402-346-0902 x202",
+        website: "http://www.nuihc.org",
+        ageGroup: "Adult",
+        genderServed: "Co-ed",
+        treatmentType: "Dual Diagnosis",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 41.2099802, lng: -95.9453188 }
+    },
+    {
+        id: 246,
+        name: "Douglas County Community Mental Health Center",
+        type: "Outpatient",
+        address: "1709 Jackson Street, Omaha, NE 68102",
+        phone: "402-599-2713",
+        website: "http://",
+        ageGroup: "Adult",
+        genderServed: "Co-ed",
+        treatmentType: "Substance Abuse",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 41.2543841, lng: -95.9388056 }
+    },
+    {
+        id: 247,
+        name: "Complete Behavioral Health",
+        type: "Outpatient",
+        address: "1240 North 19th Street, Nebraska City, NE 68410",
+        phone: "402-590-2947 x1",
+        website: "https://cbhomaha.com/",
+        ageGroup: "Adult",
+        genderServed: "Co-ed",
+        treatmentType: "Dual Diagnosis",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 40.6889074, lng: -95.8680934 }
+    },
+    {
+        id: 249,
+        name: "Blue Valley Behavioral Health Nebraska City Office",
+        type: "Outpatient",
+        address: "1903 4th Corso Street, Nebraska City, NE 68410",
+        phone: "402-873-5505",
+        website: "http://www.bvbh.net",
+        ageGroup: "Adult",
+        genderServed: "Co-ed",
+        treatmentType: "Dual Diagnosis",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 40.672798, lng: -95.8691433 }
+    },
+    {
+        id: 251,
+        name: "Complete Behavioral Health",
+        type: "Outpatient",
+        address: "1807 4th Corso, Suite 9, Nebraska City, NE 68410",
+        phone: "402-590-2947 x1",
+        website: "https://cbhomaha.com/",
+        ageGroup: "Adult",
+        genderServed: "Co-ed",
+        treatmentType: "Mental Health",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 40.672794, lng: -95.8682218 }
+    },
+    {
+        id: 252,
+        name: "Blue Valley Behavioral Health Auburn Office",
+        type: "Outpatient",
+        address: "820 Central Avenue, Suite 4, Auburn, NE 68305",
+        phone: "402-274-4373",
+        website: "http://www.bvbh.net",
+        ageGroup: "Adult",
+        genderServed: "Co-ed",
+        treatmentType: "Dual Diagnosis",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 40.3931147, lng: -95.8371255 }
+    },
+    {
+        id: 254,
+        name: "Community Medical Center",
+        type: "Outpatient",
+        address: "3307 Bill Schock Boulevard, Falls City, NE 68355",
+        phone: "402-245-6599",
+        website: "http://cmcfc.org",
+        ageGroup: "Adult",
+        genderServed: "Co-ed",
+        treatmentType: "Substance Abuse",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 40.0777552, lng: -95.6078515 }
+    },
+    {
+        id: 255,
+        name: "Blue Valley Behavioral Health Falls City Office",
+        type: "Outpatient",
+        address: "103 East 35th Street, Suite A, Falls City, NE 68355",
+        phone: "402-245-4458",
+        website: "http://www.bvbh.net",
+        ageGroup: "Adult",
+        genderServed: "Co-ed",
+        treatmentType: "Dual Diagnosis",
+        status: "Contact for Availability",
+        lastUpdated: "2025-01-27",
+        coordinates: { lat: 40.0796347, lng: -95.6024124 }
+    }
+];
+
+// Apply age/gender labels for Outpatient providers based on repository TSV
+// Keys are normalized as "name|city" with lowercase and punctuation removed
+(function() {
+    const __OUTPATIENT_ATTR_OVERRIDES = {
+        "ally counseling services|oneill": {
+            "ageGroup": "Juvenile",
+            "genderServed": "Co-ed"
+        },
+        "arbor family counseling a trivium life services company|omaha": {
+            "ageGroup": "Both",
+            "genderServed": "Co-ed"
+        },
+        "associates in counseling and treatment dba act|lincoln": {
+            "ageGroup": "Both",
+            "genderServed": "Co-ed"
+        },
+        "associates in counseling and treatment|lincoln": {
+            "ageGroup": "Juvenile",
+            "genderServed": "Co-ed"
+        },
+        "at ease usa|omaha": {
+            "ageGroup": "Both",
+            "genderServed": "Co-ed"
+        },
+        "baart community healthcare inc|omaha": {
+            "ageGroup": "Both",
+            "genderServed": "Co-ed"
+        },
+        "baart programs lincoln|lincoln": {
+            "ageGroup": "Both",
+            "genderServed": "Co-ed"
+        },
+        "beacon of hope counseling center llc|north platte": {
+            "ageGroup": "Both",
+            "genderServed": "Co-ed"
+        },
+        "behavioral health resources llc|lincoln": {
+            "ageGroup": "Juvenile",
+            "genderServed": "Co-ed"
+        },
+        "behavioral health specialists inc seekers for serenity|columbus": {
+            "ageGroup": "Both",
+            "genderServed": "Co-ed"
+        },
+        "behavioral health specialists inc seekers of serenity place|columbus": {
+            "ageGroup": "Both",
+            "genderServed": "Co-ed"
+        },
+        "behavioral health specialists inc sunrise place|norfolk": {
+            "ageGroup": "Both",
+            "genderServed": "Co-ed"
+        },
+        "bellevue psychiatric associates bellevue|bellevue": {
+            "ageGroup": "Both",
+            "genderServed": "Co-ed"
+        },
+        "blue valley behavioral health auburn office|auburn": {
+            "ageGroup": "Juvenile",
+            "genderServed": "Co-ed"
+        },
+        "blue valley behavioral health beatrice office|beatrice": {
+            "ageGroup": "Juvenile",
+            "genderServed": "Co-ed"
+        },
+        "blue valley behavioral health crete office|crete": {
+            "ageGroup": "Juvenile",
+            "genderServed": "Co-ed"
+        },
+        "blue valley behavioral health david city office|david city": {
+            "ageGroup": "Both",
+            "genderServed": "Co-ed"
+        },
+        "blue valley behavioral health fairbury office|fairbury": {
+            "ageGroup": "Both",
+            "genderServed": "Co-ed"
+        },
+        "blue valley behavioral health falls city office|falls city": {
+            "ageGroup": "Both",
+            "genderServed": "Co-ed"
+        },
+        "blue valley behavioral health lincoln office|lincoln": {
+            "ageGroup": "Both",
+            "genderServed": "Co-ed"
+        },
+        "blue valley behavioral health nebraska city office|nebraska city": {
+            "ageGroup": "Both",
+            "genderServed": "Co-ed"
+        },
+        "blue valley behavioral health seward office|seward": {
+            "ageGroup": "Juvenile",
+            "genderServed": "Co-ed"
+        },
+        "blue valley behavioral health wahoo office|wahoo": {
+            "ageGroup": "Juvenile",
+            "genderServed": "Co-ed"
+        },
+        "blue valley behavioral health york office|york": {
+            "ageGroup": "Both",
+            "genderServed": "Co-ed"
+        },
+        "boys town center for behavioral health|boys town": {
+            "ageGroup": "Both",
+            "genderServed": "Co-ed"
+        },
+        "bridge behavioral health|lincoln": {
+            "ageGroup": "Both",
+            "genderServed": "Co-ed"
+        },
+        "bryan medical center west behavioral health services|lincoln": {
+            "ageGroup": "Both",
+            "genderServed": "Co-ed"
+        },
+        "bryan medical center west independence center|lincoln": {
+            "ageGroup": "Juvenile",
+            "genderServed": "Co-ed"
+        },
+        "capstone behavioral health of nebraska|omaha": {
+            "ageGroup": "Both",
+            "genderServed": "Co-ed"
+        },
+        "centerpointe campus for health and wellbeing|lincoln": {
+            "ageGroup": "Both",
+            "genderServed": "Co-ed"
+        },
+        "centerpointe campus for hope|omaha": {
+            "ageGroup": "Juvenile",
+            "genderServed": "Co-ed"
+        },
+        "centerpointe midpointe day rehabilitation|lincoln": {
+            "ageGroup": "Juvenile",
+            "genderServed": "Co-ed"
+        },
+        "centerpointe outpatient and treatment|lincoln": {
+            "ageGroup": "Both",
+            "genderServed": "Co-ed"
+        },
+        "centerpointe pier act team|lincoln": {
+            "ageGroup": "Juvenile",
+            "genderServed": "Co-ed"
+        },
+        "centerpointe youth residential|lincoln": {
+            "ageGroup": "Juvenile",
+            "genderServed": "Co-ed"
+        },
+        "charles drew health center|omaha": {
+            "ageGroup": "Both",
+            "genderServed": "Co-ed"
+        },
+        "chi health psychiatric associates lakeside|omaha": {
+            "ageGroup": "Both",
+            "genderServed": "Co-ed"
+        },
+        "complete behavioral health|nebraska city": {
+            "ageGroup": "Both",
+            "genderServed": "Co-ed"
+        },
+        "complete behavioral health|omaha": {
+            "ageGroup": "Both",
+            "genderServed": "Co-ed"
+        },
+        "complete behavioral health|papillion": {
+            "ageGroup": "Both",
+            "genderServed": "Co-ed"
+        },
+        "east central district health department columbus|columbus": {
+            "ageGroup": "Juvenile",
+            "genderServed": "Co-ed"
+        },
+        "family matters counseling services llc|north platte": {
+            "ageGroup": "Both",
+            "genderServed": "Co-ed"
+        },
+        "glc|columbus": {
+            "ageGroup": "Both",
+            "genderServed": "Co-ed"
+        },
+        "good life counseling and support llc|norfolk": {
+            "ageGroup": "Both",
+            "genderServed": "Co-ed"
+        },
+        "good life counseling and support llc|omaha": {
+            "ageGroup": "Both",
+            "genderServed": "Co-ed"
+        },
+        "goodwill industries of greater ne columbus office|columbus": {
+            "ageGroup": "Both",
+            "genderServed": "Co-ed"
+        },
+        "goodwill industries of greater ne grand island office|grand island": {
+            "ageGroup": "Both",
+            "genderServed": "Co-ed"
+        },
+        "great plains health behavioral health center|north platte": {
+            "ageGroup": "Juvenile",
+            "genderServed": "Co-ed"
+        },
+        "heartland counseling clinic|mccook": {
+            "ageGroup": "Both",
+            "genderServed": "Co-ed"
+        },
+        "heartland counseling clinic|north platte": {
+            "ageGroup": "Both",
+            "genderServed": "Co-ed"
+        },
+        "heartland counseling clinic|ogallala": {
+            "ageGroup": "Both",
+            "genderServed": "Co-ed"
+        },
+        "heartland counseling services inc oneill satellite|oneill": {
+            "ageGroup": "Both",
+            "genderServed": "Co-ed"
+        },
+        "heartland counseling services inc|south sioux city": {
+            "ageGroup": "Both",
+            "genderServed": "Co-ed"
+        },
+        "hopespoke main office|lincoln": {
+            "ageGroup": "Juvenile",
+            "genderServed": "Co-ed"
+        },
+        "integrated behavioral health services|lincoln": {
+            "ageGroup": "Juvenile",
+            "genderServed": "Co-ed"
+        },
+        "liberty centre services|norfolk": {
+            "ageGroup": "Juvenile",
+            "genderServed": "Co-ed"
+        },
+        "lexington regional health center|lexington": {
+            "ageGroup": "Both",
+            "genderServed": "Co-ed"
+        },
+        "live well csl ctr of greater nebraska|grand island": {
+            "ageGroup": "Both",
+            "genderServed": "Co-ed"
+        },
+        "lutheran family services of nebraska lexington|lexington": {
+            "ageGroup": "Both",
+            "genderServed": "Co-ed"
+        },
+        "lutheran family services of nebraska mourning hope clinic|lincoln": {
+            "ageGroup": "Juvenile",
+            "genderServed": "Co-ed"
+        },
+        "lutheran family services|north platte": {
+            "ageGroup": "Both",
+            "genderServed": "Co-ed"
+        },
+        "lutheran family services|scottsbluff": {
+            "ageGroup": "Both",
+            "genderServed": "Co-ed"
+        },
+        "mid plains center for behavioral healthcare services inc|grand island": {
+            "ageGroup": "Both",
+            "genderServed": "Co-ed"
+        },
+        "midtown health center phillip avenue|norfolk": {
+            "ageGroup": "Both",
+            "genderServed": "Co-ed"
+        },
+        "midtown health center west norfolk avenue|norfolk": {
+            "ageGroup": "Both",
+            "genderServed": "Co-ed"
+        },
+        "ne center for mental health counseling|nebraska city": {
+            "ageGroup": "Both",
+            "genderServed": "Co-ed"
+        },
+        "nebraska counseling and neurological services|beatrice": {
+            "ageGroup": "Both",
+            "genderServed": "Co-ed"
+        },
+        "nebraska mental health centers wahoo office|wahoo": {
+            "ageGroup": "Both",
+            "genderServed": "Co-ed"
+        },
+        "nebraska urban indian health coalition intertribal treatment center|omaha": {
+            "ageGroup": "Both",
+            "genderServed": "Co-ed"
+        },
+        "oasis counseling international|norfolk": {
+            "ageGroup": "Both",
+            "genderServed": "Co-ed"
+        },
+        "omaha insomnia and psychiatric servs|omaha": {
+            "ageGroup": "Both",
+            "genderServed": "Co-ed"
+        },
+        "omni inventive care|omaha": {
+            "ageGroup": "Both",
+            "genderServed": "Co-ed"
+        },
+        "pine lake behavioral health medical|lincoln": {
+            "ageGroup": "Both",
+            "genderServed": "Co-ed"
+        },
+        "ponca tribe of nebraska fred leroy health and wellness center|omaha": {
+            "ageGroup": "Both",
+            "genderServed": "Co-ed"
+        },
+        "ponca tribe of nebraska lincoln health and wellness center|lincoln": {
+            "ageGroup": "Both",
+            "genderServed": "Co-ed"
+        },
+        "ponca tribe of nebraska ponca hills health and wellness center|norfolk": {
+            "ageGroup": "Both",
+            "genderServed": "Co-ed"
+        },
+        "ponca tribe of nebraska tribal headquarters|niobrara": {
+            "ageGroup": "Both",
+            "genderServed": "Co-ed"
+        },
+        "psychiatric hope|north platte": {
+            "ageGroup": "Both",
+            "genderServed": "Co-ed"
+        },
+        "psychology department munroe meyer institute|omaha": {
+            "ageGroup": "Both",
+            "genderServed": "Co-ed"
+        },
+        "revive inc horizon recovery and counseling center|hastings": {
+            "ageGroup": "Both",
+            "genderServed": "Co-ed"
+        },
+        "saint monicas behavioral health servs outpatient services|lincoln": {
+            "ageGroup": "Both",
+            "genderServed": "Female"
+        },
+        "saint monicas behavioral health servs short term residential|lincoln": {
+            "ageGroup": "Both",
+            "genderServed": "Female"
+        },
+        "sandhills center for hope|alliance": {
+            "ageGroup": "Both",
+            "genderServed": "Co-ed"
+        },
+        "south central behavioral services inc assertive community treatment|hastings": {
+            "ageGroup": "Juvenile",
+            "genderServed": "Co-ed"
+        },
+        "south central behavioral services inc hastings clinic|hastings": {
+            "ageGroup": "Both",
+            "genderServed": "Co-ed"
+        },
+        "south central behavioral services inc kearney clinic|kearney": {
+            "ageGroup": "Juvenile",
+            "genderServed": "Co-ed"
+        },
+        "south central behavioral services inc opportunity house|hastings": {
+            "ageGroup": "Juvenile",
+            "genderServed": "Co-ed"
+        },
+        "south central behavioral services inc unity house|kearney": {
+            "ageGroup": "Juvenile",
+            "genderServed": "Co-ed"
+        },
+        "spence counseling center|omaha": {
+            "ageGroup": "Both",
+            "genderServed": "Co-ed"
+        },
+        "stephen center inc|omaha": {
+            "ageGroup": "Both",
+            "genderServed": "Co-ed"
+        },
+        "the link inc|norfolk": {
+            "ageGroup": "Both",
+            "genderServed": "Male"
+        },
+        "the well columbus|columbus": {
+            "ageGroup": "Both",
+            "genderServed": "Co-ed"
+        },
+        "the well outpatient|norfolk": {
+            "ageGroup": "Both",
+            "genderServed": "Co-ed"
+        },
+        "the well west point|west point": {
+            "ageGroup": "Both",
+            "genderServed": "Co-ed"
+        },
+        "va nebraska western iowa hcs grand island cboc|grand island": {
+            "ageGroup": "Both",
+            "genderServed": "Co-ed"
+        },
+        "va nebraska western iowa hcs holdrege comm based outpatient|holdrege": {
+            "ageGroup": "Both",
+            "genderServed": "Co-ed"
+        },
+        "va nebraska western iowa hcs north platte cboc|north platte": {
+            "ageGroup": "Both",
+            "genderServed": "Co-ed"
+        },
+        "va nebraska western iowa hcs sarpy county community based outpt|papillion": {
+            "ageGroup": "Both",
+            "genderServed": "Co-ed"
+        },
+        "va panhandle of nebraska community based outreach clinic|scottsbluff": {
+            "ageGroup": "Both",
+            "genderServed": "Co-ed"
+        },
+        "valley hope of omaha|omaha": {
+            "ageGroup": "Both",
+            "genderServed": "Co-ed"
+        }
+    };
+
+    function __normalizeKey(value) {
+        return (value || '')
+            .normalize('NFKD')
+            .toLowerCase()
+            .replace(/['’]/g, '')
+            .replace(/[^a-z0-9]+/g, ' ')
+            .trim();
+    }
+
+    function __cityFromAddress(address) {
+        const m = (address || '').match(/,\s*([^,]+),\s*NE\b/i);
+        return m ? m[1] : '';
+    }
+
+if (Array.isArray(window.STATIC_OUTPATIENT_DATA)) {
+        window.STATIC_OUTPATIENT_DATA.forEach((item) => {
+            if (!item || !item.name || !item.address) return;
+            const city = __cityFromAddress(item.address);
+            const key = `${__normalizeKey(item.name)}|${__normalizeKey(city)}`;
+            const attrs = __OUTPATIENT_ATTR_OVERRIDES[key];
+            if (attrs) {
+                if (attrs.ageGroup) item.ageGroup = attrs.ageGroup;
+                if (attrs.genderServed) item.genderServed = attrs.genderServed;
+            }
+        });
+    }
+})();
+
+// Combined data for search functionality - must run after all datasets and overrides load
+(function initializeFacilityDatasets() {
+    const rawFacilities = [
+        ...(window.STATIC_FACILITIES_DATA || []),
+        ...(window.STATIC_HALFWAY_HOUSES_DATA || []),
+        ...(window.STATIC_OUTPATIENT_DATA || []),
+        ...(window.STATIC_DETOX_DATA || [])
+    ];
+
+    if (window.FacilityUtils && typeof window.FacilityUtils.normalizeFacilityDataset === 'function') {
+        const normalized = window.FacilityUtils.normalizeFacilityDataset(rawFacilities);
+        window.STATIC_ALL_FACILITIES_DATA = normalized;
+        window.ALL_FACILITIES_DATA = normalized;
+
+        const facilityMatches = (facility, keyword) =>
+            Array.isArray(facility.facilityTypes) &&
+            facility.facilityTypes.some(type => (type || '').toLowerCase().includes(keyword));
+
+        window.STATIC_FACILITIES_DATA = normalized.filter(facility => facilityMatches(facility, 'treatment center'));
+        window.STATIC_HALFWAY_HOUSES_DATA = normalized.filter(facility => facilityMatches(facility, 'halfway house'));
+        window.STATIC_OUTPATIENT_DATA = normalized.filter(facility => facilityMatches(facility, 'outpatient'));
+        window.STATIC_DETOX_DATA = normalized.filter(facility => facilityMatches(facility, 'detox'));
+    } else {
+        window.STATIC_ALL_FACILITIES_DATA = rawFacilities;
+        window.ALL_FACILITIES_DATA = rawFacilities;
+    }
+})();

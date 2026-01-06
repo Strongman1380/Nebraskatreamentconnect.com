@@ -1,0 +1,49 @@
+{
+  "name": "nebraska-treatment-connect",
+  "version": "1.0.0",
+  "description": "Nebraska Treatment Facility Directory - Find substance abuse treatment facilities",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "server": "node server.js",
+    "server:dev": "nodemon server.js",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src --ext .ts,.tsx,.js,.jsx",
+    "format": "prettier --write \"src/**/*.{ts,tsx,js,jsx,css,html}\""
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "express-rate-limit": "^6.10.0",
+    "firebase-admin": "^11.11.0"
+  },
+  "devDependencies": {
+    "@types/google.maps": "^3.58.1",
+    "@types/node": "^20.10.0",
+    "autoprefixer": "^10.4.16",
+    "nodemon": "^3.0.1",
+    "postcss": "^8.4.32",
+    "tailwindcss": "^3.3.6",
+    "terser": "^5.26.0",
+    "typescript": "^5.3.2",
+    "vite": "^5.0.7",
+    "vite-plugin-pwa": "^0.17.4",
+    "workbox-window": "^7.0.0"
+  },
+  "keywords": [
+    "healthcare",
+    "treatment",
+    "nebraska",
+    "substance-abuse",
+    "addiction",
+    "recovery"
+  ],
+  "author": "Nebraska Treatment Connect",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

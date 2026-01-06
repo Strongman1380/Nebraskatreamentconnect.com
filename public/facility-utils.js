@@ -56,8 +56,7 @@
                     lat: Math.max(-90, Math.min(90, record.coordinates.lat)),
                     lng: Math.max(-180, Math.min(180, record.coordinates.lng))
                 }
-                : null,
-            description: SecurityUtils.sanitizeHTML((record.description || '').trim())
+                : null
         };
     }
 
@@ -89,7 +88,6 @@
                 status: normalized.status,
                 lastUpdated: normalized.lastUpdated,
                 coordinates: normalized.coordinates,
-                description: normalized.description || '',
                 treatmentTypes: new Set(),
                 facilityTypes: new Set(),
                 sourceIds: new Set(),
@@ -130,10 +128,6 @@
                 entry.coordinates = normalized.coordinates;
             }
 
-            if (normalized.description && !entry.description) {
-                entry.description = normalized.description;
-            }
-
             entry.treatmentTypes.add(normalized.treatmentType || 'Unknown');
             entry.facilityTypes.add(normalized.type || 'Treatment Center');
 
@@ -157,7 +151,6 @@
                 entry.name,
                 entry.address,
                 entry.phone,
-                entry.description,
                 treatmentTypes.join(' '),
                 facilityTypes.join(' ')
             ].join(' ').toLowerCase();
@@ -174,7 +167,6 @@
                 status: entry.status,
                 lastUpdated: entry.lastUpdated,
                 coordinates: entry.coordinates,
-                description: entry.description,
                 treatmentType: treatmentTypes[0] || '',
                 treatmentTypes,
                 type: facilityTypes[0] || '',

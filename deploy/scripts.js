@@ -1,77 +1,160 @@
-// Static version of scripts.js - works without Firebase
-// Uses static data instead of real-time database
-
 // Global variables
 let allFacilities = [];
 let filteredFacilities = [];
 let map;
 let markers = [];
 let userLocation = null;
+let mapsLoadPromise = null;
+
+function shouldUseStaticData() {
+    if (window.USE_STATIC_DATA === true) return true;
+    if (window.USE_STATIC_DATA === false) return false;
+
+    const fallbackEnabled = window.API_CONFIG?.USE_STATIC_FALLBACK === true;
+    const hostname = window.location.hostname;
+    const isLocalhost = hostname === 'localhost' || hostname === '127.0.0.1';
+
+    return fallbackEnabled && isLocalhost;
+}
 
 // Initialize the application
-document.addEventListener('DOMContentLoaded', function() {
-    // Load static data
-    allFacilities = window.ALL_FACILITIES_DATA || [];
-    filteredFacilities = [...allFacilities];
-    
-    // Initialize UI
-    initializeEventListeners();
-    displayFacilities(filteredFacilities);
-    updateResultsCount();
-    
-    // Show demo notice if configured
-    if (window.APP_CONFIG && window.APP_CONFIG.SHOW_DEMO_MESSAGE) {
-        showDemoNotice();
+document.addEventListener('DOMContentLoaded', async function() {
+    const pageType = getCurrentPageType();
+    const useStaticData = shouldUseStaticData();
+
+    try {
+        // Load facilities from the backend API unless static mode is enabled
+        allFacilities = useStaticData
+            ? getStaticFacilitiesForPage(pageType)
+            : await loadFacilitiesFromAPI(pageType);
+        allFacilities = normalizeFacilities(allFacilities);
+        filteredFacilities = [...allFacilities];
+
+        initializeEventListeners();
+        displayFacilities(filteredFacilities);
+        updateResultsCount();
+        switchView('list');
+        console.log('Loaded', allFacilities.length, 'facilities for page type:', pageType);
+
+    } catch (error) {
+        console.error("Error loading facilities from API: ", error);
+        // Fallback to static data if API fails
+        allFacilities = normalizeFacilities(getStaticFacilitiesForPage(pageType));
+        filteredFacilities = [...allFacilities];
+        displayFacilities(filteredFacilities);
+        updateResultsCount();
     }
-    
-    console.log('Static version loaded with', allFacilities.length, 'facilities');
 });
 
-function showDemoNotice() {
-    const notice = document.getElementById('demo-notice');
-    if (notice) {
-        notice.style.display = 'block';
+// Load facilities from the backend API
+async function loadFacilitiesFromAPI(pageType) {
+    try {
+        const baseUrl = window.API_CONFIG?.BASE_URL || '/api';
+        let url = `${baseUrl}/facilities`;
+        const params = new URLSearchParams();
+
+        // Add page type filter
+        if (pageType === 'Treatment Center') {
+            params.append('type', 'Treatment Center,Detox');
+        } else {
+            params.append('type', pageType);
+        }
+
+        if (params.toString()) {
+            url += '?' + params.toString();
+        }
+
+        const response = await fetch(url);
+
+        if (!response.ok) {
+            throw new Error(`API request failed with status ${response.status}`);
+        }
+
+        const data = await response.json();
+        return data.facilities || [];
+    } catch (error) {
+        console.error('Error loading facilities from API:', error);
+        throw error;
+    }
+}
+
+// Get static facilities as fallback
+function getStaticFacilitiesForPage(pageType) {
+    const combined = window.STATIC_ALL_FACILITIES_DATA || window.ALL_FACILITIES_DATA || [
+        ...(window.STATIC_FACILITIES_DATA || []),
+        ...(window.STATIC_HALFWAY_HOUSES_DATA || []),
+        ...(window.STATIC_OUTPATIENT_DATA || []),
+        ...(window.STATIC_DETOX_DATA || [])
+    ];
+
+    return filterFacilitiesByPageType(combined, pageType);
+}
+
+// Determine what type of facilities to show based on current page
+function getCurrentPageType() {
+    const path = window.location.pathname;
+    const filename = path.split('/').pop() || 'index.html';
+    
+    if (filename.includes('halfway-houses')) {
+        return 'Halfway House';
+    } else if (filename.includes('outpatient')) {
+        return 'Outpatient';
+    } else if (filename.includes('detox')) {
+        return 'Detox';
+    } else {
+        return 'Treatment Center'; // Home page shows residential and detox centers
+    }
+}
+
+// Filter facilities based on page type
+function filterFacilitiesByPageType(facilities, pageType) {
+    if (!Array.isArray(facilities)) return [];
+
+    const matchesFacilityType = (facility, value) => {
+        if (!facility) return false;
+        if (Array.isArray(facility.facilityTypes)) {
+            return facility.facilityTypes.includes(value);
+        }
+        return facility.type === value;
+    };
+
+    switch (pageType) {
+        case 'Treatment Center':
+            return facilities.filter(f =>
+                matchesFacilityType(f, 'Treatment Center') || matchesFacilityType(f, 'Detox')
+            );
+        case 'Halfway House':
+            return facilities.filter(f => matchesFacilityType(f, 'Halfway House'));
+        case 'Outpatient':
+            return facilities.filter(f => matchesFacilityType(f, 'Outpatient'));
+        case 'Detox':
+            return facilities.filter(f => matchesFacilityType(f, 'Detox'));
+        default:
+            return facilities;
     }
 }
 
 function initializeEventListeners() {
-    // Search functionality
     const searchInput = document.getElementById('search-input');
     const searchBtn = document.getElementById('search-btn');
     const useLocationBtn = document.getElementById('use-location-btn');
     
-    if (searchInput) {
-        searchInput.addEventListener('input', debounce(handleSearch, 300));
-    }
+    const debounceDelay = window.APP_CONFIG?.SEARCH_DEBOUNCE_DELAY || 300;
+    if (searchInput) searchInput.addEventListener('input', debounce(handleSearch, debounceDelay));
+    if (searchBtn) searchBtn.addEventListener('click', handleSearch);
+    if (useLocationBtn) useLocationBtn.addEventListener('click', useCurrentLocation);
     
-    if (searchBtn) {
-        searchBtn.addEventListener('click', handleSearch);
-    }
-    
-    if (useLocationBtn) {
-        useLocationBtn.addEventListener('click', useCurrentLocation);
-    }
-    
-    // Filter functionality
     const filters = ['search-radius', 'age-group', 'gender-served', 'treatment-type', 'facility-type'];
     filters.forEach(filterId => {
         const element = document.getElementById(filterId);
-        if (element) {
-            element.addEventListener('change', handleSearch);
-        }
+        if (element) element.addEventListener('change', handleSearch);
     });
     
-    // View toggle functionality
     const listViewBtn = document.getElementById('list-view-btn');
     const mapViewBtn = document.getElementById('map-view-btn');
     
-    if (listViewBtn) {
-        listViewBtn.addEventListener('click', () => switchView('list'));
-    }
-    
-    if (mapViewBtn) {
-        mapViewBtn.addEventListener('click', () => switchView('map'));
-    }
+    if (listViewBtn) listViewBtn.addEventListener('click', (e) => { e.preventDefault(); switchView('list'); });
+    if (mapViewBtn) mapViewBtn.addEventListener('click', (e) => { e.preventDefault(); switchView('map'); });
 }
 
 function debounce(func, wait) {
@@ -86,58 +169,159 @@ function debounce(func, wait) {
     };
 }
 
-function handleSearch() {
-    const searchTerm = document.getElementById('search-input')?.value.toLowerCase() || '';
-    const radius = parseInt(document.getElementById('search-radius')?.value) || 999;
-    const ageGroup = document.getElementById('age-group')?.value || '';
-    const genderServed = document.getElementById('gender-served')?.value || '';
-    const treatmentType = document.getElementById('treatment-type')?.value || '';
-    const facilityType = document.getElementById('facility-type')?.value || '';
-    
-    filteredFacilities = allFacilities.filter(facility => {
-        // Text search
-        const matchesSearch = !searchTerm || 
-            facility.name.toLowerCase().includes(searchTerm) ||
-            facility.address.toLowerCase().includes(searchTerm) ||
-            facility.phone.includes(searchTerm);
-        
-        // Filter by age group
-        const matchesAge = !ageGroup || 
-            facility.ageGroup === ageGroup || 
-            facility.ageGroup === 'Both';
-        
-        // Filter by gender
-        const matchesGender = !genderServed || 
-            facility.genderServed === genderServed || 
-            facility.genderServed === 'Co-ed';
-        
-        // Filter by treatment type
-        const matchesTreatment = !treatmentType || 
-            facility.treatmentType === treatmentType || 
-            facility.treatmentType === 'Both';
-        
-        // Filter by facility type
-        const matchesFacilityType = !facilityType || 
-            facility.type === facilityType;
-        
-        // Distance filter (if user location is available)
-        let matchesDistance = true;
-        if (userLocation && radius < 999 && facility.coordinates) {
-            const distance = calculateDistance(
-                userLocation.lat, userLocation.lng,
-                facility.coordinates.lat, facility.coordinates.lng
-            );
-            matchesDistance = distance <= radius;
+function ensureGoogleMapsLoaded() {
+    if (window.google && window.google.maps) {
+        return Promise.resolve();
+    }
+
+    if (mapsLoadPromise) {
+        return mapsLoadPromise;
+    }
+
+    const apiKey = window.GOOGLE_MAPS_API_KEY;
+    if (!apiKey || apiKey === 'YOUR_API_KEY_HERE') {
+        return Promise.reject(new Error('Google Maps API key is not configured'));
+    }
+
+    mapsLoadPromise = new Promise((resolve, reject) => {
+        const existingScript = document.querySelector('script[data-google-maps-loader]');
+        if (existingScript) {
+            existingScript.addEventListener('load', resolve);
+            existingScript.addEventListener('error', () => reject(new Error('Failed to load Google Maps script')));
+            return;
         }
-        
-        return matchesSearch && matchesAge && matchesGender && 
-               matchesTreatment && matchesFacilityType && matchesDistance;
+
+        const script = document.createElement('script');
+        script.src = `https://maps.googleapis.com/maps/api/js?key=${encodeURIComponent(apiKey)}&libraries=places`;
+        script.async = true;
+        script.defer = true;
+        script.setAttribute('data-google-maps-loader', 'true');
+        script.onload = resolve;
+        script.onerror = () => reject(new Error('Failed to load Google Maps script'));
+        document.head.appendChild(script);
     });
-    
+
+    return mapsLoadPromise;
+}
+
+function normalizeFacilities(facilities) {
+    if (!Array.isArray(facilities)) return [];
+    if (!facilities.length) return [];
+    const alreadyNormalized = facilities[0] && typeof facilities[0].searchIndex === 'string';
+    if (alreadyNormalized) {
+        return facilities.slice();
+    }
+    return window.FacilityUtils?.normalizeFacilityDataset
+        ? window.FacilityUtils.normalizeFacilityDataset(facilities)
+        : facilities.slice();
+}
+
+function getSearchCriteria() {
+    return {
+        searchTerm: document.getElementById('search-input')?.value || '',
+        radius: document.getElementById('search-radius')?.value || '999',
+        ageGroup: document.getElementById('age-group')?.value || '',
+        genderServed: document.getElementById('gender-served')?.value || '',
+        treatmentType: document.getElementById('treatment-type')?.value || '',
+        facilityType: document.getElementById('facility-type')?.value || ''
+    };
+}
+
+async function handleSearch() {
+    const criteria = getSearchCriteria();
+    const useStaticData = shouldUseStaticData();
+
+    if (useStaticData) {
+        applyClientFilters(criteria);
+        return;
+    }
+
+    try {
+        // Use API for filtering to handle large datasets efficiently
+        const baseUrl = window.API_CONFIG?.BASE_URL || '/api';
+        let url = `${baseUrl}/facilities`;
+        const params = new URLSearchParams();
+
+        // Add page type filter
+        const pageType = getCurrentPageType();
+        if (pageType === 'Treatment Center') {
+            // For home page, include both Treatment Center and Detox
+            params.append('type', 'Treatment Center,Detox');
+        } else {
+            params.append('type', pageType);
+        }
+
+        // Add other filters
+        if (criteria.searchTerm) params.append('search', criteria.searchTerm);
+        if (criteria.ageGroup) params.append('ageGroup', criteria.ageGroup);
+        if (criteria.genderServed) params.append('genderServed', criteria.genderServed);
+        if (criteria.treatmentType) params.append('treatmentType', criteria.treatmentType);
+        if (criteria.facilityType) params.append('facilityType', criteria.facilityType);
+        if (criteria.radius && criteria.radius !== '999') params.append('radius', criteria.radius);
+        if (userLocation && criteria.radius && criteria.radius !== '999') {
+            params.append('lat', userLocation.lat);
+            params.append('lng', userLocation.lng);
+        }
+
+        url += '?' + params.toString();
+
+        const response = await fetch(url);
+        if (!response.ok) {
+            throw new Error(`API request failed with status ${response.status}`);
+        }
+
+        const data = await response.json();
+        filteredFacilities = data.facilities || [];
+
+        displayFacilities(filteredFacilities);
+        updateResultsCount();
+
+        if (map && document.getElementById('map-container').style.display !== 'none') {
+            updateMapMarkers();
+        }
+    } catch (error) {
+        console.error('Error filtering facilities:', error);
+        applyClientFilters(criteria);
+    }
+}
+
+function applyClientFilters(criteria) {
+    if (window.FacilityUtils?.filterFacilities) {
+        filteredFacilities = window.FacilityUtils.filterFacilities(
+            allFacilities,
+            criteria,
+            userLocation
+        );
+    } else {
+        const searchTerm = (criteria.searchTerm || '').toLowerCase();
+        filteredFacilities = allFacilities.filter(facility => {
+            const searchTermMatch = !searchTerm ||
+                (facility.name && facility.name.toLowerCase().includes(searchTerm)) ||
+                (facility.address && facility.address.toLowerCase().includes(searchTerm)) ||
+                (facility.description && facility.description.toLowerCase().includes(searchTerm)) ||
+                (facility.type && facility.type.toLowerCase().includes(searchTerm));
+
+            const ageGroupMatch = !criteria.ageGroup ||
+                facility.ageGroup === criteria.ageGroup ||
+                facility.ageGroup === 'Both';
+            const genderServedMatch = !criteria.genderServed ||
+                facility.genderServed === criteria.genderServed ||
+                facility.genderServed === 'Co-ed';
+            const treatmentTypeMatch = !criteria.treatmentType ||
+                facility.treatmentType === criteria.treatmentType ||
+                facility.treatmentType === 'Both' ||
+                (Array.isArray(facility.treatmentTypes) && facility.treatmentTypes.includes(criteria.treatmentType));
+            const facilityTypeMatch = !criteria.facilityType ||
+                facility.type === criteria.facilityType ||
+                (Array.isArray(facility.facilityTypes) && facility.facilityTypes.includes(criteria.facilityType));
+
+            return searchTermMatch && ageGroupMatch && genderServedMatch && treatmentTypeMatch && facilityTypeMatch;
+        });
+    }
+
     displayFacilities(filteredFacilities);
     updateResultsCount();
-    
-    // Update map if it's visible
+
     if (map && document.getElementById('map-container').style.display !== 'none') {
         updateMapMarkers();
     }
@@ -148,13 +332,7 @@ function displayFacilities(facilities) {
     if (!facilitiesList) return;
     
     if (facilities.length === 0) {
-        facilitiesList.innerHTML = `
-            <div class="no-results">
-                <i class="fas fa-search"></i>
-                <h3>No facilities found</h3>
-                <p>Try adjusting your search criteria or expanding your search radius.</p>
-            </div>
-        `;
+        facilitiesList.innerHTML = `<div class="no-results"><h3>No facilities found</h3><p>Try adjusting your search criteria.</p></div>`;
         return;
     }
     
@@ -162,71 +340,50 @@ function displayFacilities(facilities) {
 }
 
 function createFacilityCard(facility) {
-    const statusClass = getStatusClass(facility.status);
-    const statusIcon = getStatusIcon(facility.status);
+    const safeFacility = window.FacilityUtils ? window.FacilityUtils.sanitizeFacilityForRender(facility) : facility;
+    if (!safeFacility) return '';
+
+    const statusClass = getStatusClass(safeFacility.status);
     
     return `
-        <div class="facility-card">
-            <div class="facility-header">
-                <h3>${facility.name}</h3>
-                <div class="status-indicator ${statusClass}">
-                    <i class="${statusIcon}"></i>
-                    <span>${facility.status}</span>
-                </div>
-            </div>
-            <div class="facility-details">
-                <p><strong>Type:</strong> ${facility.type}</p>
-                <p><strong>Address:</strong> ${facility.address}</p>
-                <p><strong>Phone:</strong> ${facility.phone}</p>
-                <p><strong>Age Group:</strong> ${facility.ageGroup}</p>
-                <p><strong>Gender Served:</strong> ${facility.genderServed}</p>
-                <p><strong>Treatment Type:</strong> ${facility.treatmentType}</p>
-                ${facility.lastUpdated ? `<p class="last-updated">Status updated: ${formatDate(facility.lastUpdated)}</p>` : ''}
+        <div class="facility-card" data-facility-id="${safeFacility.id}">
+            <div class="facility-name">${safeFacility.name}</div>
+            <div class="facility-status ${statusClass}">${safeFacility.status}</div>
+            <div class="facility-info">
+                <p><i class="fas fa-map-marker-alt"></i> ${safeFacility.address}</p>
+                <p><i class="fas fa-phone"></i> ${safeFacility.phone}</p>
+                <p><i class="fas fa-users"></i> ${safeFacility.genderServed} • ${safeFacility.ageGroup}</p>
+                ${safeFacility.lastUpdated ? `<p><i class="fas fa-clock"></i> Updated: ${formatDate(safeFacility.lastUpdated)}</p>` : ''}
             </div>
             <div class="facility-actions">
-                <button onclick="getDirections('${facility.address}')" class="action-btn directions-btn">
-                    <i class="fas fa-directions"></i> Directions
-                </button>
-                <button onclick="callFacility('${facility.phone}')" class="action-btn call-btn">
-                    <i class="fas fa-phone"></i> Call
-                </button>
-                ${facility.website ? `<button onclick="visitWebsite('${facility.website}')" class="action-btn website-btn">
-                    <i class="fas fa-globe"></i> Website
-                </button>` : ''}
+                <button onclick="getDirections('${safeFacility.address}')" class="action-btn"><i class="fas fa-directions"></i> Directions</button>
+                <button onclick="callFacility('${safeFacility.phone}')" class="action-btn"><i class="fas fa-phone"></i> Call</button>
+                ${safeFacility.website ? `<button onclick="visitWebsite('${safeFacility.website}')" class="action-btn"><i class="fas fa-globe"></i> Website</button>` : ''}
             </div>
         </div>
     `;
 }
 
 function getStatusClass(status) {
-    switch (status) {
-        case 'Openings Available': return 'status-available';
-        case 'No Openings': return 'status-full';
-        case 'Waitlist': return 'status-waitlist';
-        case 'Accepting Assessments': return 'status-assessment';
-        case 'Emergency/Crisis Only': return 'status-emergency';
-        default: return 'status-unknown';
-    }
-}
-
-function getStatusIcon(status) {
-    switch (status) {
-        case 'Openings Available': return 'fas fa-check-circle';
-        case 'No Openings': return 'fas fa-times-circle';
-        case 'Waitlist': return 'fas fa-clock';
-        case 'Accepting Assessments': return 'fas fa-clipboard-check';
-        case 'Emergency/Crisis Only': return 'fas fa-exclamation-triangle';
-        default: return 'fas fa-question-circle';
-    }
+    if (!status) return 'status-not-updated';
+    const s = status.toLowerCase();
+    
+    // Check for specific statuses first
+    if (s === 'beds available' || s === 'available') return 'status-available';
+    if (s === 'no beds available' || s === 'no beds' || s.includes('no opening')) return 'status-unavailable';
+    if (s === 'call for availability' || s.includes('contact')) return 'status-call';
+    
+    // Fallback logic
+    if (s.includes('available') && !s.includes('no') && !s.includes('call')) return 'status-available';
+    if (s.includes('week')) return 'status-waitlist';
+    
+    return 'status-not-updated';
 }
 
 function formatDate(dateString) {
+    if (!dateString) return 'N/A';
     const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', {
-        year: 'numeric',
-        month: 'short',
-        day: 'numeric'
-    });
+    return date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
 }
 
 function updateResultsCount() {
@@ -236,213 +393,117 @@ function updateResultsCount() {
     }
 }
 
-// Action functions
+// Mock action functions - replace with secure handlers if needed
 function getDirections(address) {
     const encodedAddress = encodeURIComponent(address);
-    const url = `https://www.google.com/maps/dir/?api=1&destination=${encodedAddress}`;
-    window.open(url, '_blank');
+    window.open(`https://www.google.com/maps/dir/?api=1&destination=${encodedAddress}`, '_blank');
 }
 
 function callFacility(phone) {
-    window.location.href = `tel:${phone}`;
+    window.location.href = `tel:${phone.replace(/\D/g, '')}`;
 }
 
 function visitWebsite(website) {
+    if (website && !website.startsWith('http')) {
+        website = 'http://' + website;
+    }
     window.open(website, '_blank');
 }
 
-// Location functionality
 function useCurrentLocation() {
-    if (!navigator.geolocation) {
-        alert('Geolocation is not supported by this browser.');
-        return;
-    }
-    
-    const button = document.getElementById('use-location-btn');
-    const originalHTML = button.innerHTML;
-    button.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
-    button.disabled = true;
-    
-    navigator.geolocation.getCurrentPosition(
-        (position) => {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(position => {
             userLocation = {
                 lat: position.coords.latitude,
                 lng: position.coords.longitude
             };
-            
-            // Update search input with location
-            reverseGeocode(userLocation.lat, userLocation.lng);
-            
-            // Trigger search with new location
+            // With userLocation set, re-run the search.
             handleSearch();
-            
-            button.innerHTML = originalHTML;
-            button.disabled = false;
-        },
-        (error) => {
-            console.error('Error getting location:', error);
-            alert('Unable to get your location. Please enter your city or ZIP code manually.');
-            button.innerHTML = originalHTML;
-            button.disabled = false;
-        },
-        {
-            timeout: window.APP_CONFIG?.GEOLOCATION_TIMEOUT || 15000,
-            maximumAge: window.APP_CONFIG?.LOCATION_MAX_AGE || 300000
-        }
-    );
+        }, () => {
+            alert('Unable to retrieve your location.');
+        });
+    } else {
+        alert('Geolocation is not supported by your browser.');
+    }
 }
 
-function reverseGeocode(lat, lng) {
-    // Simple reverse geocoding using Google Maps API
-    const geocoder = new google.maps.Geocoder();
-    const latlng = { lat: lat, lng: lng };
-    
-    geocoder.geocode({ location: latlng }, (results, status) => {
-        if (status === 'OK' && results[0]) {
-            const searchInput = document.getElementById('search-input');
-            if (searchInput) {
-                // Extract city from the result
-                const addressComponents = results[0].address_components;
-                const city = addressComponents.find(component => 
-                    component.types.includes('locality')
-                )?.long_name;
-                
-                if (city) {
-                    searchInput.value = city + ', NE';
-                }
-            }
-        }
-    });
-}
-
-// Distance calculation
-function calculateDistance(lat1, lng1, lat2, lng2) {
-    const R = 3959; // Earth's radius in miles
-    const dLat = (lat2 - lat1) * Math.PI / 180;
-    const dLng = (lng2 - lng1) * Math.PI / 180;
-    const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
-              Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
-              Math.sin(dLng/2) * Math.sin(dLng/2);
-    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-    return R * c;
-}
-
-// View switching
 function switchView(view) {
     const listView = document.getElementById('facilities-list');
     const mapContainer = document.getElementById('map-container');
     const listBtn = document.getElementById('list-view-btn');
     const mapBtn = document.getElementById('map-view-btn');
-    
+
     if (view === 'list') {
-        listView.style.display = 'block';
+        listView.style.display = 'grid';
         mapContainer.style.display = 'none';
         listBtn.classList.add('active');
         mapBtn.classList.remove('active');
-    } else {
+    } else { // map view
         listView.style.display = 'none';
         mapContainer.style.display = 'block';
         listBtn.classList.remove('active');
         mapBtn.classList.add('active');
-        
-        // Initialize map if not already done
-        if (!map) {
-            initializeMap();
-        } else {
-            updateMapMarkers();
-        }
+        ensureGoogleMapsLoaded()
+            .then(() => initializeMap())
+            .catch((error) => console.error(error.message));
     }
 }
 
-// Map functionality
 function initializeMap() {
+    if (map) { // If map already initialized, just update markers
+        updateMapMarkers();
+        return;
+    }
+
+    // Check if Google Maps script is loaded
+    if (typeof google === 'undefined' || typeof google.maps === 'undefined') {
+        console.error('Google Maps API not loaded.');
+        return;
+    }
+
     const mapElement = document.getElementById('google-map');
-    if (!mapElement) return;
-    
-    const center = userLocation || window.APP_CONFIG?.NEBRASKA_CENTER || { lat: 41.5, lng: -99.5 };
-    const zoom = userLocation ? 10 : (window.APP_CONFIG?.DEFAULT_MAP_ZOOM || 7);
-    
+    const nebraskaCenter = window.APP_CONFIG?.NEBRASKA_CENTER || { lat: 41.4925, lng: -99.9018 };
+    const defaultZoom = window.APP_CONFIG?.DEFAULT_MAP_ZOOM || 7;
+
     map = new google.maps.Map(mapElement, {
-        center: center,
-        zoom: zoom,
-        styles: [
-            {
-                featureType: 'poi',
-                elementType: 'labels',
-                stylers: [{ visibility: 'off' }]
-            }
-        ]
+        center: nebraskaCenter,
+        zoom: defaultZoom
     });
-    
+
     updateMapMarkers();
 }
 
 function updateMapMarkers() {
     if (!map) return;
-    
+
     // Clear existing markers
     markers.forEach(marker => marker.setMap(null));
     markers = [];
-    
-    // Add markers for filtered facilities
+
+    const bounds = new google.maps.LatLngBounds();
+
     filteredFacilities.forEach(facility => {
-        if (facility.coordinates) {
+        if (facility.coordinates && facility.coordinates.lat && facility.coordinates.lng) {
             const marker = new google.maps.Marker({
                 position: facility.coordinates,
                 map: map,
-                title: facility.name,
-                icon: getMarkerIcon(facility.status)
+                title: facility.name
             });
-            
-            const infoWindow = new google.maps.InfoWindow({
-                content: createInfoWindowContent(facility)
+
+            const infowindow = new google.maps.InfoWindow({
+                content: `<b>${facility.name}</b><br>${facility.address}`
             });
-            
+
             marker.addListener('click', () => {
-                infoWindow.open(map, marker);
+                infowindow.open(map, marker);
             });
-            
+
             markers.push(marker);
+            bounds.extend(marker.getPosition());
         }
     });
-    
-    // Adjust map bounds to show all markers
+
     if (markers.length > 0) {
-        const bounds = new google.maps.LatLngBounds();
-        markers.forEach(marker => bounds.extend(marker.getPosition()));
         map.fitBounds(bounds);
-        
-        // Don't zoom in too much for single markers
-        google.maps.event.addListenerOnce(map, 'bounds_changed', () => {
-            if (map.getZoom() > 15) {
-                map.setZoom(15);
-            }
-        });
     }
-}
-
-function getMarkerIcon(status) {
-    const color = getStatusClass(status).includes('available') ? 'green' :
-                  getStatusClass(status).includes('full') ? 'red' :
-                  getStatusClass(status).includes('waitlist') ? 'orange' :
-                  getStatusClass(status).includes('assessment') ? 'blue' :
-                  getStatusClass(status).includes('emergency') ? 'purple' : 'gray';
-    
-    return `https://maps.google.com/mapfiles/ms/icons/${color}-dot.png`;
-}
-
-function createInfoWindowContent(facility) {
-    return `
-        <div class="info-window">
-            <h4>${facility.name}</h4>
-            <p><strong>Status:</strong> <span class="${getStatusClass(facility.status)}">${facility.status}</span></p>
-            <p><strong>Address:</strong> ${facility.address}</p>
-            <p><strong>Phone:</strong> ${facility.phone}</p>
-            <p><strong>Type:</strong> ${facility.type}</p>
-            <div class="info-actions">
-                <button onclick="callFacility('${facility.phone}')" class="info-btn">Call</button>
-                ${facility.website ? `<button onclick="visitWebsite('${facility.website}')" class="info-btn">Website</button>` : ''}
-            </div>
-        </div>
-    `;
 }

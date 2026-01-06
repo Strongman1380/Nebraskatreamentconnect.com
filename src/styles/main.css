@@ -1,0 +1,463 @@
+/**
+ * Nebraska Treatment Connect - Main Stylesheet
+ *
+ * This file imports Tailwind CSS and includes custom component styles
+ * that extend or override Tailwind's default styles.
+ */
+
+/* Tailwind CSS Layers */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ============================================================================
+   Base Layer - Global Resets and Defaults
+   ============================================================================ */
+
+@layer base {
+  /* Smooth scrolling */
+  html {
+    scroll-behavior: smooth;
+  }
+
+  /* Better box sizing */
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  /* Focus styles for accessibility */
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-primary-500;
+  }
+
+  /* Skip link for accessibility */
+  .skip-link {
+    @apply absolute left-0 top-0 -translate-y-full bg-primary-500 text-white px-4 py-2 z-50 transition-transform focus:translate-y-0;
+  }
+
+  /* Visually hidden but accessible */
+  .visually-hidden {
+    @apply absolute w-px h-px p-0 -m-px overflow-hidden whitespace-nowrap border-0;
+    clip: rect(0, 0, 0, 0);
+  }
+}
+
+/* ============================================================================
+   Components Layer - Reusable Component Styles
+   ============================================================================ */
+
+@layer components {
+  /* Container */
+  .container {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  /* Header */
+  .header {
+    @apply sticky top-0 z-50 bg-white shadow-sm border-b border-neutral-200;
+  }
+
+  .header-inner {
+    @apply flex items-center justify-between h-16;
+  }
+
+  .logo {
+    @apply text-xl font-bold text-primary-500 hover:text-primary-600 transition-colors;
+  }
+
+  .logo a {
+    @apply no-underline text-inherit;
+  }
+
+  /* Navigation */
+  .nav-list {
+    @apply flex items-center gap-1 sm:gap-4 list-none p-0 m-0;
+  }
+
+  .nav-link {
+    @apply px-3 py-2 text-sm font-medium text-neutral-600 hover:text-primary-500 rounded-md transition-colors;
+  }
+
+  .nav-link.active {
+    @apply text-primary-500 bg-primary-50;
+  }
+
+  /* Search Section */
+  .search-section {
+    @apply py-8 bg-gradient-to-b from-primary-50 to-white;
+  }
+
+  .search-layout {
+    @apply grid grid-cols-1 lg:grid-cols-4 gap-6;
+  }
+
+  .search-main {
+    @apply lg:col-span-3;
+  }
+
+  .search-container {
+    @apply flex gap-2 mb-4;
+  }
+
+  .search-input {
+    @apply flex-1 px-4 py-3 text-base border border-neutral-300 rounded-lg
+           focus:ring-2 focus:ring-primary-500 focus:border-primary-500
+           transition-all outline-none;
+  }
+
+  .search-btn {
+    @apply px-4 py-3 bg-primary-500 text-white rounded-lg hover:bg-primary-600
+           focus:ring-2 focus:ring-primary-500 focus:ring-offset-2
+           transition-all cursor-pointer;
+  }
+
+  .use-location-btn {
+    @apply px-4 py-3 border border-primary-500 text-primary-500 rounded-lg
+           hover:bg-primary-50 focus:ring-2 focus:ring-primary-500 focus:ring-offset-2
+           transition-all cursor-pointer;
+  }
+
+  .search-hint {
+    @apply text-sm text-neutral-500 mb-4;
+  }
+
+  .search-description {
+    @apply text-neutral-600;
+  }
+
+  /* Category Chips */
+  .category-chips {
+    @apply flex flex-wrap gap-2 mb-6;
+  }
+
+  .category-chip {
+    @apply px-4 py-2 text-sm font-medium text-neutral-600 bg-neutral-100
+           rounded-full cursor-pointer transition-all
+           hover:bg-primary-100 hover:text-primary-600;
+  }
+
+  .category-chip.active {
+    @apply bg-primary-500 text-white hover:bg-primary-600;
+  }
+
+  /* Filters Sidebar */
+  .filters-container {
+    @apply bg-white rounded-lg shadow-card p-4;
+  }
+
+  .filters-title {
+    @apply text-lg font-semibold text-neutral-800 mb-4 pb-2 border-b border-neutral-200;
+  }
+
+  /* Results Section */
+  .results-section {
+    @apply py-8;
+  }
+
+  .results-header {
+    @apply flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6;
+  }
+
+  .results-count {
+    @apply text-neutral-600;
+  }
+
+  .results-count span {
+    @apply font-bold text-primary-500;
+  }
+
+  /* View Toggle */
+  .view-toggle {
+    @apply flex gap-2;
+  }
+
+  .view-btn {
+    @apply px-4 py-2 text-sm font-medium text-neutral-600 bg-neutral-100
+           rounded-md cursor-pointer transition-all
+           hover:bg-neutral-200;
+  }
+
+  .view-btn.active {
+    @apply bg-primary-500 text-white hover:bg-primary-600;
+  }
+
+  /* Facilities Grid */
+  .facilities-list {
+    @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6;
+  }
+
+  /* Facility Card (extended from tailwind.config.js) */
+  .facility-name {
+    @apply text-lg font-semibold text-neutral-800 mb-2;
+  }
+
+  .facility-status {
+    @apply status-badge mb-3;
+  }
+
+  .facility-info {
+    @apply space-y-2 text-sm text-neutral-600 mb-4;
+  }
+
+  .facility-info p {
+    @apply flex items-start gap-2;
+  }
+
+  .facility-info i {
+    @apply text-primary-500 mt-1;
+  }
+
+  .facility-actions {
+    @apply flex flex-wrap gap-2 pt-4 border-t border-neutral-200;
+  }
+
+  /* Map Container */
+  .map-container {
+    @apply w-full h-96 rounded-lg overflow-hidden shadow-card;
+  }
+
+  #google-map {
+    @apply w-full h-full;
+  }
+
+  /* No Results */
+  .no-results {
+    @apply col-span-full text-center py-12;
+  }
+
+  .no-results h3 {
+    @apply text-xl font-semibold text-neutral-700 mb-2;
+  }
+
+  .no-results p {
+    @apply text-neutral-500;
+  }
+
+  /* Modal/Drawer */
+  .modal-overlay {
+    @apply fixed inset-0 bg-black/50 z-60 flex items-center justify-center p-4;
+  }
+
+  .modal-content {
+    @apply bg-white rounded-lg shadow-modal max-w-lg w-full max-h-[90vh] overflow-y-auto;
+  }
+
+  .modal-header {
+    @apply flex items-center justify-between p-4 border-b border-neutral-200;
+  }
+
+  .modal-body {
+    @apply p-4;
+  }
+
+  .modal-footer {
+    @apply flex justify-end gap-2 p-4 border-t border-neutral-200;
+  }
+
+  /* Detail Drawer */
+  .facility-detail-drawer {
+    @apply fixed right-0 top-0 h-full w-full sm:w-96 bg-white shadow-modal z-70
+           transform translate-x-full transition-transform duration-300;
+  }
+
+  .facility-detail-drawer[aria-hidden="false"] {
+    @apply translate-x-0;
+  }
+
+  .drawer-close-btn {
+    @apply absolute top-4 right-4 p-2 text-neutral-500 hover:text-neutral-700
+           rounded-full hover:bg-neutral-100 transition-colors;
+  }
+
+  .drawer-content {
+    @apply p-6 pt-14;
+  }
+
+  /* Form Styles */
+  .form-group {
+    @apply mb-4;
+  }
+
+  .form-label {
+    @apply block text-sm font-medium text-neutral-700 mb-1;
+  }
+
+  .form-input {
+    @apply w-full px-3 py-2 border border-neutral-300 rounded-md
+           focus:ring-2 focus:ring-primary-500 focus:border-primary-500
+           transition-all outline-none;
+  }
+
+  .form-input:disabled {
+    @apply bg-neutral-100 cursor-not-allowed;
+  }
+
+  .form-error {
+    @apply text-sm text-danger-500 mt-1;
+  }
+
+  .form-help {
+    @apply text-sm text-neutral-500 mt-1;
+  }
+
+  /* Alert/Notice Boxes */
+  .alert {
+    @apply p-4 rounded-lg mb-4;
+  }
+
+  .alert-info {
+    @apply bg-primary-50 text-primary-800 border border-primary-200;
+  }
+
+  .alert-success {
+    @apply bg-success-50 text-success-800 border border-success-200;
+  }
+
+  .alert-warning {
+    @apply bg-secondary-50 text-secondary-800 border border-secondary-200;
+  }
+
+  .alert-danger {
+    @apply bg-danger-50 text-danger-800 border border-danger-200;
+  }
+
+  /* Emergency Box */
+  .emergency-box {
+    @apply bg-secondary-50 border border-secondary-200 rounded-lg p-5 my-5;
+  }
+
+  .emergency-box h3 {
+    @apply text-secondary-700 font-semibold mb-2;
+  }
+
+  .emergency-box p {
+    @apply text-secondary-700 m-0;
+  }
+
+  /* Service Highlight */
+  .service-highlight {
+    @apply bg-success-50 border-l-4 border-success-500 p-4 my-5;
+  }
+
+  /* Footer */
+  .footer {
+    @apply bg-neutral-800 text-neutral-300 py-8 mt-auto;
+  }
+
+  .footer a {
+    @apply text-neutral-300 hover:text-white transition-colors;
+  }
+
+  /* Provider Dashboard Specific */
+  .dashboard-layout {
+    @apply grid grid-cols-1 lg:grid-cols-4 gap-6;
+  }
+
+  .dashboard-sidebar {
+    @apply bg-white rounded-lg shadow-card p-4;
+  }
+
+  .dashboard-main {
+    @apply lg:col-span-3;
+  }
+
+  .provider-info {
+    @apply space-y-3;
+  }
+
+  .provider-name {
+    @apply text-xl font-bold text-neutral-800;
+  }
+
+  .provider-detail {
+    @apply text-sm text-neutral-600;
+  }
+
+  /* Loading States */
+  .loading {
+    @apply flex items-center justify-center py-12;
+  }
+
+  .loading-spinner {
+    @apply w-8 h-8 border-4 border-primary-200 border-t-primary-500 rounded-full animate-spin;
+  }
+
+  /* Back Link */
+  .back-link {
+    @apply inline-flex items-center gap-2 mt-5 px-5 py-2.5 text-primary-500 font-medium
+           border-2 border-primary-500 rounded-md transition-all
+           hover:bg-primary-500 hover:text-white no-underline;
+  }
+}
+
+/* ============================================================================
+   Utilities Layer - Custom Utility Classes
+   ============================================================================ */
+
+@layer utilities {
+  /* Text utilities */
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  /* Animation utilities */
+  .animate-in {
+    animation: fadeIn 0.3s ease-out;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Scrollbar styling */
+  .scrollbar-thin {
+    scrollbar-width: thin;
+    scrollbar-color: theme('colors.neutral.400') transparent;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    background-color: theme('colors.neutral.400');
+    border-radius: 3px;
+  }
+}
+
+/* ============================================================================
+   Print Styles
+   ============================================================================ */
+
+@media print {
+  .header,
+  .filters-container,
+  .view-toggle,
+  .facility-actions,
+  .footer {
+    display: none !important;
+  }
+
+  .facility-card {
+    break-inside: avoid;
+    box-shadow: none;
+    border: 1px solid #ccc;
+  }
+
+  .facilities-list {
+    display: block;
+  }
+}

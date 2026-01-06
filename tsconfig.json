@@ -1,0 +1,88 @@
+{
+  "compilerOptions": {
+    // Target and module settings
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+
+    // Output settings (Vite handles this, but needed for type checking)
+    "outDir": "./dist",
+    "rootDir": ".",
+    "noEmit": true,
+
+    // Strict type checking
+    "strict": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "strictFunctionTypes": true,
+    "strictBindCallApply": true,
+    "strictPropertyInitialization": true,
+    "noImplicitThis": true,
+    "alwaysStrict": true,
+
+    // Additional checks
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": true,
+    "noPropertyAccessFromIndexSignature": true,
+
+    // Module interop
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "verbatimModuleSyntax": true,
+
+    // Source maps and declarations
+    "sourceMap": true,
+    "declaration": false,
+    "declarationMap": false,
+
+    // Path aliases (must match vite.config.ts)
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"],
+      "@scripts/*": ["src/scripts/*"],
+      "@styles/*": ["src/styles/*"],
+      "@types/*": ["src/types/*"]
+    },
+
+    // Type checking for JavaScript files (gradual migration)
+    "allowJs": true,
+    "checkJs": false,
+
+    // Skip library checking for faster builds
+    "skipLibCheck": true,
+
+    // Types to include
+    "types": ["vite/client", "vite-plugin-pwa/client", "google.maps"]
+  },
+
+  // Files to include in compilation
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "src/**/*.js",
+    "vite.config.ts",
+    "tailwind.config.js"
+  ],
+
+  // Files to exclude
+  "exclude": [
+    "node_modules",
+    "dist",
+    "deploy",
+    "public",
+    "*.config.js",
+    "server.js",
+    "tools/**/*"
+  ],
+
+  // References for composite projects (if needed later)
+  "references": []
+}
