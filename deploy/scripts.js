@@ -152,9 +152,34 @@ function initializeEventListeners() {
     
     const listViewBtn = document.getElementById('list-view-btn');
     const mapViewBtn = document.getElementById('map-view-btn');
-    
+
     if (listViewBtn) listViewBtn.addEventListener('click', (e) => { e.preventDefault(); switchView('list'); });
     if (mapViewBtn) mapViewBtn.addEventListener('click', (e) => { e.preventDefault(); switchView('map'); });
+
+    // Facility type tabs - navigate to different pages
+    const facilityTabs = document.querySelectorAll('.facility-tab');
+    facilityTabs.forEach(tab => {
+        tab.addEventListener('click', (e) => {
+            const link = tab.getAttribute('data-link');
+            if (link) {
+                window.location.href = link;
+            }
+        });
+    });
+
+    // Advanced filters toggle
+    const toggleFiltersBtn = document.getElementById('toggle-filters-btn');
+    const advancedFilters = document.getElementById('advanced-filters');
+    if (toggleFiltersBtn && advancedFilters) {
+        toggleFiltersBtn.addEventListener('click', () => {
+            const isHidden = advancedFilters.style.display === 'none';
+            advancedFilters.style.display = isHidden ? 'block' : 'none';
+            const icon = toggleFiltersBtn.querySelector('.fa-chevron-down');
+            if (icon) {
+                icon.style.transform = isHidden ? 'rotate(180deg)' : 'rotate(0deg)';
+            }
+        });
+    }
 }
 
 function debounce(func, wait) {
