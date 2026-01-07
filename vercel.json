@@ -2,9 +2,7 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "version": 2,
   "name": "nebraska-treatment-connect",
-  "buildCommand": "",
-  "outputDirectory": "deploy",
-  "installCommand": "",
+  "public": true,
   "cleanUrls": true,
   "trailingSlash": false,
   "headers": [
@@ -52,12 +50,7 @@
       ]
     }
   ],
-  "rewrites": [
-    {
-      "source": "/api/:path*",
-      "destination": "/api/:path*"
-    }
-  ],
+  "rewrites": [],
   "redirects": [
     {
       "source": "/residential",

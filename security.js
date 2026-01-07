@@ -27,8 +27,14 @@ function sanitizeAttribute(str) {
 function sanitizePhone(phone) {
     if (typeof phone !== 'string') return '';
 
+    const trimmed = phone.trim();
+    if (!trimmed) return '';
+
+    // Strip common extension formats before validation
+    const withoutExtension = trimmed.replace(/\s*(?:ext\.?|x)\s*\d+/gi, '').trim();
+
     // Remove all non-digit characters except parentheses, spaces, hyphens, and plus signs
-    const cleaned = phone.replace(/[^\d\(\)\-\s\+]/g, '');
+    const cleaned = withoutExtension.replace(/[^\d\(\)\-\s\+]/g, '');
 
     // Improved US phone number validation
     // Accepts formats like: (555) 123-4567, 555-123-4567, 5551234567, +1-555-123-4567
@@ -65,6 +71,10 @@ function sanitizeURL(url) {
     let normalized = trimmed;
     if (!/^[a-zA-Z][\w+.-]*:/.test(normalized)) {
         normalized = `https://${normalized}`;
+    }
+
+    if (/^https?:\/\/$/i.test(normalized)) {
+        return '';
     }
     
     // Enforce http(s) only
