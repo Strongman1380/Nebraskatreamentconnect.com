@@ -1,5 +1,4 @@
-import { Link } from 'react-router-dom'
-import { MapPin, Phone, Globe, ChevronRight } from 'lucide-react'
+import { MapPin, Phone, Globe, ExternalLink } from 'lucide-react'
 import { ProgramBadge } from './ProgramBadge'
 import { AvailabilityBadge } from './AvailabilityBadge'
 import type { Facility, AvailabilityStatus } from '../../types/facility'
@@ -9,7 +8,6 @@ interface FacilityCardProps {
   facility: Facility
 }
 
-// Show the top programs offered by a facility
 function getTopPrograms(facility: Facility): string[] {
   const programs = facility.programs || {}
   const keys = Object.entries(programs)
@@ -18,7 +16,6 @@ function getTopPrograms(facility: Facility): string[] {
   return keys.slice(0, 4)
 }
 
-// Summarize overall availability from all tracked programs
 function getOverallAvailability(facility: Facility): AvailabilityStatus | null {
   const availability = facility.availability || {}
   const statuses = Object.values(availability) as AvailabilityStatus[]
@@ -29,6 +26,12 @@ function getOverallAvailability(facility: Facility): AvailabilityStatus | null {
   return 'N/A'
 }
 
+function hasValidWebsite(website: string | undefined): website is string {
+  if (!website) return false
+  const trimmed = website.trim()
+  return trimmed !== '' && trimmed !== 'https://' && trimmed !== 'http://'
+}
+
 export function FacilityCard({ facility }: FacilityCardProps) {
   const topPrograms = getTopPrograms(facility)
   const overallStatus = getOverallAvailability(facility)
@@ -36,19 +39,18 @@ export function FacilityCard({ facility }: FacilityCardProps) {
     .filter(Boolean)
     .join(', ')
 
-  return (
-    <Link
-      to={`/facility/${facility.id}`}
-      className="block bg-white rounded-xl border border-gray-200 p-5 hover:border-blue-300 hover:shadow-md transition-all duration-150 group"
-    >
+  const hasWebsite = hasValidWebsite(facility.website)
+
+  const cardContent = (
+    <>
       {/* Header */}
       <div className="flex items-start justify-between gap-3 mb-3">
         <div className="min-w-0">
-          <h3 className="font-semibold text-gray-900 group-hover:text-blue-700 transition-colors leading-snug">
+          <h3 className={`font-semibold text-gray-900 leading-snug text-[0.938rem] ${hasWebsite ? 'group-hover:text-blue-700 transition-colors' : ''}`}>
             {facility.name1}
           </h3>
           {facility.name2 && (
-            <p className="text-xs text-gray-500 mt-0.5 truncate">{facility.name2}</p>
+            <p className="text-xs text-gray-400 mt-0.5 truncate">{facility.name2}</p>
           )}
         </div>
         {overallStatus && overallStatus !== 'N/A' && (
@@ -62,7 +64,7 @@ export function FacilityCard({ facility }: FacilityCardProps) {
       {address && (
         <div className="flex items-start gap-1.5 text-xs text-gray-500 mb-3">
           <MapPin className="w-3.5 h-3.5 mt-0.5 shrink-0 text-gray-400" />
-          <span>{address}</span>
+          <span className="leading-relaxed">{address}</span>
         </div>
       )}
 
@@ -89,7 +91,7 @@ export function FacilityCard({ facility }: FacilityCardProps) {
       )}
 
       {/* Footer */}
-      <div className="flex items-center justify-between gap-2 pt-3 border-t border-gray-100">
+      <div className="flex items-center justify-between gap-2 pt-3 border-t border-gray-100 mt-auto">
         <div className="flex items-center gap-3">
           {facility.phone && (
             <span className="flex items-center gap-1 text-xs text-gray-500">
@@ -97,15 +99,36 @@ export function FacilityCard({ facility }: FacilityCardProps) {
               {facility.phone}
             </span>
           )}
-          {facility.website && (
-            <span className="flex items-center gap-1 text-xs text-blue-600">
+          {hasWebsite && (
+            <span className="flex items-center gap-1 text-xs text-blue-600 font-medium">
               <Globe className="w-3 h-3" />
               Website
             </span>
           )}
         </div>
-        <ChevronRight className="w-4 h-4 text-gray-300 group-hover:text-blue-500 transition-colors" />
+        {hasWebsite && (
+          <ExternalLink className="w-3.5 h-3.5 text-gray-300 group-hover:text-blue-500 transition-colors" />
+        )}
       </div>
-    </Link>
+    </>
+  )
+
+  if (hasWebsite) {
+    return (
+      <a
+        href={facility.website}
+        target="_blank"
+        rel="noreferrer noopener"
+        className="flex flex-col bg-white rounded-xl border border-gray-200 p-5 hover:border-blue-300 hover:shadow-lg hover:shadow-blue-500/5 transition-all duration-200 cursor-pointer group"
+      >
+        {cardContent}
+      </a>
+    )
+  }
+
+  return (
+    <div className="flex flex-col bg-white rounded-xl border border-gray-200/80 p-5 opacity-75">
+      {cardContent}
+    </div>
   )
 }

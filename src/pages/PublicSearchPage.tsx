@@ -1,4 +1,5 @@
 import { useSearchParams } from 'react-router-dom'
+import { Search } from 'lucide-react'
 import { SearchBar } from '../components/search/SearchBar'
 import { FilterPanel } from '../components/search/FilterPanel'
 import { FacilityGrid } from '../components/results/FacilityGrid'
@@ -43,12 +44,26 @@ export function PublicSearchPage() {
   return (
     <main className="min-h-screen">
       {/* Hero */}
-      <div className="bg-gradient-to-br from-blue-900 via-blue-800 to-teal-800 text-white py-12 px-4">
-        <div className="max-w-4xl mx-auto text-center">
-          <h1 className="text-3xl sm:text-4xl font-bold mb-3">Find Treatment in Nebraska</h1>
-          <p className="text-blue-200 text-lg mb-8">
-            Search hundreds of substance use, mental health, and recovery service providers.
+      <div className="relative overflow-hidden bg-gradient-to-br from-blue-950 via-blue-900 to-teal-900 text-white py-16 sm:py-20 px-4">
+        {/* Subtle pattern overlay */}
+        <div className="absolute inset-0 opacity-[0.04]" style={{
+          backgroundImage: 'radial-gradient(circle at 1px 1px, white 1px, transparent 0)',
+          backgroundSize: '32px 32px',
+        }} />
+
+        <div className="relative max-w-4xl mx-auto text-center">
+          <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm rounded-full px-4 py-1.5 text-sm text-blue-200 mb-6 border border-white/10">
+            <Search className="w-3.5 h-3.5" />
+            306 treatment facilities across Nebraska
+          </div>
+
+          <h1 className="text-4xl sm:text-5xl font-extrabold mb-4 tracking-tight">
+            Find Treatment in Nebraska
+          </h1>
+          <p className="text-blue-200/80 text-lg sm:text-xl mb-10 max-w-2xl mx-auto leading-relaxed">
+            Search substance use, mental health, and recovery service providers statewide.
           </p>
+
           <div className="max-w-2xl mx-auto">
             <SearchBar
               value={filters.search}
@@ -57,7 +72,7 @@ export function PublicSearchPage() {
           </div>
 
           {/* Quick type filters */}
-          <div className="flex flex-wrap justify-center gap-2 mt-5">
+          <div className="flex flex-wrap justify-center gap-2.5 mt-6">
             {[
               { label: 'Substance Use', value: 'SU' },
               { label: 'Mental Health', value: 'MH' },
@@ -71,10 +86,10 @@ export function PublicSearchPage() {
                   ...filters,
                   facilityType: filters.facilityType === value ? '' : value,
                 })}
-                className={`px-4 py-1.5 rounded-full text-sm font-medium border transition-all duration-150 ${
+                className={`px-4 py-2 rounded-full text-sm font-medium border transition-all duration-200 ${
                   filters.facilityType === value
-                    ? 'bg-white text-blue-900 border-white'
-                    : 'bg-transparent text-blue-200 border-blue-400 hover:border-white hover:text-white'
+                    ? 'bg-white text-blue-900 border-white shadow-lg shadow-white/20'
+                    : 'bg-white/5 text-blue-100 border-white/20 hover:bg-white/10 hover:border-white/40'
                 }`}
               >
                 {label}
@@ -87,9 +102,10 @@ export function PublicSearchPage() {
       {/* Results */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {error && <ErrorBanner message={error} className="mb-6" />}
-        <div className="flex gap-6">
-          {/* Sidebar */}
-          <aside className="w-72 shrink-0">
+
+        <div className="lg:flex lg:gap-8">
+          {/* Sidebar - hidden on mobile, toggle handled inside FilterPanel */}
+          <aside className="lg:w-72 lg:shrink-0">
             <FilterPanel filters={filters} onChange={updateFilters} />
           </aside>
 
