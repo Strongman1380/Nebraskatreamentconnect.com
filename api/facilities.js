@@ -27,46 +27,25 @@ export default async function handler(req, res) {
     const populations = parseList(req.query['populations[]'] || req.query.populations)
     const insurance = parseList(req.query['insurance[]'] || req.query.insurance)
 
-    let query = db.collection('facilities').where('active', '==', true)
-
-    // Firestore only supports one inequality filter per query
-    // So we apply simple equality filters in Firestore, do the rest client-side
-    if (county) {
-      query = query.where('county', '==', county)
-    } else if (city) {
-      query = query.where('city', '==', city)
-    }
-
-    if (facilityType) {
-      query = query.where('facilityTypes', 'array-contains', facilityType)
-    }
-
-    // For program/population/insurance filters, Firestore array-contains only supports one at a time.
-    // If exactly one filter is selected use Firestore; otherwise filter in memory.
-    if (programs.length === 1 && populations.length === 0 && insurance.length === 0 && !facilityType) {
-      query = query.where(`programs.${programs[0]}`, '==', true)
-    }
-
-    query = query.limit(500)
-
-    const snapshot = await query.get()
+    // Fetch all active facilities — 325 docs is small enough to filter in memory
+    const snapshot = await db.collection('facilities').where('active', '==', true).get()
     let facilities = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }))
 
-    // In-memory filters for complex multi-filter scenarios
-    if (programs.length > 1 || (programs.length === 1 && (populations.length > 0 || insurance.length > 0))) {
-      facilities = facilities.filter(f =>
-        programs.every(p => f.programs?.[p] === true)
-      )
+    // In-memory filters
+    if (county) facilities = facilities.filter(f => f.county === county)
+    else if (city) facilities = facilities.filter(f => f.city === city)
+
+    if (facilityType) {
+      facilities = facilities.filter(f => Array.isArray(f.facilityTypes) && f.facilityTypes.includes(facilityType))
+    }
+    if (programs.length > 0) {
+      facilities = facilities.filter(f => programs.every(p => f.programs?.[p] === true))
     }
     if (populations.length > 0) {
-      facilities = facilities.filter(f =>
-        populations.every(p => f.populations?.[p] === true)
-      )
+      facilities = facilities.filter(f => populations.every(p => f.populations?.[p] === true))
     }
     if (insurance.length > 0) {
-      facilities = facilities.filter(f =>
-        insurance.every(i => f.insurance?.[i] === true)
-      )
+      facilities = facilities.filter(f => insurance.every(i => f.insurance?.[i] === true))
     }
 
     // Sort in memory by name
@@ -100,6 +79,6 @@ export default async function handler(req, res) {
     })
   } catch (err) {
     console.error('facilities error:', err?.message, err?.stack)
-    return json(res, 500, { error: 'Failed to fetch facilities', detail: err?.message })
+    return json(res, 500, { error: 'Failed to fetch facilities' })
   }
 }
