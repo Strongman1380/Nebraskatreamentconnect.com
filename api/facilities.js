@@ -47,7 +47,7 @@ export default async function handler(req, res) {
       query = query.where(`programs.${programs[0]}`, '==', true)
     }
 
-    query = query.orderBy('name1').limit(500)
+    query = query.limit(500)
 
     const snapshot = await query.get()
     let facilities = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }))
@@ -68,6 +68,9 @@ export default async function handler(req, res) {
         insurance.every(i => f.insurance?.[i] === true)
       )
     }
+
+    // Sort in memory by name
+    facilities.sort((a, b) => (a.name1 || '').localeCompare(b.name1 || ''))
 
     // Text search across name, city, county
     if (search) {

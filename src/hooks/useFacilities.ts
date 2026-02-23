@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import type { Facility, SearchFilters } from '../types/facility'
 
 interface Pagination {
@@ -39,56 +39,52 @@ export function useFacilities(filters: SearchFilters): UseFacilitiesResult {
 
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const abortRef = useRef<AbortController | null>(null)
+  const pageRef = useRef(page)
+  pageRef.current = page
 
-  const fetchFacilities = useCallback(async (currentFilters: SearchFilters, currentPage: number) => {
-    // Cancel previous request
-    abortRef.current?.abort()
-    abortRef.current = new AbortController()
-
-    setLoading(true)
-    setError(null)
-
-    try {
-      const qs = buildQueryString(currentFilters, currentPage)
-      const res = await fetch(`/api/facilities?${qs}`, { signal: abortRef.current.signal })
-      if (!res.ok) throw new Error(`Failed to fetch facilities: ${res.statusText}`)
-      const data = await res.json()
-      setFacilities(data.facilities || [])
-      setPagination(data.pagination || null)
-    } catch (err) {
-      if ((err as Error).name === 'AbortError') return
-      setError((err as Error).message || 'Failed to load facilities')
-    } finally {
-      setLoading(false)
-    }
-  }, [])
-
-  // Reset page when filters change (but not when page changes)
-  const filtersKey = JSON.stringify({ ...filters })
+  const filtersKey = JSON.stringify(filters)
   const prevFiltersKey = useRef(filtersKey)
 
+  // Reset page to 1 when filters change
   useEffect(() => {
     if (prevFiltersKey.current !== filtersKey) {
       prevFiltersKey.current = filtersKey
       setPage(1)
-      return
     }
+  }, [filtersKey])
+
+  useEffect(() => {
+    const controller = new AbortController()
+    abortRef.current?.abort()
+    abortRef.current = controller
+
+    const delay = filters.search ? 400 : 0
 
     if (debounceRef.current) clearTimeout(debounceRef.current)
-    debounceRef.current = setTimeout(() => {
-      fetchFacilities(filters, page)
-    }, filters.search ? 400 : 0)
+    debounceRef.current = setTimeout(async () => {
+      setLoading(true)
+      setError(null)
+      try {
+        const qs = buildQueryString(filters, pageRef.current)
+        const res = await fetch(`/api/facilities?${qs}`, { signal: controller.signal })
+        if (!res.ok) throw new Error(`Failed to fetch facilities: ${res.statusText}`)
+        const data = await res.json()
+        setFacilities(data.facilities || [])
+        setPagination(data.pagination || null)
+      } catch (err) {
+        if ((err as Error).name === 'AbortError') return
+        setError((err as Error).message || 'Failed to load facilities')
+        setFacilities([])
+      } finally {
+        setLoading(false)
+      }
+    }, delay)
 
     return () => {
+      controller.abort()
       if (debounceRef.current) clearTimeout(debounceRef.current)
     }
-  }, [filtersKey, page, filters, fetchFacilities])
-
-  // When page resets to 1, fetch immediately
-  useEffect(() => {
-    if (prevFiltersKey.current !== filtersKey) return
-    fetchFacilities(filters, page)
-  }, [page]) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [filtersKey, page]) // eslint-disable-line react-hooks/exhaustive-deps
 
   return { facilities, pagination, loading, error, page, setPage }
 }

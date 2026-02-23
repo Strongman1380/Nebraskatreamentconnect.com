@@ -28,9 +28,6 @@ try {
     firebase.apps.length ? firebase.app() : firebase.initializeApp(firebaseConfig)
     _auth = firebase.auth()
     _db = firebase.firestore()
-    _db.enablePersistence({ synchronizeTabs: true }).catch(() => {
-      // Persistence unavailable in some environments — non-fatal
-    })
   } else {
     _initError = 'Firebase configuration is incomplete. Set VITE_FIREBASE_* environment variables.'
     console.warn(_initError)
