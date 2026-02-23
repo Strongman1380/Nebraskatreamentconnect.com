@@ -99,7 +99,7 @@ export default async function handler(req, res) {
       pagination: { page: pageNum, totalPages, total, pageSize: PAGE_SIZE },
     })
   } catch (err) {
-    console.error('facilities error:', err?.message)
-    return json(res, 500, { error: 'Failed to fetch facilities' })
+    console.error('facilities error:', err?.message, err?.stack)
+    return json(res, 500, { error: 'Failed to fetch facilities', detail: err?.message })
   }
 }
