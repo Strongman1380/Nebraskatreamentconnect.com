@@ -2,6 +2,20 @@ import { json, methodNotAllowed } from './_utils.js'
 import { getDb } from './_firebaseAdmin.js'
 
 const PAGE_SIZE = 24
+const CACHE_TTL_MS = 5 * 60 * 1000 // 5 minutes
+
+let _cache = null
+let _cacheAt = 0
+
+async function getAllActiveFacilities() {
+  const now = Date.now()
+  if (_cache && now - _cacheAt < CACHE_TTL_MS) return _cache
+  const db = getDb()
+  const snapshot = await db.collection('facilities').where('active', '==', true).get()
+  _cache = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }))
+  _cacheAt = now
+  return _cache
+}
 
 export default async function handler(req, res) {
   if (req.method !== 'GET') return methodNotAllowed(res)
@@ -27,9 +41,8 @@ export default async function handler(req, res) {
     const populations = parseList(req.query['populations[]'] || req.query.populations)
     const insurance = parseList(req.query['insurance[]'] || req.query.insurance)
 
-    // Fetch all active facilities — 325 docs is small enough to filter in memory
-    const snapshot = await db.collection('facilities').where('active', '==', true).get()
-    let facilities = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }))
+    // Fetch all active facilities (cached 5 min) — 325 docs, filter in memory
+    let facilities = await getAllActiveFacilities()
 
     // In-memory filters
     if (county) facilities = facilities.filter(f => f.county === county)
