@@ -1,0 +1,14 @@
+{
+  "importedAt": "2026-02-23T17:08:05.078Z",
+  "filesProcessed": [
+    "FindTreament_Facility_listing_2026_02_23_051242.csv",
+    "FindTreament_Facility_listing_2026_02_23_051257.csv",
+    "FindTreament_Facility_listing_2026_02_23_051341.csv",
+    "FindTreament_Facility_listing_2026_02_23_051451.csv",
+    "FindTreament_Facility_listing_2026_02_23_052811.csv"
+  ],
+  "totalRows": 517,
+  "uniqueFacilities": 325,
+  "facilitiesWritten": 325,
+  "errors": []
+}

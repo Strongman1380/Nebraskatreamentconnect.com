@@ -1,0 +1,33 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Facilities: public read for active facilities
+    // Providers can update ONLY the availability, lastUpdatedAt, lastUpdatedBy fields
+    // All other writes go through Firebase Admin SDK (bypasses these rules)
+    match /facilities/{facilityId} {
+      allow read: if resource.data.active == true;
+
+      allow update: if request.auth != null
+        && exists(/databases/$(database)/documents/providers/$(request.auth.uid))
+        && get(/databases/$(database)/documents/providers/$(request.auth.uid)).data.active == true
+        && get(/databases/$(database)/documents/providers/$(request.auth.uid)).data.facilityId == facilityId
+        && request.resource.data.diff(resource.data).affectedKeys()
+             .hasOnly(['availability', 'lastUpdatedAt', 'lastUpdatedBy']);
+
+      allow create, delete: if false;
+    }
+
+    // Providers: each provider can read their own document only
+    // All writes go through Admin SDK
+    match /providers/{uid} {
+      allow read: if request.auth != null && request.auth.uid == uid;
+      allow write: if false;
+    }
+
+    // Availability audit log: Admin SDK only, no client access
+    match /availabilityLog/{logId} {
+      allow read, write: if false;
+    }
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "indexes": [
+    {
+      "collectionGroup": "facilities",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "active", "order": "ASCENDING" },
+        { "fieldPath": "county", "order": "ASCENDING" },
+        { "fieldPath": "name1", "order": "ASCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "facilities",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "active", "order": "ASCENDING" },
+        { "fieldPath": "city", "order": "ASCENDING" },
+        { "fieldPath": "name1", "order": "ASCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "facilities",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "active", "order": "ASCENDING" },
+        { "fieldPath": "facilityTypes", "arrayConfig": "CONTAINS" },
+        { "fieldPath": "name1", "order": "ASCENDING" }
+      ]
+    }
+  ],
+  "fieldOverrides": []
+}
